@@ -1,0 +1,385 @@
+.navbar-brand img {
+    width: 140px;
+    height: auto;
+}
+
+
+.nav-link:hover {
+    color: #c9a34e !important;
+    /* gold feel */
+}
+
+.navbar {
+    background-color: var(--white);
+}
+
+
+
+.nav-link {
+    color: var(--text-dark);
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: var(--gold);
+}
+
+.btn-dark {
+    background-color: var(--primary-red);
+    border: none;
+}
+
+.btn-dark:hover {
+    background-color: var(--primary-red-dark);
+}
+
+.top-header {
+    background-color: var(--ring-brown);
+    color: #fff;
+    font-size: 18px;
+    padding: 6px 0;
+}
+
+.top-left span {
+    font-weight: var(--fw-normal);
+}
+
+.top-left i {
+    margin-right: 5px;
+    /* color: var(--gold); */
+    font-weight: var(--fw-normal);
+    font-size: 16px;
+}
+
+/* Right side links */
+.top-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: var(--fw-normal);
+}
+
+.top-link:hover {
+    color: var(--gold);
+}
+
+/* Social Icons */
+.social-icon {
+    color: #fff;
+    font-size: 16px;
+    transition: 0.3s;
+    font-weight: var(--fw-normal);
+}
+
+.social-icon:hover {
+    color: var(--gold);
+}
+
+/* Mega dropdown base */
+.mega-dropdown {
+    position: static;
+}
+
+.mega-menu {
+    width: 100%;
+    left: 0;
+    right: 0;
+    border: none;
+    border-radius: 0;
+    display: none;
+    background-color: var(--white);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+/* Hover effect (desktop) */
+@media (min-width: 992px) {
+    .mega-dropdown:hover .mega-menu {
+        display: block;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Category item */
+.mega-item img {
+    border-radius: 8px;
+    width: 200px;
+    height: 100px;
+    object-fit: cover;
+    transition: 0.3s;
+}
+
+.mega-item h5 {
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+/* Hover effect */
+.mega-item:hover img {
+    transform: scale(1.05);
+}
+
+.mega-item:hover h5 {
+    color: var(--gold);
+}
+
+.navbar .nav-link {
+    position: relative;
+    display: inline-block;
+    padding: 8px 0;
+}
+
+/* underline */
+.navbar .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 1px;
+    /* 🔥 important */
+    width: 100%;
+    height: 2px;
+    background: var(--gold);
+
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.navbar .nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+
+.navbar .dropdown-toggle::after {
+    display: none !important;
+}
+
+.navbar .nav-link i {
+    font-size: 22px;
+    margin-left: 4px;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+}
+
+.mega-dropdown:hover .nav-link i {
+    transform: rotate(180deg);
+}
+
+.mobile-cart-wrapper {
+    display: none;
+}
+
+/* Remove default */
+.navbar-toggler {
+    border: none;
+    background: transparent;
+    padding: 6px;
+}
+
+/* Hamburger lines */
+/* Toggle container */
+.custom-toggler {
+    width: 30px;
+    height: 24px;
+    position: relative;
+}
+
+/* Common line */
+.toggler-icon {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Proper center alignment */
+.toggler-icon.top {
+    top: 50%;
+    transform: translateY(-10px);
+}
+
+.toggler-icon.middle {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.toggler-icon.bottom {
+    top: 50%;
+    transform: translateY(7px);
+}
+
+/* 🔥 Active (perfect X) */
+.toggler-icon.top.active {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.toggler-icon.middle.active {
+    opacity: 0;
+}
+
+.toggler-icon.bottom.active {
+    transform: translateY(-50%) rotate(-45deg);
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.custom-toggler:focus,
+.custom-toggler:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Cart icon */
+.mobile-cart-wrapper {
+    font-size: 20px;
+    color: var(--text-dark);
+}
+
+/* Badge */
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: var(--primary-red);
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 50%;
+}
+
+@media (max-width:560px) {
+    .mobile-cart-wrapper {
+        display: block;
+
+    }
+
+    .desk-cart {
+        display: none;
+    }
+}
+
+@media (max-width: 991px) {
+
+    .navbar-nav {
+        gap: 0 !important;
+        /* ❌ remove gap */
+    }
+
+    .navbar .nav-link {
+        display: block;
+        /* 🔥 important */
+        padding: 10px 0;
+        /* controlled spacing */
+        font-size: 18px;
+        /* reduce size */
+    }
+
+    .navbar-collapse {
+        padding-top: 10px;
+    }
+
+}
+
+@media (max-width: 991px) {
+
+    .mega-menu {
+        display: none;
+        position: relative;
+        box-shadow: none;
+        padding: 10px 0;
+    }
+
+    .mega-menu.show {
+        display: block;
+    }
+
+    .mega-item img {
+        width: 100%;
+        height: auto;
+    }
+
+}
+
+
+.mobile-header {
+    height: 60px;
+}
+
+
+
+/* Center align fix */
+.mobile-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mobile-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--primary-red);
+}
+
+/* Toggle button clean */
+.navbar-toggler {
+    border: none;
+}
+
+@media (max-width: 991px) {
+
+    .navbar-nav {
+        gap: 0 !important;
+        text-align: center;
+    }
+
+    .navbar .nav-link {
+        display: block;
+        padding: 12px 0;
+        font-size: 18px;
+    }
+
+    .navbar-collapse {
+        padding: 10px 0;
+    }
+
+}
+
+@media (max-width: 991px) {
+
+    .mega-menu {
+        display: none;
+        position: relative;
+        width: 100%;
+        box-shadow: none;
+        padding: 10px 0;
+    }
+
+    .mega-menu.show {
+        display: block;
+    }
+
+    .mega-item {
+        margin-bottom: 15px;
+    }
+
+}
+
+.navbar {
+    align-items: center;
+}

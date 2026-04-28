@@ -1,0 +1,137 @@
+<!-- 🔝 Top Header Bar -->
+<div class="top-header d-none d-lg-block">
+    <div class="container d-flex justify-content-between align-items-center">
+
+        <!-- Left Side -->
+        <div class="top-left">
+            <span>
+                <i class="fa fa-phone"></i> +91 9876543210
+            </span>
+            <span class="ms-3">
+                <i class="fa fa-envelope"></i> support@jewellery.com
+            </span>
+        </div>
+
+        <!-- Right Side -->
+        <div class="top-right d-flex align-items-center gap-3">
+
+            <a routerLink="/offers" class="top-link">
+                <i class="fa fa-tag"></i> Offers
+            </a>
+            <!-- Social Icons -->
+            <a href="#" class="social-icon"><i class="fa fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fa fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fa fa-twitter"></i></a>
+
+        </div>
+
+    </div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3">
+
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold text-dark" routerLink="/">
+        <img src="../../../assets/images/logo2.png" alt="">
+        <span class="mobile-title d-lg-none">Jewellery</span>
+
+    </a>
+    <a class="mobile-cart-wrapper position-relative" routerLink="/cart">
+        <i class="fa fa-shopping-cart"></i>
+        <span class="cart-badge">2</span>
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        (click)="isMenuOpen = !isMenuOpen">
+
+        <span class="toggler-icon top" [class.active]="isMenuOpen"></span>
+        <span class="toggler-icon middle" [class.active]="isMenuOpen"></span>
+        <span class="toggler-icon bottom" [class.active]="isMenuOpen"></span>
+
+    </button>
+
+    <!-- Menu -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-center gap-5">
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/">Home</a>
+            </li>
+            <li class="nav-item dropdown mega-dropdown" (click)="toggleCategory()">
+                <a class="nav-link" href="#">
+                    Categories <i class="fa fa-angle-down ms-1"></i>
+                </a>
+
+                <div class="dropdown-menu mega-menu p-4" [class.show]="isCategoryOpen">
+                    <div class="row">
+
+                        <!-- Category Item -->
+                        <div class="col-md-3">
+                            <div class="mega-item text-center">
+                                <img src="../../../assets/images/gold.jpg" class="img-fluid mb-2" />
+                                <h5>Gold Jewellery</h5>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="mega-item text-center">
+                                <img src="../../../assets/images/diamond.jpg" class="img-fluid mb-2" />
+                                <h5>Diamond</h5>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="mega-item text-center">
+                                <img src="../../../assets/images/silver.webp" class="img-fluid mb-2" />
+                                <h5>Silver</h5>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="mega-item text-center">
+                                <img src="../../../assets/images/rings.jpg" class="img-fluid mb-2" />
+                                <h5>Rings</h5>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/gold">Gold</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/diamond">Diamonds</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/silver">Silver</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/about">About</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/contact">Contact</a>
+            </li>
+
+            <!-- Cart -->
+            <li class="nav-item desk-cart">
+                <a class="nav-link position-relative" routerLink="/cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
+                        2
+                    </span>
+                </a>
+            </li>
+
+            <!-- Login -->
+            <li class="nav-item">
+                <a class="btn btn-dark btn-sm px-3" routerLink="/login">
+                    Login
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
