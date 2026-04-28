@@ -64,3 +64,9 @@
     margin-left: 10px;
     color: #fff;
 }
+
+@media (max-width:570px) {
+    .footer {
+        display: none;
+    }
+}

@@ -1,0 +1,181 @@
+.contact-hero {
+    background: url('../../../assets/images/silver-neckless.webp') center/cover no-repeat;
+    padding: 100px 20px;
+    color: #fff;
+}
+
+.contact-hero h1 {
+    font-size: 48px;
+    font-weight: 600;
+    color: var(--primary-red-dark);
+}
+
+.contact-hero p {
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--primary-red-dark);
+}
+
+.contact-card {
+    padding: 25px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: 0.3s;
+}
+
+.contact-card i {
+    font-size: 30px;
+    color: var(--gold);
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: var(--gold);
+    outline: none;
+}
+
+.btn-gold {
+    background: var(--primary-red-dark);
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    float: right;
+}
+
+/* .contact-img {
+    background-image: url("../../../assets/images/gold.jpg");
+    width: 100%;
+    height: 400px;
+    text-align: center;
+} */
+.contact-container {
+    position: relative;
+    /* 🔥 important */
+    background-image: url("../../../assets/images/silver-neckless.webp");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 50px;
+    overflow: hidden;
+}
+
+/* 🔥 overlay */
+.contact-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.381);
+    /* opacity adjust chesuko */
+    z-index: 0;
+}
+
+/* 🔥 content above overlay */
+.contact-container .row {
+    position: relative;
+    z-index: 1;
+}
+
+/* text visible */
+.contact-title {
+    margin-top: 100px;
+    color: #fff;
+    /* white better */
+}
+
+.contact-title h1 {
+    font-size: 48px;
+    font-weight: 600;
+}
+
+section h1 {
+    font-size: 48px;
+    font-weight: 600;
+}
+
+section p {
+    font-size: 20px;
+    font-weight: 600;
+
+}
+
+.contact-title p {
+    font-size: 22px;
+}
+
+/* form inputs */
+.contact-form input,
+.contact-form textarea {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+}
+
+.btn-dark {
+    background: var(--primary-red-dark);
+    border: none;
+    padding: 10px 20px;
+    color: white;
+}
+
+/* Wrapper */
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Input */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    /* background: rgba(255, 255, 255, 0.9); */
+}
+
+/* Label */
+.form-group label {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    font-size: 14px;
+    color: #777;
+    pointer-events: none;
+    transition: 0.3s ease;
+}
+
+/* 🔥 FLOAT EFFECT */
+.form-group input:focus+label,
+.form-group input:not(:placeholder-shown)+label,
+.form-group textarea:focus+label,
+.form-group textarea:not(:placeholder-shown)+label {
+    top: -10px;
+    left: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-red-dark);
+    padding: 0 5px;
+}
+
+/* Focus border */
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--gold);
+}

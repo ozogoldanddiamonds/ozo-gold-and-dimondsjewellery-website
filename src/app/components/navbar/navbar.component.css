@@ -245,6 +245,54 @@
     box-shadow: none !important;
 }
 
+.nav-title {
+    color: var(--primary-red);
+    font-weight: 700;
+}
+
+/* Sticky navbar */
+#mainNavbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    transition: all 0.6s ease;
+}
+
+/* 🔥 Scroll effect */
+#mainNavbar.scrolled {
+    animation: navFlipIn 0.8s ease forwards;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Animation */
+@keyframes navFlipIn {
+    0% {
+        transform: translateY(-20px) rotateX(-8deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+/* Top header hide/show */
+.top-header {
+    transition: all 0.6s ease;
+}
+
+/* Hide class */
+.top-header.hide {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+/* Navbar when scrolling */
+#mainNavbar.scrolled {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
 /* Cart icon */
 .mobile-cart-wrapper {
     font-size: 20px;
@@ -276,10 +324,50 @@
 
 @media (max-width: 991px) {
 
-    .navbar-nav {
-        gap: 0 !important;
-        /* ❌ remove gap */
+    /* Navbar row */
+    .navbar {
+        display: flex;
+        align-items: center;
     }
+
+    /* Brand = logo + text */
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        /* push others right */
+    }
+
+    /* Logo */
+    .navbar-brand img {
+        width: 80px;
+    }
+
+    /* Text container */
+    .nav-title {
+        display: flex;
+        flex-direction: column;
+        /* 🔥 break into 2 lines */
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--primary-red);
+        line-height: 1.2;
+    }
+
+    /* Cart */
+    .mobile-cart-wrapper {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+    }
+
+    /* Toggle */
+    .navbar-toggler {
+        padding: 4px;
+    }
+
 
     .navbar .nav-link {
         display: block;

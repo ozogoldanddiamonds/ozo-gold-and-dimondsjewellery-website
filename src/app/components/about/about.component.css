@@ -1,0 +1,48 @@
+.about-hero {
+    background: url("../../../assets/images/gold-items.avif") center/cover no-repeat;
+    padding: 120px 20px;
+    color: #fff;
+}
+
+.about-hero h1 {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 38px;
+    font-weight: 600;
+}
+
+p {
+    font-size: 20px;
+}
+
+.icon {
+    font-size: 30px;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+.stats {
+    background: #f9f9f9;
+}
+
+.stats h3 {
+    color: var(--gold);
+}
+
+.btn-gold {
+    background-color: var(--primary-red-dark);
+    color: white;
+}
+
+@media (max-width:570px) {
+    .about-hero {
+        padding: 20px;
+    }
+
+    .about-hero h1 {
+        font-size: 36px;
+    }
+}
