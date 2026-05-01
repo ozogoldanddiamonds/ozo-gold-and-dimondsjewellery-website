@@ -1,0 +1,107 @@
+<div class="container product-page my-5">
+
+    <div class="row">
+
+        <!-- LEFT SIDE -->
+        <div class="col-md-6">
+
+            <div class="main-image">
+                <img [src]="selectedImage">
+            </div>
+
+            <div class="thumb-list mt-3">
+                <img *ngFor="let img of images" [src]="img" (click)="selectedImage = img"
+                    [class.active]="selectedImage === img">
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="col-md-6">
+
+            <h2 class="product-title">Diamond Necklace</h2>
+
+            <div class="rating mb-2">
+                ⭐⭐⭐⭐☆ <span>(18 Reviews)</span>
+            </div>
+
+            <p class="description">
+                Elegant handcrafted necklace with premium diamonds.
+            </p>
+
+            <!-- COLORS -->
+            <div class="mb-3">
+                <strong>Color</strong>
+                <div class="color-box">
+                    <span class="color black"></span>
+                    <span class="color red"></span>
+                    <span class="color blue"></span>
+                </div>
+            </div>
+
+            <!-- SIZE -->
+            <div class="mb-3">
+                <strong>Size</strong>
+                <div class="size-box">
+                    <button class="active">SMALL</button>
+                    <button>MEDIUM</button>
+                </div>
+            </div>
+
+            <!-- QUANTITY -->
+            <div class="qty-box">
+                <button class="qty-btn">-</button>
+                <input type="number" value="1">
+                <button class="qty-btn">+</button>
+            </div>
+
+            <!-- PRICE -->
+            <h2 class="price">$200.00</h2>
+
+            <!-- ADD TO CART -->
+            <button class="btn add-cart-btn w-100">
+                ADD TO CART
+            </button>
+
+            <!-- EXTRA -->
+            <div class="extra-links mt-3">
+                <span>❤️ Wishlist</span>
+                <span>✉ Send Email</span>
+            </div>
+
+
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <!-- ACCORDION -->
+            <div class="accordion mt-4">
+
+                <div class="acc-item" (click)="toggleAcc('specs')">
+                    MEASUREMENTS & SPECS
+                </div>
+                <div class="acc-content" *ngIf="openAcc === 'specs'">
+                    Product measurements and specifications details here...
+                </div>
+
+                <div class="acc-item" (click)="toggleAcc('shipping')">
+                    SHIPPING & RETURNS
+                </div>
+                <div class="acc-content" *ngIf="openAcc === 'shipping'">
+                    Shipping details and return policy...
+                </div>
+
+                <div class="acc-item" (click)="toggleAcc('size')">
+                    SIZE CHARTS
+                </div>
+                <div class="acc-content" *ngIf="openAcc === 'size'">
+                    Size chart details here...
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

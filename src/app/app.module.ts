@@ -10,7 +10,10 @@ import { ContactComponent } from './components/contact/contact.component';
 import { CartComponent } from './components/cart/cart.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { FooterComponent } from './footer/footer.component';
-
+import { CategoriesComponent } from './components/categories/categories.component';
+import { WhishlistComponent } from './components/whishlist/whishlist.component';
+import { ProductComponent } from './components/product/product.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,11 +23,16 @@ import { FooterComponent } from './footer/footer.component';
     ContactComponent,
     CartComponent,
     PaymentComponent,
-    FooterComponent
+    FooterComponent,
+    CategoriesComponent,
+    WhishlistComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

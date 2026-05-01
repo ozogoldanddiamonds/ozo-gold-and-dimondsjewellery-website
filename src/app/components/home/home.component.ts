@@ -9,16 +9,16 @@ SwiperCore.use([Navigation, Pagination, Autoplay]);
 })
 export class HomeComponent implements AfterViewInit {
 
-  collections = [
-    { name: 'Gold', image: 'assets/images/gold.jpg' },
-    { name: 'Diamond', image: 'assets/images/diamond.jpg' },
-    { name: 'Rings', image: 'assets/images/rings.jpg' },
-    { name: 'Silver', image: 'assets/images/silver.webp' },
-    { name: 'Gold', image: 'assets/images/gold.jpg' },
-    { name: 'Diamond', image: 'assets/images/diamond.jpg' },
-    { name: 'Rings', image: 'assets/images/rings.jpg' },
-    { name: 'Silver', image: 'assets/images/silver.webp' }
-  ];
+    collections = [
+      { name: 'Gold', image: 'assets/images/gold.jpg' },
+      { name: 'Diamond', image: 'assets/images/diamond.jpg' },
+      { name: 'Rings', image: 'assets/images/rings.jpg' },
+      { name: 'Silver', image: 'assets/images/silver.webp' },
+      { name: 'Gold', image: 'assets/images/gold.jpg' },
+      { name: 'Diamond', image: 'assets/images/diamond.jpg' },
+      { name: 'Rings', image: 'assets/images/rings.jpg' },
+      { name: 'Silver', image: 'assets/images/silver.webp' }
+    ];
 
   featureProducts = [
     { name: 'Gold', image: 'assets/images/gold.jpg' },

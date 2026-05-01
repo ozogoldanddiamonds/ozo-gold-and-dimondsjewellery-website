@@ -122,6 +122,11 @@
     transition: 0.3s;
 }
 
+.mega-item a {
+    text-decoration: none;
+    color: var(--gold);
+}
+
 .mega-item h5 {
     font-weight: 500;
     margin-top: 5px;

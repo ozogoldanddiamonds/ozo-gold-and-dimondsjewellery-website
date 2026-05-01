@@ -1,1 +1,81 @@
-<p>cart works!</p>
+<div class="container my-5">
+
+    <div class="row">
+
+        <!-- 🔹 LEFT: CART ITEMS -->
+        <div class="col-lg-8">
+
+            <h3 class="mb-4">Shopping Cart</h3>
+
+            <div class="cart-item row align-items-center" *ngFor="let item of cartItems">
+
+                <!-- Image -->
+                <div class="col-2">
+                    <img [src]="item.image" class="cart-img">
+                </div>
+
+                <!-- Name -->
+                <div class="col-3">
+                    <h6>{{item.name}}</h6>
+                    <p class="mb-0 text-muted">₹ {{item.price}}</p>
+                </div>
+
+
+                <!-- Quantity -->
+                <div class="col-2 text-center">
+                    <div class="qty-box">
+                        <button (click)="decrease(item)">-</button>
+                        <input type="number" [ngModel]="item.qty" (ngModelChange)="item.qty = +$event">
+                        <button (click)="increase(item)">+</button>
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="col-2 text-center">
+                    ₹ {{item.price * item.qty}}
+                </div>
+
+                <!-- Remove -->
+                <div class="col-1 text-center">
+                    <i class="fa fa-times remove-btn" (click)="remove(item)"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 🔹 RIGHT: SUMMARY -->
+        <div class="col-lg-4">
+
+            <div class="summary-box">
+
+                <h5>Order Summary</h5>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹ {{getSubtotal()}}</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+
+                <hr>
+
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>₹ {{getSubtotal()}}</span>
+                </div>
+
+                <button class="btn checkout-btn w-100 mt-3">
+                    Proceed to Checkout
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

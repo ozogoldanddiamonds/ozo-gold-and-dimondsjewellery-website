@@ -1,0 +1,38 @@
+/* Row */
+.wishlist-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Image */
+.wishlist-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Button */
+.move-btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    padding: 6px 12px;
+    transition: 0.3s;
+}
+
+.move-btn:hover {
+    background: var(--gold);
+    color: #fff;
+}
+
+/* Remove */
+.remove-btn {
+    cursor: pointer;
+    color: #999;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.remove-btn:hover {
+    color: red;
+}

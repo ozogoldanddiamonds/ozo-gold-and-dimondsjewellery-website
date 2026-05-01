@@ -1,0 +1,87 @@
+/* Sidebar */
+.filter-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.filter-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.filter-box li {
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.filter-box li:hover {
+    color: var(--gold);
+}
+
+/* Product Card */
+.product-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Image */
+.product-img {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-img img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: 0.3s;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Hover icons */
+.hover-icons {
+    position: absolute;
+    bottom: -40px;
+    width: 100%;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.product-card:hover .hover-icons {
+    bottom: 20px;
+}
+
+.hover-icons i {
+    background: #fff;
+    padding: 8px;
+    margin: 0 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.hover-icons i:hover {
+    background: var(--gold);
+    color: #fff;
+}
+
+/* Info */
+.product-info {
+    padding: 10px;
+    text-align: center;
+}
+
+.product-info p {
+    color: var(--gold);
+    font-weight: 600;
+}
