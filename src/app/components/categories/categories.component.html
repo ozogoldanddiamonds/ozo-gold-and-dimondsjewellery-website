@@ -1,74 +1,273 @@
-<div class="container my-5">
+<div class="container-fluid product-page">
 
     <div class="row">
 
-        <!-- 🔹 LEFT FILTER -->
-        <div class="col-lg-3">
+        <!-- ================= LEFT FILTER ================= -->
+        <div class="col-lg-2 filter-sidebar d-none d-lg-block">
 
-            <div class="filter-box">
+            <div class="filter-section">
+                <h6 class="filter-title">CATEGORIES</h6>
 
-                <h5>Categories</h5>
-                <ul>
-                    <li>Gold</li>
-                    <li>Diamond</li>
-                    <li>Silver</li>
-                    <li>Rings</li>
-                </ul>
+                <label class="filter-option">
+                    <input type="checkbox"> Gold
+                </label>
 
-                <h5 class="mt-4">Price Range</h5>
+                <label class="filter-option">
+                    <input type="checkbox"> Diamond
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox"> Silver
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox"> Rings
+                </label>
+            </div>
+
+            <div class="filter-section">
+                <h6 class="filter-title">PRICE</h6>
+
                 <input type="range" class="form-range">
 
-                <h5 class="mt-4">Sort By</h5>
+                <div class="price-text">
+                    ₹500 - ₹5,00,000+
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h6 class="filter-title">SORT BY</h6>
+
                 <select class="form-select">
+                    <option>Recommended</option>
                     <option>Latest</option>
                     <option>Price Low to High</option>
                     <option>Price High to Low</option>
                 </select>
+            </div>
+
+        </div>
+
+        <!-- ================= RIGHT SIDE ================= -->
+        <div class="col-lg-10">
+
+            <!-- TOP BAR -->
+            <div class="top-bar">
+
+                <div>
+                    <h5 class="page-title">
+                        Jewellery Collection
+                    </h5>
+
+                    <span class="product-count">
+                        120 Items
+                    </span>
+                </div>
+
+                <div class="sort-box">
+                    <select class="form-select">
+                        <option>Sort by : Recommended</option>
+                        <option>Newest</option>
+                        <option>Popularity</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- PRODUCTS -->
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-6" *ngFor="let item of products">
+
+                    <div class="product-card" (click)="product()">
+
+                        <!-- IMAGE -->
+                        <div class="product-img">
+
+                            <img [src]="item.image">
+
+                            <div class="wishlist">
+                                <i class="fa fa-heart-o"></i>
+                            </div>
+
+                            <div class="hover-icons">
+                                <i class="fa fa-shopping-cart"></i>
+                                <i class="fa fa-eye"></i>
+                            </div>
+
+                        </div>
+
+                        <!-- INFO -->
+                        <div class="product-info">
+
+                            <h6>{{item.name}}</h6>
+
+                            <p class="category">
+                                Premium Jewellery
+                            </p>
+
+                            <div class="price-section">
+
+                                <span class="price">
+                                    ₹ {{item.price}}
+                                </span>
+
+                                <span class="old-price">
+                                    ₹ 99999
+                                </span>
+
+                                <span class="discount">
+                                    (40% OFF)
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
-        <!-- 🔹 RIGHT PRODUCTS -->
-        <div class="col-lg-9">
+    </div>
 
-            <!-- Top bar -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5>Showing 12 Products</h5>
+</div>
+<!-- MOBILE FILTER BAR -->
+<!-- MOBILE BOTTOM BAR -->
 
-                <select class="form-select w-auto">
-                    <option>Default Sorting</option>
-                    <option>Popularity</option>
-                    <option>Newest</option>
-                </select>
-            </div>
+<div class="mobile-bottom-bar d-lg-none">
 
-            <!-- Product Grid -->
-            <div class="row">
+    <div class="bottom-tab" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
 
-                <div class="col-md-4" *ngFor="let item of products">
-                    <div class="product-card" (click)="product()">
+        <i class="fa fa-filter"></i>
+        Filter
 
-                        <div class="product-img">
-                            <img [src]="item.image">
+    </div>
 
-                            <div class="hover-icons">
-                                <i class="fa fa-shopping-cart"></i>
-                                <i class="fa fa-eye"></i>
-                                <i class="fa fa-heart"></i>
-                            </div>
-                        </div>
+    <div class="bottom-tab" data-bs-toggle="offcanvas" data-bs-target="#sortCanvas">
 
-                        <div class="product-info">
-                            <h6>{{item.name}}</h6>
-                            <p>₹ {{item.price}}</p>
-                        </div>
+        <i class="fa fa-sort"></i>
+        Sort
 
-                    </div>
-                </div>
+    </div>
 
-            </div>
+</div>
+<!-- FILTER OFFCANVAS -->
 
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="filterCanvas">
+
+    <div class="offcanvas-header">
+
+        <h5>Filters</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas">
+        </button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <!-- CATEGORY -->
+
+        <div class="mobile-filter-section">
+
+            <h6>Categories</h6>
+
+            <label>
+                <input type="checkbox">
+                Gold
+            </label>
+
+            <label>
+                <input type="checkbox">
+                Diamond
+            </label>
+
+            <label>
+                <input type="checkbox">
+                Silver
+            </label>
+
+        </div>
+
+        <!-- PRICE -->
+
+        <div class="mobile-filter-section">
+
+            <h6>Price Range</h6>
+
+            <input type="range" class="form-range">
+
+        </div>
+
+        <!-- TYPE -->
+
+        <div class="mobile-filter-section">
+
+            <h6>Jewellery Type</h6>
+
+            <label>
+                <input type="checkbox">
+                Rings
+            </label>
+
+            <label>
+                <input type="checkbox">
+                Chains
+            </label>
+
+            <label>
+                <input type="checkbox">
+                Bangles
+            </label>
+
+        </div>
+
+        <!-- APPLY -->
+
+        <button class="btn apply-btn">
+            Apply Filters
+        </button>
+
+    </div>
+
+</div>
+<!-- SORT OFFCANVAS -->
+
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="sortCanvas">
+
+    <div class="offcanvas-header">
+
+        <h5>Sort By</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas">
+        </button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <div class="sort-option">
+            Recommended
+        </div>
+
+        <div class="sort-option">
+            Price Low To High
+        </div>
+
+        <div class="sort-option">
+            Price High To Low
+        </div>
+
+        <div class="sort-option">
+            Latest
+        </div>
+
+        <div class="sort-option">
+            Popularity
         </div>
 
     </div>
