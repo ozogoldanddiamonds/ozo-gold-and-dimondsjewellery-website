@@ -63,6 +63,13 @@
         font-size: 22px;
     }
 
+    .date-box {
+        height: 100px;
+    }
+
+    .news-content h5 {
+        font-size: 16px !important;
+    }
 }
 
 
@@ -72,6 +79,7 @@
     padding: 10px;
     transition: 0.3s;
     cursor: pointer;
+    text-align: center;
 }
 
 .collection-card img {
@@ -125,13 +133,7 @@
     animation: scroll 20s linear infinite;
 }
 
-.collection-card {
-    min-width: 250px;
-    background: #fff;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-}
+
 
 
 /* Card */
@@ -142,7 +144,21 @@
     transition: 0.3s;
     position: relative;
     margin-top: 50px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+}
+
+.feature-collection-card {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    /* important */
+}
+
+
+
+
+.swiper {
+    padding-bottom: 40px;
 }
 
 .product-card:hover {
@@ -381,4 +397,49 @@
 /* Hover */
 .news-item:hover h5 {
     text-decoration: underline;
+}
+
+.product-info-mobile {
+    display: none;
+}
+
+@media (max-width:760px) {
+    .collection-card img {
+        border-radius: 10px;
+        height: 80px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .collection-card h5 {
+        font-size: 14px;
+    }
+
+    .feature-collection-card {
+        width: 100%;
+    }
+
+    .product-img img {
+        height: 150px;
+    }
+
+    .product-info {
+        display: none !important;
+    }
+
+    .product-name {
+        font-size: 14px;
+    }
+
+    .price {
+        font-size: 14px;
+        justify-content: space-between;
+        display: flex;
+    }
+
+    .product-info-mobile {
+        display: block;
+        padding: 10px;
+    }
+
 }

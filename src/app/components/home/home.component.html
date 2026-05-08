@@ -56,7 +56,7 @@
 
 </div>
 
-<div class="swiper mySwiper">
+<div class="swiper popularSwiper">
     <!-- Heading -->
     <div class="section-header text-center">
         <h2>Popular Collections</h2>
@@ -116,7 +116,7 @@
 
                 <!-- Image -->
                 <div class="product-img">
-                    <img [src]="item.image">
+                    <img [src]="item.image" (click)="product()">
 
                     <!-- Sale Badge -->
                     <!-- <span class="sale-badge">Sale</span> -->
@@ -125,7 +125,7 @@
                     <div class="hover-icons">
                         <i class="fa fa-shopping-cart"></i>
                         <i class="fa fa-eye"></i>
-                        <i class="fa fa-heart"></i>
+                        <i class="fa fa-heart" (click)="whishlist()"></i>
                     </div>
                 </div>
 
@@ -219,7 +219,7 @@
 </div>
 
 <div class="container">
-    <div class="swiper mySwiper">
+    <div class="swiper featuredSwiper">
         <!-- Heading -->
         <div class="section-header text-center">
             <h2>Featured Products</h2>
@@ -240,13 +240,13 @@
         <div class="swiper-wrapper">
 
             <div class="swiper-slide" *ngFor="let item of products">
-                <div class="collection-card">
+                <div class="feature-collection-card">
                     <!-- Product Grid -->
                     <div class="product-card">
 
                         <!-- Image -->
                         <div class="product-img">
-                            <img [src]="item.image">
+                            <img [src]="item.image" (click)="product()">
 
                             <!-- Sale Badge -->
                             <!-- <span class="sale-badge">Sale</span> -->
@@ -262,6 +262,15 @@
                         <!-- Info -->
                         <div class="product-info d-flex justify-content-between align-items-center">
                             <span class="product-name">{{item.name}}</span>
+                            <span class="price">
+                                ${{item.price}}
+                                <small class="old-price">$300</small>
+                            </span>
+                        </div>
+
+                        <!-- Info -->
+                        <div class="product-info-mobile">
+                            <p class="product-name">{{item.name}}</p>
                             <span class="price">
                                 ${{item.price}}
                                 <small class="old-price">$300</small>

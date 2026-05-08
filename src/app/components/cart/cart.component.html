@@ -7,38 +7,41 @@
 
             <h3 class="mb-4">Shopping Cart</h3>
 
-            <div class="cart-item row align-items-center" *ngFor="let item of cartItems">
+            <div class="cart-item" *ngFor="let item of cartItems">
 
                 <!-- Image -->
-                <div class="col-2">
+                <div>
                     <img [src]="item.image" class="cart-img">
                 </div>
 
-                <!-- Name -->
-                <div class="col-3">
+                <!-- Product Details -->
+                <div class="flex-grow-1">
+
                     <h6>{{item.name}}</h6>
-                    <p class="mb-0 text-muted">₹ {{item.price}}</p>
-                </div>
+                    <p>₹ {{item.price}}</p>
 
+                    <!-- Qty + Total -->
+                    <div class="d-flex align-items-center justify-content-between mt-2">
 
-                <!-- Quantity -->
-                <div class="col-2 text-center">
-                    <div class="qty-box">
-                        <button (click)="decrease(item)">-</button>
-                        <input type="number" [ngModel]="item.qty" (ngModelChange)="item.qty = +$event">
-                        <button (click)="increase(item)">+</button>
+                        <div class="qty-box">
+                            <button (click)="decrease(item)">-</button>
+
+                            <input type="number" [ngModel]="item.qty" (ngModelChange)="item.qty = +$event">
+
+                            <button (click)="increase(item)">+</button>
+                        </div>
+
+                        <div class="fw-bold">
+                            ₹ {{item.price * item.qty}}
+                        </div>
+
                     </div>
-                </div>
 
-                <!-- Total -->
-                <div class="col-2 text-center">
-                    ₹ {{item.price * item.qty}}
                 </div>
 
                 <!-- Remove -->
-                <div class="col-1 text-center">
-                    <i class="fa fa-times remove-btn" (click)="remove(item)"></i>
-                </div>
+                <i class="fa fa-times remove-btn" (click)="remove(item)">
+                </i>
 
             </div>
 

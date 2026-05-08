@@ -58,10 +58,10 @@
         <ul class="navbar-nav align-items-center gap-5">
 
             <li class="nav-item">
-                <a class="nav-link" routerLink="/">Home</a>
+                <a class="nav-link" routerLink="/" (click)="closeMenu()">Home</a>
             </li>
             <li class="nav-item dropdown mega-dropdown" (click)="toggleCategory()">
-                <a class="nav-link" href="#" (click)="closeMenu()">
+                <a class="nav-link" href="#">
                     Categories <i class="fa fa-angle-down ms-1"></i>
                 </a>
 
@@ -71,7 +71,7 @@
                         <!-- Category Item -->
                         <div class="col-md-3">
                             <div class="mega-item text-center">
-                                <a routerLink="/categories">
+                                <a routerLink="/categories" (click)="closeMenu()">
                                     <img src="../../../assets/images/gold.jpg" class="img-fluid mb-2" />
                                     <h5>Gold Jewellery</h5>
                                 </a>
@@ -80,7 +80,7 @@
 
                         <div class="col-md-3">
                             <div class="mega-item text-center">
-                                <a routerLink="/categories">
+                                <a routerLink="/categories" (click)="closeMenu()">
                                     <img src="../../../assets/images/diamond.jpg" class="img-fluid mb-2" />
                                     <h5>Diamond</h5>
                                 </a>
@@ -89,7 +89,7 @@
 
                         <div class="col-md-3">
                             <div class="mega-item text-center">
-                                <a routerLink="/categories">
+                                <a routerLink="/categories" (click)="closeMenu()">
                                     <img src="../../../assets/images/silver.webp" class="img-fluid mb-2" />
                                     <h5>Silver</h5>
                                 </a>
@@ -98,7 +98,7 @@
 
                         <div class="col-md-3">
                             <div class="mega-item text-center">
-                                <a routerLink="/categories">
+                                <a routerLink="/categories" (click)="closeMenu()">
                                     <img src="../../../assets/images/rings.jpg" class="img-fluid mb-2" />
                                     <h5>Rings</h5>
                                 </a>

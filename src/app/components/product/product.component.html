@@ -5,17 +5,22 @@
         <!-- LEFT SIDE -->
         <div class="col-md-6">
 
-            <div class="main-image">
-                <img [src]="selectedImage">
-            </div>
+            <div class="image-gallery">
 
-            <div class="thumb-list mt-3">
-                <img *ngFor="let img of images" [src]="img" (click)="selectedImage = img"
-                    [class.active]="selectedImage === img">
+                <!-- LEFT THUMBNAILS -->
+                <div class="thumb-list">
+                    <img *ngFor="let img of images" [src]="img" (click)="selectedImage = img"
+                        [class.active]="selectedImage === img">
+                </div>
+
+                <!-- RIGHT MAIN IMAGE -->
+                <div class="main-image">
+                    <img [src]="selectedImage">
+                </div>
+
             </div>
 
         </div>
-
         <!-- RIGHT SIDE -->
         <div class="col-md-6">
 

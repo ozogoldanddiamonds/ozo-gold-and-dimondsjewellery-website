@@ -1,45 +1,42 @@
-<div class="container my-5">
+<div class="container wishlist-page my-5">
 
-    <h3 class="mb-4">My Wishlist</h3>
+    <h2 class="wishlist-title mb-4">My Wishlist</h2>
 
-    <!-- Header -->
-    <div class="row fw-bold mb-3 d-none d-md-flex">
-        <div class="col-md-2">Product</div>
-        <div class="col-md-4"></div>
-        <div class="col-md-2 text-center">Price</div>
-        <div class="col-md-2 text-center">Action</div>
-        <div class="col-md-2 text-center">Remove</div>
-    </div>
+    <!-- Wishlist Card -->
+    <div class="wishlist-card" *ngFor="let item of wishlist">
 
-    <!-- Items -->
-    <div class="wishlist-item row align-items-center" *ngFor="let item of wishlist">
-
-        <!-- Image -->
-        <div class="col-md-2">
-            <img [src]="item.image" class="wishlist-img">
+        <!-- Product Image -->
+        <div class="wishlist-image">
+            <img [src]="item.image" alt="">
         </div>
 
-        <!-- Name -->
-        <div class="col-md-4">
-            <h6>{{item.name}}</h6>
-            <small class="text-muted">Gold / Diamond</small>
+        <!-- Product Details -->
+        <div class="wishlist-details">
+
+            <h5>{{item.name}}</h5>
+
+            <p class="category">
+                Gold Jewellery
+            </p>
+
+            <div class="price">
+                ₹ {{item.price}}
+            </div>
+
         </div>
 
-        <!-- Price -->
-        <div class="col-md-2 text-center">
-            ₹ {{item.price}}
-        </div>
+        <!-- Actions -->
+        <div class="wishlist-actions">
 
-        <!-- Move to cart -->
-        <div class="col-md-2 text-center">
-            <button class="btn move-btn" (click)="moveToCart(item)">
+            <button class="btn cart-btn" (click)="moveToCart(item)">
+                <i class="fa fa-shopping-cart me-2"></i>
                 Add to Cart
             </button>
-        </div>
 
-        <!-- Remove -->
-        <div class="col-md-2 text-center">
-            <i class="fa fa-times remove-btn" (click)="remove(item)"></i>
+            <button class="delete-btn" (click)="remove(item)">
+                <i class="fa fa-trash"></i>
+            </button>
+
         </div>
 
     </div>

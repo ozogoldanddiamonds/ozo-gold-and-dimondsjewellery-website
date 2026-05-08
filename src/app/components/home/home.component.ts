@@ -1,4 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { Router } from '@angular/router';
 import Swiper from 'swiper';
 import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
 SwiperCore.use([Navigation, Pagination, Autoplay]);
@@ -9,16 +10,17 @@ SwiperCore.use([Navigation, Pagination, Autoplay]);
 })
 export class HomeComponent implements AfterViewInit {
 
-    collections = [
-      { name: 'Gold', image: 'assets/images/gold.jpg' },
-      { name: 'Diamond', image: 'assets/images/diamond.jpg' },
-      { name: 'Rings', image: 'assets/images/rings.jpg' },
-      { name: 'Silver', image: 'assets/images/silver.webp' },
-      { name: 'Gold', image: 'assets/images/gold.jpg' },
-      { name: 'Diamond', image: 'assets/images/diamond.jpg' },
-      { name: 'Rings', image: 'assets/images/rings.jpg' },
-      { name: 'Silver', image: 'assets/images/silver.webp' }
-    ];
+
+  collections = [
+    { name: 'Gold', image: 'assets/images/gold.jpg' },
+    { name: 'Diamond', image: 'assets/images/diamond.jpg' },
+    { name: 'Rings', image: 'assets/images/rings.jpg' },
+    { name: 'Silver', image: 'assets/images/silver.webp' },
+    { name: 'Gold', image: 'assets/images/gold.jpg' },
+    { name: 'Diamond', image: 'assets/images/diamond.jpg' },
+    { name: 'Rings', image: 'assets/images/rings.jpg' },
+    { name: 'Silver', image: 'assets/images/silver.webp' }
+  ];
 
   featureProducts = [
     { name: 'Gold', image: 'assets/images/gold.jpg' },
@@ -66,12 +68,17 @@ export class HomeComponent implements AfterViewInit {
       desc: 'Discover handcrafted jewellery pieces with elegance...'
     }
   ];
+  constructor(public router: Router) { }
   ngAfterViewInit() {
     setTimeout(() => {
-      new Swiper('.mySwiper', {
+
+      /* =========================
+         Popular Collections
+      ========================= */
+      new Swiper('.popularSwiper', {
 
         slidesPerView: 4,
-        spaceBetween: 20,
+        spaceBetween: 10,
         loop: true,
 
         autoplay: {
@@ -80,23 +87,68 @@ export class HomeComponent implements AfterViewInit {
         },
 
         navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+          nextEl: '.popularSwiper .swiper-button-next',
+          prevEl: '.popularSwiper .swiper-button-prev',
         },
 
         pagination: {
-          el: '.swiper-pagination',
+          el: '.popularSwiper .swiper-pagination',
           clickable: true,
         },
 
         breakpoints: {
-          320: { slidesPerView: 1 },
+          320: { slidesPerView: 4 },
+          576: { slidesPerView: 4 },
+          768: { slidesPerView: 4 },
+          992: { slidesPerView: 4 }
+        }
+
+      });
+
+
+      /* =========================
+         Featured Products
+      ========================= */
+      new Swiper('.featuredSwiper', {
+
+        slidesPerView: 4,
+        spaceBetween: 25,
+        loop: true,
+
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+
+        navigation: {
+          nextEl: '.featuredSwiper .swiper-button-next',
+          prevEl: '.featuredSwiper .swiper-button-prev',
+        },
+
+        pagination: {
+          el: '.featuredSwiper .swiper-pagination',
+          clickable: true,
+        },
+
+        breakpoints: {
+          320: { slidesPerView: 2 },
           576: { slidesPerView: 2 },
           768: { slidesPerView: 3 },
           992: { slidesPerView: 4 }
         }
 
       });
+
     }, 0);
+
+
+  }
+
+
+  whishlist() {
+    this.router.navigate(["/whishlist"]);
+  }
+  product() {
+    this.router.navigate(["/product"]);
   }
 }

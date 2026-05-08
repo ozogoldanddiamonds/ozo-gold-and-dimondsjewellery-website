@@ -10,7 +10,8 @@ export class ProductComponent {
   images = [
     'assets/images/gold.jpg',
     'assets/images/diamond.jpg',
-    'assets/images/rings.jpg'
+    'assets/images/rings.jpg',
+    'assets/images/silver.webp',
   ];
 
 
