@@ -1,112 +1,131 @@
 <div class="container product-page my-5">
-
-    <div class="row">
-
+    <div class="row g-5">
         <!-- LEFT SIDE -->
-        <div class="col-md-6">
+        <div class="col-lg-7">
+            <div class="product-gallery-wrap">
+                <div class="image-gallery">
+                    <div class="thumb-list">
+                        <img *ngFor="let img of images" [src]="img" (click)="selectedImage = img"
+                            [class.active]="selectedImage === img" alt="Product thumbnail" />
+                    </div>
 
-            <div class="image-gallery">
-
-                <!-- LEFT THUMBNAILS -->
-                <div class="thumb-list">
-                    <img *ngFor="let img of images" [src]="img" (click)="selectedImage = img"
-                        [class.active]="selectedImage === img">
+                    <div class="main-image">
+                        <span class="product-badge">Best Seller</span>
+                        <img [src]="selectedImage" alt="Diamond Necklace" />
+                    </div>
                 </div>
-
-                <!-- RIGHT MAIN IMAGE -->
-                <div class="main-image">
-                    <img [src]="selectedImage">
-                </div>
-
             </div>
-
         </div>
+
         <!-- RIGHT SIDE -->
-        <div class="col-md-6">
+        <div class="col-lg-5">
+            <div class="product-buy-box">
+                <p class="brand-name">OZO Gold & Diamond</p>
+                <h2 class="product-title">Diamond Necklace</h2>
 
-            <h2 class="product-title">Diamond Necklace</h2>
+                <div class="rating-row">
+                    <div class="rating-badge">4.4 ★</div>
+                    <span class="rating-text">18 Reviews</span>
+                </div>
 
-            <div class="rating mb-2">
-                ⭐⭐⭐⭐☆ <span>(18 Reviews)</span>
-            </div>
+                <p class="description">
+                    Elegant handcrafted necklace with premium diamonds, designed for timeless beauty and special
+                    occasions.
+                </p>
 
-            <p class="description">
-                Elegant handcrafted necklace with premium diamonds.
-            </p>
+                <div class="price-block">
+                    <h2 class="price">$200.00 <small class="old-price">$300.00</small></h2>
+                    <p class="save-text">33% OFF <span>inclusive of all taxes</span></p>
+                </div>
 
-            <!-- COLORS -->
-            <div class="mb-3">
-                <strong>Color</strong>
-                <div class="color-box">
-                    <span class="color black"></span>
-                    <span class="color red"></span>
-                    <span class="color blue"></span>
+                <!-- COLORS -->
+                <div class="option-block">
+                    <div class="option-head">
+                        <strong>Color</strong>
+                        <span>Choose a finish</span>
+                    </div>
+                    <div class="color-box">
+                        <span class="color black active"></span>
+                        <span class="color red"></span>
+                        <span class="color blue"></span>
+                    </div>
+                </div>
+
+                <!-- SIZE -->
+                <div class="option-block">
+                    <div class="option-head">
+                        <strong>Size</strong>
+                        <a href="javascript:void(0)" class="size-guide-link">Size Guide</a>
+                    </div>
+                    <div class="size-box">
+                        <button class="active">SMALL</button>
+                        <button>MEDIUM</button>
+                        <button>LARGE</button>
+                    </div>
+                </div>
+
+                <!-- QUANTITY -->
+                <div class="option-block">
+                    <div class="option-head">
+                        <strong>Quantity</strong>
+                    </div>
+                    <div class="qty-box">
+                        <button class="qty-btn">-</button>
+                        <input type="number" value="1">
+                        <button class="qty-btn">+</button>
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <button class="btn add-cart-btn">ADD TO CART</button>
+                    <button class="btn buy-now-btn">BUY NOW</button>
+                </div>
+
+                <div class="extra-links">
+                    <span (click)="whishlist()">❤️ Add to Wishlist</span>
+                    <span>🔒 Secure Checkout</span>
+                </div>
+
+                <div class="delivery-box">
+                    <h6>Delivery & Service</h6>
+                    <ul>
+                        <li>Free delivery on prepaid orders</li>
+                        <li>7-day easy returns</li>
+                        <li>Certified premium jewellery</li>
+                    </ul>
                 </div>
             </div>
-
-            <!-- SIZE -->
-            <div class="mb-3">
-                <strong>Size</strong>
-                <div class="size-box">
-                    <button class="active">SMALL</button>
-                    <button>MEDIUM</button>
-                </div>
-            </div>
-
-            <!-- QUANTITY -->
-            <div class="qty-box">
-                <button class="qty-btn">-</button>
-                <input type="number" value="1">
-                <button class="qty-btn">+</button>
-            </div>
-
-            <!-- PRICE -->
-            <h2 class="price">$200.00</h2>
-
-            <!-- ADD TO CART -->
-            <button class="btn add-cart-btn w-100">
-                ADD TO CART
-            </button>
-
-            <!-- EXTRA -->
-            <div class="extra-links mt-3">
-                <span>❤️ Wishlist</span>
-                <span>✉ Send Email</span>
-            </div>
-
-
-
         </div>
-
     </div>
-    <div class="row">
-        <div class="col-12">
-            <!-- ACCORDION -->
-            <div class="accordion mt-4">
 
+    <!-- Accordion -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="product-detail-panels">
                 <div class="acc-item" (click)="toggleAcc('specs')">
-                    MEASUREMENTS & SPECS
+                    <span>MEASUREMENTS & SPECS</span>
+                    <span>+</span>
                 </div>
                 <div class="acc-content" *ngIf="openAcc === 'specs'">
-                    Product measurements and specifications details here...
+                    Product measurements, material details, diamond quality, finish, and other specifications here.
                 </div>
 
                 <div class="acc-item" (click)="toggleAcc('shipping')">
-                    SHIPPING & RETURNS
+                    <span>SHIPPING & RETURNS</span>
+                    <span>+</span>
                 </div>
                 <div class="acc-content" *ngIf="openAcc === 'shipping'">
-                    Shipping details and return policy...
+                    Shipping details, estimated delivery time, return and refund policy here.
                 </div>
 
                 <div class="acc-item" (click)="toggleAcc('size')">
-                    SIZE CHARTS
+                    <span>SIZE CHARTS</span>
+                    <span>+</span>
                 </div>
                 <div class="acc-content" *ngIf="openAcc === 'size'">
-                    Size chart details here...
+                    Size chart and fit guide details here.
                 </div>
-
             </div>
         </div>
     </div>
-
 </div>

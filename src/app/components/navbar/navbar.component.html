@@ -60,7 +60,7 @@
             <li class="nav-item">
                 <a class="nav-link" routerLink="/" (click)="closeMenu()">Home</a>
             </li>
-            <li class="nav-item dropdown mega-dropdown" (click)="toggleCategory()">
+            <li class="nav-item dropdown mega-dropdown">
                 <a class="nav-link" href="#">
                     Categories <i class="fa fa-angle-down ms-1"></i>
                 </a>
@@ -109,13 +109,13 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" routerLink="/gold" (click)="closeMenu()">Gold</a>
+                <a class="nav-link" routerLink="/categories" (click)="closeMenu()">Gold</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" routerLink="/diamond" (click)="closeMenu()">Diamonds</a>
+                <a class="nav-link" routerLink="/categories" (click)="closeMenu()">Diamonds</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" routerLink="/silver" (click)="closeMenu()">Silver</a>
+                <a class="nav-link" routerLink="/categories" (click)="closeMenu()">Silver</a>
             </li>
 
             <li class="nav-item">
@@ -128,7 +128,7 @@
 
             <!-- Cart -->
             <li class="nav-item desk-cart">
-                <a class="nav-link position-relative" routerLink="/cart" (click)="closeMenu()">
+                <a class="position-relative" routerLink="/cart" (click)="closeMenu()">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
                         2
@@ -138,11 +138,109 @@
 
             <!-- Login -->
             <li class="nav-item">
-                <a class="btn btn-dark btn-sm px-3" routerLink="/login">
-                    Login
+                <a routerLink="/login">
+                    <!-- Trigger -->
+                    <button class="auth-trigger" (click)="openAuthModal('login')">Login / Register</button>
                 </a>
             </li>
 
         </ul>
     </div>
 </nav>
+
+
+
+<!-- Modal -->
+<div class="auth-backdrop" *ngIf="isAuthOpen" (click)="closeAuthModal()"></div>
+
+<div class="auth-modal" *ngIf="isAuthOpen" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="auth-close" (click)="closeAuthModal()" aria-label="Close modal">
+        &times;
+    </button>
+
+    <div class="auth-grid">
+        <!-- Left panel -->
+        <div class="auth-brand-panel">
+            <p class="auth-kicker">Welcome to OZO</p>
+            <h2 id="authTitle">{{ activeAuthTab === 'login' ? 'Sign in to your account' : 'Create your account' }}</h2>
+            <p class="auth-copy">
+                Save your wishlist, track orders, and shop faster with a secure account.
+            </p>
+
+            <ul class="auth-benefitsts">
+                <li>Fast checkout</li>
+                <li>Track orders</li>
+                <li>Wishlist sync</li>
+            </ul>
+        </div>
+
+        <!-- Right panel -->
+        <div class="auth-form-panel">
+            <div class="auth-tabs">
+                <button [class.active]="activeAuthTab === 'login'" (click)="activeAuthTab='login'">Login</button>
+                <button [class.active]="activeAuthTab === 'register'"
+                    (click)="activeAuthTab='register'">Register</button>
+            </div>
+
+            <!-- Login -->
+            <form *ngIf="activeAuthTab === 'login'" class="auth-form">
+                <label>Email</label>
+                <input type="email" placeholder="Enter your email" />
+
+                <label>Password</label>
+                <div class="password-wrap">
+                    <input [type]="showLoginPassword ? 'text' : 'password'" placeholder="Enter your password" />
+                    <button type="button" class="eye-btn" (click)="showLoginPassword = !showLoginPassword">
+                        <i class="fa" [ngClass]="showLoginPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                </div>
+
+                <div class="auth-row">
+                    <label class="remember">
+                        <input type="checkbox" />
+                        <span>Remember me</span>
+                    </label>
+                    <a href="javascript:void(0)" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button class="auth-submit">Login</button>
+
+                <div class="auth-divider">
+                    <span>or continue with</span>
+                </div>
+
+                <div class="social-row">
+                    <button type="button" class="social-btn">Google</button>
+                    <button type="button" class="social-btn">Facebook</button>
+                </div>
+            </form>
+
+            <!-- Register -->
+            <form *ngIf="activeAuthTab === 'register'" class="auth-form">
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your name" />
+
+                <label>Email</label>
+                <input type="email" placeholder="Enter your email" />
+
+                <label>Password</label>
+                <div class="password-wrap">
+                    <input [type]="showRegisterPassword ? 'text' : 'password'" placeholder="Create password" />
+                    <button type="button" class="eye-btn" (click)="showRegisterPassword = !showRegisterPassword">
+                        <i class="fa" [ngClass]="showRegisterPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                </div>
+
+                <label>Confirm Password</label>
+                <input type="password" placeholder="Confirm password" />
+
+                <label class="remember terms">
+                    <input type="checkbox" />
+                    <span>I agree to Terms & Privacy Policy</span>
+                </label>
+
+                <button class="auth-submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+</div>

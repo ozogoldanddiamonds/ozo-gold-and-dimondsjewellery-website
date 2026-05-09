@@ -6,10 +6,14 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  isAuthOpen = false;
+  activeAuthTab: 'login' | 'register' = 'login';
+  showLoginPassword = false;
+  showRegisterPassword = false;
   isCategoryOpen = false;
   isMenuOpen = false;
   lastScrollTop = 0;
-  toggleCategory() {
+  toggleCategoryMenu() {
     this.isCategoryOpen = !this.isCategoryOpen;
   }
 
@@ -49,5 +53,33 @@ export class NavbarComponent {
     }, 200);
   }
 
+  openAuthModal(tab: 'login' | 'register' = 'login') {
+    this.activeAuthTab = tab;
+    this.isAuthOpen = true;
+  }
 
+  closeAuthModal() {
+    this.isAuthOpen = false;
+    this.showLoginPassword = false;
+    this.showRegisterPassword = false;
+  }
+
+  switchTab(tab: 'login' | 'register') {
+    this.activeAuthTab = tab;
+    this.showLoginPassword = false;
+    this.showRegisterPassword = false;
+  }
+
+  toggleLoginPassword() {
+    this.showLoginPassword = !this.showLoginPassword;
+  }
+
+  toggleRegisterPassword() {
+    this.showRegisterPassword = !this.showRegisterPassword;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEsc() {
+    if (this.isAuthOpen) this.closeAuthModal();
+  }
 }

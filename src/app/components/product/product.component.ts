@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product',
@@ -6,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent {
+
   openAcc: string | null = null;
   images = [
     'assets/images/gold.jpg',
@@ -13,11 +15,16 @@ export class ProductComponent {
     'assets/images/rings.jpg',
     'assets/images/silver.webp',
   ];
-
+  constructor(public router: Router) { }
 
   toggleAcc(section: string) {
     this.openAcc = this.openAcc === section ? null : section;
   }
 
   selectedImage = this.images[0];
+
+
+  whishlist() {
+    this.router.navigate(["/whishlist"]);
+  }
 }

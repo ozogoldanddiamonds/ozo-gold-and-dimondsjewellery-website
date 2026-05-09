@@ -1,44 +1,66 @@
 <div class="container wishlist-page my-5">
-
-    <h2 class="wishlist-title mb-4">My Wishlist</h2>
-
-    <!-- Wishlist Card -->
-    <div class="wishlist-card" *ngFor="let item of wishlist">
-
-        <!-- Product Image -->
-        <div class="wishlist-image">
-            <img [src]="item.image" alt="">
+    <div class="wishlist-header">
+        <div>
+            <p class="wishlist-subtitle">Saved for later</p>
+            <h2 class="wishlist-title">My Wishlist</h2>
         </div>
 
-        <!-- Product Details -->
-        <div class="wishlist-details">
-
-            <h5>{{item.name}}</h5>
-
-            <p class="category">
-                Gold Jewellery
-            </p>
-
-            <div class="price">
-                ₹ {{item.price}}
-            </div>
-
+        <div class="wishlist-count">
+            {{ wishlist?.length || 0 }} Items
         </div>
-
-        <!-- Actions -->
-        <div class="wishlist-actions">
-
-            <button class="btn cart-btn" (click)="moveToCart(item)">
-                <i class="fa fa-shopping-cart me-2"></i>
-                Add to Cart
-            </button>
-
-            <button class="delete-btn" (click)="remove(item)">
-                <i class="fa fa-trash"></i>
-            </button>
-
-        </div>
-
     </div>
 
+    <div class="wishlist-grid" *ngIf="wishlist?.length; else emptyWishlist">
+        <div class="wishlist-card" *ngFor="let item of wishlist">
+
+            <button class="remove-icon" (click)="remove(item)" aria-label="Remove from wishlist">
+                <i class="fa fa-times"></i>
+            </button>
+
+            <div class="wishlist-image">
+                <img [src]="item.image" [alt]="item.name">
+                <span class="wishlist-badge">Wishlist Pick</span>
+            </div>
+
+            <div class="wishlist-details">
+                <p class="brand-name">OZO JEWELS</p>
+                <h5>{{ item.name }}</h5>
+
+                <p class="category">Gold Jewellery</p>
+
+                <div class="price-row">
+                    <span class="price">₹ {{ item.price }}</span>
+                    <span class="old-price">₹ {{ item.price + 1200 }}</span>
+                    <span class="discount">20% OFF</span>
+                </div>
+
+                <p class="stock-text">In stock • Ready for dispatch</p>
+
+                <div class="wishlist-meta">
+                    <span>Free Delivery</span>
+                    <span>7 Days Return</span>
+                </div>
+            </div>
+
+            <div class="wishlist-actions">
+                <!-- <button class="btn cart-btn" (click)="moveToCart(item)">
+                    <i class="fa fa-shopping-bag me-2"></i>
+                    Move to Bag
+                </button> -->
+
+                <button class="btn outline-btn">
+                    View Product
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #emptyWishlist>
+        <div class="empty-wishlist">
+            <div class="empty-icon">♡</div>
+            <h4>Your wishlist is empty</h4>
+            <p>Save your favourite products here and review them anytime before purchase.</p>
+            <button class="btn shop-btn" routerLink="/products">Start Shopping</button>
+        </div>
+    </ng-template>
 </div>

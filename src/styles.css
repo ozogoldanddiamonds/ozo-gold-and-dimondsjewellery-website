@@ -10,6 +10,7 @@
 
 body {
     color: var(--text-dark);
+    background: #fffdfa;
     /* font-family: "Poppins", sans-serif; */
     font-family: "Ysabeau Office", sans-serif;
 }
@@ -56,6 +57,20 @@ body {
     --heading-color: var(--text-dark);
     --subheading-color: var(--primary-red);
     --desc-color: var(--text-muted);
+
+    --gold: #c79a43;
+    --gold-dark: #a57b32;
+    --text-dark: #1e1a17;
+    --text-muted: #7e746a;
+    --surface: #ffffff;
+    --surface-soft: #fcf8f2;
+    --border: rgba(30, 26, 23, 0.08);
+    --danger: #d94c4c;
+    --success: #118a43;
+    --shadow-sm: 0 8px 24px rgba(28, 22, 14, 0.06);
+    --shadow-md: 0 18px 40px rgba(28, 22, 14, 0.10);
+    --radius-md: 18px;
+    --radius-lg: 24px;
 }
 
 /* 🧱 Headings */
