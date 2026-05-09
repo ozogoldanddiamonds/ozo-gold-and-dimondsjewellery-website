@@ -43,6 +43,7 @@
         <span class="cart-badge">2</span>
     </a>
 
+
     <!-- Mobile Toggle -->
     <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         (click)="isMenuOpen = !isMenuOpen">
@@ -60,7 +61,7 @@
             <li class="nav-item">
                 <a class="nav-link" routerLink="/" (click)="closeMenu()">Home</a>
             </li>
-            <li class="nav-item dropdown mega-dropdown">
+            <li class="nav-item dropdown mega-dropdown" (click)="toggleCategoryMenu()">
                 <a class="nav-link" href="#">
                     Categories <i class="fa fa-angle-down ms-1"></i>
                 </a>
@@ -69,46 +70,154 @@
                     <div class="row">
 
                         <!-- Category Item -->
-                        <div class="col-md-3">
-                            <div class="mega-item text-center">
-                                <a routerLink="/categories" (click)="closeMenu()">
-                                    <img src="../../../assets/images/gold.jpg" class="img-fluid mb-2" />
-                                    <h5>Gold Jewellery</h5>
-                                </a>
-                            </div>
-                        </div>
+                        <div class="mega-wrapper">
 
-                        <div class="col-md-3">
-                            <div class="mega-item text-center">
-                                <a routerLink="/categories" (click)="closeMenu()">
-                                    <img src="../../../assets/images/diamond.jpg" class="img-fluid mb-2" />
-                                    <h5>Diamond</h5>
-                                </a>
-                            </div>
-                        </div>
+                            <!-- LEFT SIDE -->
 
-                        <div class="col-md-3">
-                            <div class="mega-item text-center">
-                                <a routerLink="/categories" (click)="closeMenu()">
-                                    <img src="../../../assets/images/silver.webp" class="img-fluid mb-2" />
-                                    <h5>Silver</h5>
-                                </a>
-                            </div>
-                        </div>
+                            <div class="mega-left">
 
-                        <div class="col-md-3">
-                            <div class="mega-item text-center">
-                                <a routerLink="/categories" (click)="closeMenu()">
-                                    <img src="../../../assets/images/rings.jpg" class="img-fluid mb-2" />
-                                    <h5>Rings</h5>
-                                </a>
+                                <h6 class="mega-title">
+                                    Shop By Category
+                                </h6>
+
+                                <ul class="mega-links">
+
+                                    <li>
+                                        <a routerLink="/categories">
+                                            Gold Jewellery
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a routerLink="/categories">
+                                            Diamond Jewellery
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a routerLink="/categories">
+                                            Silver Jewellery
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a routerLink="/categories">
+                                            Rings Collection
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a routerLink="/categories">
+                                            Bridal Collection
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a routerLink="/categories">
+                                            New Arrivals
+                                        </a>
+                                    </li>
+
+                                </ul>
+
                             </div>
+
+                            <!-- RIGHT SIDE -->
+
+                            <div class="mega-right">
+
+                                <div class="row g-4">
+
+                                    <!-- ITEM -->
+
+                                    <div class="col-lg-3 col-6">
+
+                                        <a routerLink="/categories" class="mega-card">
+
+                                            <img src="../../../assets/images/gold.jpg">
+
+                                            <div class="mega-card-content">
+
+                                                <h5>Gold</h5>
+
+                                                <p>Luxury Jewellery</p>
+
+                                            </div>
+
+                                        </a>
+
+                                    </div>
+
+                                    <!-- ITEM -->
+
+                                    <div class="col-lg-3 col-6">
+
+                                        <a routerLink="/categories" class="mega-card">
+
+                                            <img src="../../../assets/images/diamond.jpg">
+
+                                            <div class="mega-card-content">
+
+                                                <h5>Diamond</h5>
+
+                                                <p>Premium Designs</p>
+
+                                            </div>
+
+                                        </a>
+
+                                    </div>
+
+                                    <!-- ITEM -->
+
+                                    <div class="col-lg-3 col-6">
+
+                                        <a routerLink="/categories" class="mega-card">
+
+                                            <img src="../../../assets/images/silver.webp">
+
+                                            <div class="mega-card-content">
+
+                                                <h5>Silver</h5>
+
+                                                <p>Trending Collection</p>
+
+                                            </div>
+
+                                        </a>
+
+                                    </div>
+
+                                    <!-- ITEM -->
+
+                                    <div class="col-lg-3 col-6">
+
+                                        <a routerLink="/categories" class="mega-card">
+
+                                            <img src="../../../assets/images/rings.jpg">
+
+                                            <div class="mega-card-content">
+
+                                                <h5>Rings</h5>
+
+                                                <p>Wedding Collection</p>
+
+                                            </div>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" routerLink="/categories" (click)="closeMenu()">Gold</a>
             </li>
             <li class="nav-item">
@@ -116,7 +225,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" routerLink="/categories" (click)="closeMenu()">Silver</a>
-            </li>
+            </li> -->
 
             <li class="nav-item">
                 <a class="nav-link" routerLink="/about" (click)="closeMenu()">About</a>
@@ -127,13 +236,16 @@
             </li>
 
             <!-- Cart -->
-            <li class="nav-item desk-cart">
+            <li class="nav-item desk-cart icons">
                 <a class="position-relative" routerLink="/cart" (click)="closeMenu()">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
                         2
                     </span>
                 </a>
+            </li>
+            <li class="icons">
+                <a (click)="closeMenu()"><i class="fa fa-heart" (click)="whishlist()"></i></a>
             </li>
 
             <!-- Login -->
@@ -147,7 +259,6 @@
         </ul>
     </div>
 </nav>
-
 
 
 <!-- Modal -->

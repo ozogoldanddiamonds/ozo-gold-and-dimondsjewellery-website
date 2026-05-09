@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -6,6 +7,7 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  constructor(public router: Router) { }
   isAuthOpen = false;
   activeAuthTab: 'login' | 'register' = 'login';
   showLoginPassword = false;
@@ -81,5 +83,10 @@ export class NavbarComponent {
   @HostListener('document:keydown.escape')
   onEsc() {
     if (this.isAuthOpen) this.closeAuthModal();
+  }
+
+
+  whishlist() {
+    this.router.navigate(["/whishlist"]);
   }
 }

@@ -3,7 +3,6 @@
     height: auto;
 }
 
-
 .nav-link:hover {
     color: #c9a34e !important;
     /* gold feel */
@@ -13,7 +12,11 @@
     background-color: var(--white);
 }
 
-
+.icons a i {
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--primary-red-dark);
+}
 
 .nav-link {
     color: var(--text-dark);
@@ -172,7 +175,6 @@
     transform: scaleX(1);
 }
 
-
 .navbar .dropdown-toggle::after {
     display: none !important;
 }
@@ -186,6 +188,144 @@
 
 .mega-dropdown:hover .nav-link i {
     transform: rotate(180deg);
+}
+
+/* ===================================
+   NEW MEGA UI
+=================================== */
+
+.mega-wrapper {
+    display: flex;
+    gap: 40px;
+}
+
+/* LEFT SIDE */
+
+.mega-left {
+    width: 220px;
+    border-right: 1px solid #ececec;
+    padding-right: 20px;
+}
+
+.mega-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 20px;
+}
+
+.mega-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mega-links li {
+    margin-bottom: 14px;
+}
+
+.mega-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.mega-links a:hover {
+    color: var(--gold);
+    padding-left: 5px;
+}
+
+/* RIGHT SIDE */
+
+.mega-right {
+    flex: 1;
+}
+
+/* CARD */
+
+.mega-card {
+    display: block;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: 0.3s;
+    border: 1px solid #f2f2f2;
+}
+
+.mega-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.mega-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: 0.4s;
+}
+
+.mega-card:hover img {
+    transform: scale(1.08);
+}
+
+.mega-card-content {
+    padding: 15px;
+    text-align: center;
+}
+
+.mega-card-content h5 {
+    font-size: 18px;
+    color: var(--gold);
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.mega-card-content p {
+    font-size: 13px;
+    color: #777;
+    margin: 0;
+}
+
+/* ===================================
+   MOBILE VIEW
+=================================== */
+
+@media(max-width:991px) {
+
+    .mega-menu {
+
+        max-height: 85vh;
+        overflow-y: auto;
+        padding-bottom: 120px !important;
+
+    }
+
+    .mega-wrapper {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .mega-left {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ececec;
+        padding-bottom: 20px;
+    }
+
+    .mega-card img {
+        height: 120px;
+    }
+
+    .mega-card-content {
+        padding: 10px;
+    }
+
+    .mega-card-content h5 {
+        font-size: 15px;
+    }
+
 }
 
 .mobile-cart-wrapper {
@@ -368,7 +508,7 @@
 
     /* Cart */
     .mobile-cart-wrapper {
-        display: flex;
+        /* display: flex; */
         align-items: center;
         margin-right: 20px;
     }
@@ -377,7 +517,6 @@
     .navbar-toggler {
         padding: 4px;
     }
-
 
     .navbar .nav-link {
         display: block;
@@ -414,11 +553,9 @@
 
 }
 
-
 .mobile-header {
     height: 60px;
 }
-
 
 
 /* Center align fix */
@@ -481,7 +618,6 @@
 .navbar {
     align-items: center;
 }
-
 
 /* login popup css  */
 .auth-trigger {
@@ -681,12 +817,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 8px;
+    font-size: 13px;
     color: #5f554b;
 }
 
 .remember input[type="checkbox"] {
-    width: 20px;
+    width: 14px;
 }
 
 .forgot-link {
