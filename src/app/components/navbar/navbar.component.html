@@ -40,18 +40,16 @@
     </a>
     <a class="mobile-cart-wrapper position-relative" routerLink="/cart">
         <i class="fa fa-shopping-cart"></i>
-        <span class="cart-badge">2</span>
+        <span class="cart-badge">{{ cartCount }}</span>
     </a>
 
 
     <!-- Mobile Toggle -->
     <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         (click)="isMenuOpen = !isMenuOpen">
-
         <span class="toggler-icon top" [class.active]="isMenuOpen"></span>
         <span class="toggler-icon middle" [class.active]="isMenuOpen"></span>
         <span class="toggler-icon bottom" [class.active]="isMenuOpen"></span>
-
     </button>
 
     <!-- Menu -->
@@ -61,159 +59,42 @@
             <li class="nav-item">
                 <a class="nav-link" routerLink="/" (click)="closeMenu()">Home</a>
             </li>
-            <li class="nav-item dropdown mega-dropdown" (click)="toggleCategoryMenu()">
-                <a class="nav-link" href="#">
+            <li class="nav-item dropdown mega-dropdown" [class.show]="isCategoryOpen">
+
+                <a class="nav-link dropdown-toggle" role="button" tabindex="0" (click)="toggleCategoryMenu()">
                     Categories <i class="fa fa-angle-down ms-1"></i>
                 </a>
 
-                <div class="dropdown-menu mega-menu p-4" [class.show]="isCategoryOpen">
-                    <div class="row">
+                <div class="dropdown-menu mega-menu p-4" [class.show]="isCategoryOpen"
+                    (click)="$event.stopPropagation()">
+                    <div class="mega-wrapper">
+                        <div class="mega-left">
+                            <h6 class="mega-title">Shop By Category</h6>
 
-                        <!-- Category Item -->
-                        <div class="mega-wrapper">
-
-                            <!-- LEFT SIDE -->
-
-                            <div class="mega-left">
-
-                                <h6 class="mega-title">
-                                    Shop By Category
-                                </h6>
-
-                                <ul class="mega-links">
-
-                                    <li>
-                                        <a routerLink="/categories">
-                                            Gold Jewellery
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a routerLink="/categories">
-                                            Diamond Jewellery
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a routerLink="/categories">
-                                            Silver Jewellery
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a routerLink="/categories">
-                                            Rings Collection
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a routerLink="/categories">
-                                            Bridal Collection
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a routerLink="/categories">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-
-                                </ul>
-
-                            </div>
-
-                            <!-- RIGHT SIDE -->
-
-                            <div class="mega-right">
-
-                                <div class="row g-4">
-
-                                    <!-- ITEM -->
-
-                                    <div class="col-lg-3 col-6">
-
-                                        <a routerLink="/categories" class="mega-card">
-
-                                            <img src="../../../assets/images/gold.jpg">
-
-                                            <div class="mega-card-content">
-
-                                                <h5>Gold</h5>
-
-                                                <p>Luxury Jewellery</p>
-
-                                            </div>
-
-                                        </a>
-
-                                    </div>
-
-                                    <!-- ITEM -->
-
-                                    <div class="col-lg-3 col-6">
-
-                                        <a routerLink="/categories" class="mega-card">
-
-                                            <img src="../../../assets/images/diamond.jpg">
-
-                                            <div class="mega-card-content">
-
-                                                <h5>Diamond</h5>
-
-                                                <p>Premium Designs</p>
-
-                                            </div>
-
-                                        </a>
-
-                                    </div>
-
-                                    <!-- ITEM -->
-
-                                    <div class="col-lg-3 col-6">
-
-                                        <a routerLink="/categories" class="mega-card">
-
-                                            <img src="../../../assets/images/silver.webp">
-
-                                            <div class="mega-card-content">
-
-                                                <h5>Silver</h5>
-
-                                                <p>Trending Collection</p>
-
-                                            </div>
-
-                                        </a>
-
-                                    </div>
-
-                                    <!-- ITEM -->
-
-                                    <div class="col-lg-3 col-6">
-
-                                        <a routerLink="/categories" class="mega-card">
-
-                                            <img src="../../../assets/images/rings.jpg">
-
-                                            <div class="mega-card-content">
-
-                                                <h5>Rings</h5>
-
-                                                <p>Wedding Collection</p>
-
-                                            </div>
-
-                                        </a>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
+                            <ul class="mega-links">
+                                <li *ngFor="let category of categories">
+                                    <a [routerLink]="['/categories']" [queryParams]="{ categoryId: category._id }"
+                                        (click)="closeMenu()">
+                                        {{ category.name }}
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
 
+                        <div class="mega-right">
+                            <div class="row g-4">
+                                <div class="col-lg-3 col-6" *ngFor="let category of categories">
+                                    <a [routerLink]="['/categories']" [queryParams]="{ categoryId: category._id }"
+                                        class="mega-card" (click)="closeMenu()">
+                                        <img [src]="category.image" [alt]="category.name">
+                                        <div class="mega-card-content">
+                                            <h5>{{ category.name }}</h5>
+                                            <p>Explore Collection</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -240,118 +121,51 @@
                 <a class="position-relative" routerLink="/cart" (click)="closeMenu()">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
-                        2
+                        {{ cartCount }}
                     </span>
                 </a>
             </li>
             <li class="icons">
-                <a (click)="closeMenu()"><i class="fa fa-heart" (click)="whishlist()"></i></a>
-            </li>
-
-            <!-- Login -->
-            <li class="nav-item">
-                <a routerLink="/login">
-                    <!-- Trigger -->
-                    <button class="auth-trigger" (click)="openAuthModal('login')">Login / Register</button>
+                <a (click)="closeMenu()">
+                    <i class="fa" [ngClass]="wishlistCount > 0? 'fa-heart text-danger': 'fa-heart-o'"
+                        (click)="whishlist()">
+                    </i>
                 </a>
             </li>
 
+            <!-- Login -->
+            <li *ngIf="!isLoggedIn">
+
+                <button class="auth-trigger" (click)="openAuthModal()">
+
+                    Login / Register
+
+                </button>
+
+            </li>
+            <li *ngIf="isLoggedIn" class="nav-item dropdown">
+
+                <a class="nav-link">
+
+                    <i class="fa fa-user-circle"></i>
+
+                </a>
+
+                <div class="user-dropdown">
+
+                    <a routerLink="/profile">My Profile</a>
+
+                    <a routerLink="/orders">My Orders</a>
+
+                    <a routerLink="/wishlist">Wishlist</a>
+
+                    <a (click)="logout()">Logout</a>
+
+                </div>
+
+            </li>
         </ul>
     </div>
 </nav>
-
-
-<!-- Modal -->
-<div class="auth-backdrop" *ngIf="isAuthOpen" (click)="closeAuthModal()"></div>
-
-<div class="auth-modal" *ngIf="isAuthOpen" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-    <button class="auth-close" (click)="closeAuthModal()" aria-label="Close modal">
-        &times;
-    </button>
-
-    <div class="auth-grid">
-        <!-- Left panel -->
-        <div class="auth-brand-panel">
-            <p class="auth-kicker">Welcome to OZO</p>
-            <h2 id="authTitle">{{ activeAuthTab === 'login' ? 'Sign in to your account' : 'Create your account' }}</h2>
-            <p class="auth-copy">
-                Save your wishlist, track orders, and shop faster with a secure account.
-            </p>
-
-            <ul class="auth-benefitsts">
-                <li>Fast checkout</li>
-                <li>Track orders</li>
-                <li>Wishlist sync</li>
-            </ul>
-        </div>
-
-        <!-- Right panel -->
-        <div class="auth-form-panel">
-            <div class="auth-tabs">
-                <button [class.active]="activeAuthTab === 'login'" (click)="activeAuthTab='login'">Login</button>
-                <button [class.active]="activeAuthTab === 'register'"
-                    (click)="activeAuthTab='register'">Register</button>
-            </div>
-
-            <!-- Login -->
-            <form *ngIf="activeAuthTab === 'login'" class="auth-form">
-                <label>Email</label>
-                <input type="email" placeholder="Enter your email" />
-
-                <label>Password</label>
-                <div class="password-wrap">
-                    <input [type]="showLoginPassword ? 'text' : 'password'" placeholder="Enter your password" />
-                    <button type="button" class="eye-btn" (click)="showLoginPassword = !showLoginPassword">
-                        <i class="fa" [ngClass]="showLoginPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-                    </button>
-                </div>
-
-                <div class="auth-row">
-                    <label class="remember">
-                        <input type="checkbox" />
-                        <span>Remember me</span>
-                    </label>
-                    <a href="javascript:void(0)" class="forgot-link">Forgot password?</a>
-                </div>
-
-                <button class="auth-submit">Login</button>
-
-                <div class="auth-divider">
-                    <span>or continue with</span>
-                </div>
-
-                <div class="social-row">
-                    <button type="button" class="social-btn">Google</button>
-                    <button type="button" class="social-btn">Facebook</button>
-                </div>
-            </form>
-
-            <!-- Register -->
-            <form *ngIf="activeAuthTab === 'register'" class="auth-form">
-                <label>Full Name</label>
-                <input type="text" placeholder="Enter your name" />
-
-                <label>Email</label>
-                <input type="email" placeholder="Enter your email" />
-
-                <label>Password</label>
-                <div class="password-wrap">
-                    <input [type]="showRegisterPassword ? 'text' : 'password'" placeholder="Create password" />
-                    <button type="button" class="eye-btn" (click)="showRegisterPassword = !showRegisterPassword">
-                        <i class="fa" [ngClass]="showRegisterPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-                    </button>
-                </div>
-
-                <label>Confirm Password</label>
-                <input type="password" placeholder="Confirm password" />
-
-                <label class="remember terms">
-                    <input type="checkbox" />
-                    <span>I agree to Terms & Privacy Policy</span>
-                </label>
-
-                <button class="auth-submit">Create Account</button>
-            </form>
-        </div>
-    </div>
-</div>
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal()">
+</app-auth-modal>

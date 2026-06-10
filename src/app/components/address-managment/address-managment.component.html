@@ -1,0 +1,97 @@
+<div class="addr-shell">
+    <div class="addr-header">
+        <div>
+            <h2>Saved Addresses</h2>
+            <p>Select or manage your delivery addresses</p>
+        </div>
+
+        <button class="primary-btn" (click)="openAddModal()">
+            + Add Address
+        </button>
+    </div>
+
+    <div class="addr-empty" *ngIf="addresses.length === 0">
+        <div class="empty-icon">📍</div>
+        <h3>No saved address yet</h3>
+        <p>Add your first address to continue with faster checkout.</p>
+        <button class="primary-btn" (click)="openAddModal()">Add New Address</button>
+    </div>
+
+    <div class="addr-grid" *ngIf="addresses.length > 0">
+        <div class="addr-card" *ngFor="let addr of addresses" [class.selected]="selectedAddress?._id === addr._id"
+            (click)="selectAddress(addr)">
+            <div class="addr-top">
+                <div class="radio-wrap">
+                    <span class="radio-dot" [class.active]="selectedAddress?._id === addr._id"></span>
+                    <div>
+                        <h4>{{ addr.fullName }}</h4>
+                        <p>{{ addr.phone }}</p>
+                    </div>
+                </div>
+
+                <div class="addr-actions">
+                    <span class="chip" *ngIf="addr.isDefault">Default</span>
+                    <button class="ghost-btn" (click)="openManageModal(addr, $event)">Manage</button>
+                </div>
+            </div>
+
+            <div class="addr-body">
+                <p>{{ addr.addressLine1 }}</p>
+                <p *ngIf="addr.addressLine2">{{ addr.addressLine2 }}</p>
+                <p>{{ addr.city }}, {{ addr.state }} - {{ addr.pincode }}</p>
+                <p>{{ addr.country }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+
+<div class="addr-modal" *ngIf="isModalOpen">
+    <div class="modal-head">
+        <div>
+            <h3>{{ modalMode === 'add' ? 'Add Address' : 'Manage Address' }}</h3>
+            <p>{{ modalMode === 'add' ? 'Fill your delivery address details' : 'Edit or update your saved addresses' }}
+            </p>
+        </div>
+        <button class="close-btn" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-tabs" *ngIf="modalMode === 'manage'">
+        <button class="tab-btn" [class.active]="manageTab === 'list'" (click)="manageTab = 'list'">
+            Address List
+        </button>
+        <button class="tab-btn" [class.active]="manageTab === 'add'" (click)="switchToAdd()">
+            Add New
+        </button>
+    </div>
+
+    <div class="modal-body" *ngIf="modalMode === 'manage' && manageTab === 'list'">
+        <div class="manage-list">
+            <div class="manage-card" *ngFor="let addr of addresses" [class.active]="editingAddress?._id === addr._id">
+                <div class="manage-card-head">
+                    <div>
+                        <h4>{{ addr.fullName }}</h4>
+                        <p>{{ addr.phone }}</p>
+                    </div>
+                    <span class="default-badge" *ngIf="addr.isDefault">Default</span>
+                </div>
+
+                <p class="manage-text">{{ addr.addressLine1 }}</p>
+                <p class="manage-text" *ngIf="addr.addressLine2">{{ addr.addressLine2 }}</p>
+                <p class="manage-text">{{ addr.city }}, {{ addr.state }} - {{ addr.pincode }}</p>
+
+                <div class="manage-footer">
+                    <button class="text-btn" (click)="editAddress(addr, $event)">Edit</button>
+                    <button class="text-btn danger" (click)="deleteAddress(addr, $event)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body" *ngIf="modalMode === 'add' || (modalMode === 'manage' && manageTab === 'add')">
+        <app-address-form [formGroup]="addressForm" [submitLabel]="editingAddress ? 'Update Address' : 'Save Address'"
+            (submitForm)="saveAddress($event)" (cancelForm)="closeModal()">
+        </app-address-form>
+    </div>
+</div>

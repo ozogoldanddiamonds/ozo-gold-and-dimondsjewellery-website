@@ -1,131 +1,599 @@
-<div class="container product-page my-5">
-    <div class="row g-5">
+<div class="container product-page" *ngIf="product">
+
+    <div class="row">
+
         <!-- LEFT SIDE -->
         <div class="col-lg-7">
+
             <div class="product-gallery-wrap">
+
                 <div class="image-gallery">
+
+                    <!-- Thumbnail Images -->
                     <div class="thumb-list">
-                        <img *ngFor="let img of images" [src]="img" (click)="selectedImage = img"
-                            [class.active]="selectedImage === img" alt="Product thumbnail" />
+
+                        <img *ngFor="let img of product?.images" [src]="img" [class.active]="selectedImage === img"
+                            (click)="selectedImage = img" alt="Product Image" />
+
                     </div>
 
+                    <!-- Main Image -->
                     <div class="main-image">
-                        <span class="product-badge">Best Seller</span>
-                        <img [src]="selectedImage" alt="Diamond Necklace" />
+
+                        <span class="product-badge" *ngIf="product?.bestSeller">
+
+                            Best Seller
+
+                        </span>
+
+                        <span class="product-badge featured" *ngIf="product?.featured">
+
+                            Featured
+
+                        </span>
+
+                        <span class="product-badge trending" *ngIf="product?.trending">
+
+                            Trending
+
+                        </span>
+
+                        <img [src]="selectedImage || product?.images?.[0]" [alt]="product?.name" />
+
                     </div>
+
                 </div>
+
+            </div>
+            <!-- Accordion -->
+            <div class="row mt-5">
+
+                <div class="col-12">
+
+                    <div class="product-detail-panels">
+
+
+                        <!-- Specs -->
+                        <div class="acc-item" (click)="toggleAcc('specs')">
+
+                            <span>
+                                MEASUREMENTS & SPECS
+                            </span>
+
+                            <span>
+                                +
+                            </span>
+
+                        </div>
+
+                        <div class="acc-content" *ngIf="openAcc === 'specs'">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-hover table-bordered align-middle specs-table">
+
+                                    <tbody>
+
+                                        <tr>
+                                            <th>Category</th>
+                                            <td>{{ product?.category?.name | titlecase}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Sub Category</th>
+                                            <td>{{ product?.subCategory?.name | titlecase}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Product Type</th>
+                                            <td>{{ product?.productType | titlecase}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Gender</th>
+                                            <td>{{ product?.gender | titlecase}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Occasion</th>
+                                            <td>{{ product?.occasion | titlecase}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Metal Purity</th>
+                                            <td>{{ selectedVariant?.metalPurity }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Metal Color</th>
+                                            <td>{{ selectedVariant?.metalColor | titlecase}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Gross Weight</th>
+                                            <td>{{ selectedVariant?.grossWeight }} g</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Net Weight</th>
+                                            <td>{{ selectedVariant?.netWeight }} g</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Making Charges</th>
+                                            <td>₹{{ selectedVariant?.makingCharges }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Stock</th>
+                                            <td>{{ selectedVariant?.stock }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>SKU</th>
+                                            <td>{{ selectedVariant?.sku | titlecase}}</td>
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Specs -->
+                        <div class="acc-item" (click)="toggleAcc('stones')">
+
+                            <span>
+                                STONES DETAILS
+                            </span>
+
+                            <span>
+                                +
+                            </span>
+
+                        </div>
+                        <div class="acc-content" *ngIf="openAcc === 'stones'">
+
+                            <div *ngFor="let stone of selectedVariant?.stones; let i = index" class="mb-4">
+
+                                <h6 class="mb-3">
+                                    STONES {{ i + 1 }}
+                                </h6>
+
+                                <div class="table-responsive">
+
+                                    <table class="table table-hover table-striped table-bordered">
+
+                                        <tbody>
+
+                                            <tr>
+                                                <th>Stone Type</th>
+                                                <td>{{ stone?.stoneType | titlecase}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Category</th>
+                                                <td>{{ stone?.stoneCategory | titlecase}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Quality</th>
+                                                <td>{{ stone?.quality }}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Total Weight</th>
+                                                <td>{{ stone?.totalWeight }} ct</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Quantity</th>
+                                                <td>{{ stone?.quantity }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Stone Price</th>
+                                                <td>{{stone?.stoneValue}}</td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Shipping -->
+                        <div class="acc-item" (click)="toggleAcc('shipping')">
+
+                            <span>
+                                SHIPPING & RETURNS
+                            </span>
+
+                            <span>
+                                +
+                            </span>
+
+                        </div>
+
+                        <div class="acc-content" *ngIf="openAcc === 'shipping'">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-hover table-striped table-bordered">
+
+                                    <tbody>
+
+                                        <tr>
+                                            <th>Shipping</th>
+                                            <td>Free shipping across India</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Returns</th>
+                                            <td>7-day easy return available</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Insurance</th>
+                                            <td>Secure insured delivery for all jewellery products</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Hallmark</th>
+                                            <td>BIS Hallmark Certified Jewellery</td>
+                                        </tr>
+
+                                        <tr *ngIf="product?.certificationIncluded">
+                                            <th>Certification</th>
+                                            <td>Diamond Certification Included</td>
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
 
         <!-- RIGHT SIDE -->
         <div class="col-lg-5">
+
             <div class="product-buy-box">
-                <p class="brand-name">OZO Gold & Diamond</p>
-                <h2 class="product-title">Diamond Necklace</h2>
 
-                <div class="rating-row">
-                    <div class="rating-badge">4.4 ★</div>
-                    <span class="rating-text">18 Reviews</span>
-                </div>
-
-                <p class="description">
-                    Elegant handcrafted necklace with premium diamonds, designed for timeless beauty and special
-                    occasions.
+                <!-- Brand -->
+                <p class="brand-name">
+                    {{ product?.brand }}
                 </p>
 
+                <!-- Product Name -->
+                <h2 class="product-title">
+                    {{ product?.name }}
+                </h2>
+
+                <!-- Category -->
+                <div class="rating-row">
+
+                    <div class="rating-badge">
+                        {{ product?.productType | uppercase }}
+                    </div>
+
+                    <span class="rating-text">
+                        {{ product?.category?.name }}
+                    </span>
+
+                </div>
+
+                <!-- Description -->
+                <p class="description">
+                    {{ product?.shortDescription }}
+                </p>
+                <p class="description">
+                    {{ product?.description }}
+                </p>
+
+                <div class="option-head">
+
+                    <strong>Size</strong>
+
+                    <button class="size-chart-link" *ngIf="sizeChart" (click)="openSizeChart()">
+
+                        View Size Chart
+
+                    </button>
+
+                </div>
+                <!-- Price -->
                 <div class="price-block">
-                    <h2 class="price">$200.00 <small class="old-price">$300.00</small></h2>
-                    <p class="save-text">33% OFF <span>inclusive of all taxes</span></p>
+
+                    <h2 class="price">
+
+                        ₹{{ selectedVariant?.priceBreakup?.finalPrice | number:'1.0-0' }}
+
+                    </h2>
+
+                    <p class="save-text" *ngIf="selectedVariant?.priceBreakup?.discountAmount > 0">
+
+                        Save ₹{{ selectedVariant?.priceBreakup?.discountAmount | number:'1.0-0' }}
+
+                        <span>
+                            inclusive of all taxes
+                        </span>
+
+                    </p>
+
                 </div>
 
-                <!-- COLORS -->
+                <!-- Metal Purity -->
+                <!-- Metal Purity -->
                 <div class="option-block">
-                    <div class="option-head">
-                        <strong>Color</strong>
-                        <span>Choose a finish</span>
-                    </div>
-                    <div class="color-box">
-                        <span class="color black active"></span>
-                        <span class="color red"></span>
-                        <span class="color blue"></span>
-                    </div>
-                </div>
 
-                <!-- SIZE -->
-                <div class="option-block">
                     <div class="option-head">
-                        <strong>Size</strong>
-                        <a href="javascript:void(0)" class="size-guide-link">Size Guide</a>
+
+                        <strong>Metal Purity</strong>
+
+                        <span>Select Purity</span>
+
                     </div>
+
                     <div class="size-box">
-                        <button class="active">SMALL</button>
-                        <button>MEDIUM</button>
-                        <button>LARGE</button>
+
+                        <button *ngFor="let purity of purityOptions" [class.active]="selectedPurity === purity"
+                            (click)="selectPurity(purity)">
+
+                            {{ purity }}
+
+                        </button>
+
                     </div>
+
+                </div>
+                <div class="option-block">
+
+                    <div class="option-head">
+
+                        <strong>Size</strong>
+
+                        <span>
+                            Select Size
+                        </span>
+
+                    </div>
+
+                    <div class="size-box">
+
+                        <button *ngFor="let size of sizeOptions" [class.active]="selectedSize === size"
+                            (click)="selectSize(size)">
+
+                            {{ size }}
+
+                        </button>
+
+                    </div>
+
                 </div>
 
-                <!-- QUANTITY -->
+                <!-- Metal Color -->
                 <div class="option-block">
+
                     <div class="option-head">
+
+                        <strong>Metal Color</strong>
+
+                        <span>
+                            Choose your finish
+                        </span>
+
+                    </div>
+
+                    <div class="size-box">
+
+                        <button *ngFor="let variant of filteredVariants"
+                            [class.active]="selectedVariant?._id === variant._id" (click)="selectVariant(variant)">
+
+                            {{ variant?.metalColor | titlecase}}
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- Size -->
+                <div class="option-block">
+
+                    <div class="variant-info">
+
+                        <div class="info-item">
+                            <strong>Purity : <span>{{ selectedVariant?.metalPurity }}</span></strong>
+
+                        </div>
+
+                        <div class="info-item">
+                            <strong>Color : <span>{{ selectedVariant?.metalColor | titlecase}}</span></strong>
+
+                        </div>
+
+                        <div class="info-item">
+                            <strong>Weight : <span>{{ selectedVariant?.grossWeight }} g</span></strong>
+
+                        </div>
+
+                        <div class="info-item">
+                            <strong>Stock : <span>{{ selectedVariant?.stock }}</span></strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Quantity -->
+                <div class="option-block">
+
+                    <div class="option-head">
+
                         <strong>Quantity</strong>
+
                     </div>
                     <div class="qty-box">
-                        <button class="qty-btn">-</button>
-                        <input type="number" value="1">
-                        <button class="qty-btn">+</button>
+
+                        <button class="qty-btn" (click)="quantity = quantity > 1 ? quantity - 1 : 1">
+
+                            -
+
+                        </button>
+
+                        <input type="number" [(ngModel)]="quantity" min="1">
+
+                        <button class="qty-btn" (click)="quantity = quantity + 1">
+
+                            +
+
+                        </button>
+
                     </div>
+
                 </div>
 
+                <!-- Actions -->
                 <div class="action-row">
-                    <button class="btn add-cart-btn">ADD TO CART</button>
-                    <button class="btn buy-now-btn">BUY NOW</button>
+
+                    <button class="btn add-cart-btn" (click)="addToCart()">
+                        ADD TO CART
+                    </button>
+
+                    <button class="btn buy-now-btn" (click)="buyProduct()">
+
+                        BUY NOW
+
+                    </button>
+
                 </div>
 
+                <!-- Wishlist -->
                 <div class="extra-links">
-                    <span (click)="whishlist()">❤️ Add to Wishlist</span>
-                    <span>🔒 Secure Checkout</span>
+
+                    <span (click)="whishlist()">
+
+                        ❤️ Add to Wishlist
+
+                    </span>
+
+                    <span>
+
+                        🔒 Secure Checkout
+
+                    </span>
+
                 </div>
 
+                <!-- Delivery -->
                 <div class="delivery-box">
-                    <h6>Delivery & Service</h6>
+
+                    <h6>
+                        Delivery & Service
+                    </h6>
+
                     <ul>
-                        <li>Free delivery on prepaid orders</li>
-                        <li>7-day easy returns</li>
-                        <li>Certified premium jewellery</li>
+
+                        <li>
+                            Free delivery across India
+                        </li>
+
+                        <li>
+                            7-day easy returns
+                        </li>
+
+                        <li *ngIf="product?.hallmarkCertified">
+
+                            BIS Hallmark Certified Jewellery
+
+                        </li>
+
+                        <li *ngIf="product?.certificationIncluded">
+
+                            Diamond Certification Included
+
+                        </li>
+
                     </ul>
+
                 </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="similar-products">
+        <h2>You May Also Like</h2>
+        <div class="product-grid">
+            <div class="product-card" *ngFor="let item of similarProducts">
+                <img [src]="item.images[0]" alt="{{ item.name }}" (click)="productDetails(item._id)" />
+                <h4>{{ item.name }}</h4>
+
+                <!-- ✅ Priority: calculatedPrice → priceBreakup.finalPrice → 0 -->
+                <span>
+
+                    Price: ₹{{ item.variants?.[0]?.calculatedPrice || item.variants?.[0]?.priceBreakup?.finalPrice || 0
+                    |
+                    number:'1.0-0' }}
+                </span>
             </div>
         </div>
     </div>
 
-    <!-- Accordion -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="product-detail-panels">
-                <div class="acc-item" (click)="toggleAcc('specs')">
-                    <span>MEASUREMENTS & SPECS</span>
-                    <span>+</span>
-                </div>
-                <div class="acc-content" *ngIf="openAcc === 'specs'">
-                    Product measurements, material details, diamond quality, finish, and other specifications here.
-                </div>
+</div>
 
-                <div class="acc-item" (click)="toggleAcc('shipping')">
-                    <span>SHIPPING & RETURNS</span>
-                    <span>+</span>
-                </div>
-                <div class="acc-content" *ngIf="openAcc === 'shipping'">
-                    Shipping details, estimated delivery time, return and refund policy here.
-                </div>
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-auth-modal>
 
-                <div class="acc-item" (click)="toggleAcc('size')">
-                    <span>SIZE CHARTS</span>
-                    <span>+</span>
-                </div>
-                <div class="acc-content" *ngIf="openAcc === 'size'">
-                    Size chart and fit guide details here.
-                </div>
-            </div>
+
+
+<!-- Size Chart Modal -->
+
+<div class="size-chart-overlay" *ngIf="isSizeChartModalOpen" (click)="closeSizeChart()">
+
+    <div class="size-chart-modal" (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+
+        <div class="size-chart-header">
+
+            <h4>
+
+                {{ sizeChart?.title }}
+
+            </h4>
+
+
+            <button type="button" class="close-btn" (click)="closeSizeChart()">
+
+                ✕
+
+            </button>
+
         </div>
+
+        <!-- Body -->
+
+        <div class="size-chart-body">
+            <p>{{sizeChart?.description}}</p>
+
+            <img [src]="sizeChart?.image" [alt]="sizeChart?.title" class="size-chart-image">
+
+        </div>
+
     </div>
+
 </div>

@@ -1,0 +1,134 @@
+<!-- Modal -->
+<div class="auth-backdrop" *ngIf="isAuthOpen" (click)="closeModal()"></div>
+
+<div class="auth-modal" *ngIf="isAuthOpen" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="auth-close" (click)="closeModal()" aria-label="Close modal">
+        &times;
+    </button>
+
+    <div class="auth-grid">
+        <!-- Left panel -->
+        <div class="auth-brand-panel">
+            <p class="auth-kicker">Welcome to OZO</p>
+            <h2 id="authTitle">{{ activeAuthTab === 'login' ? 'Sign in to your account' : 'Create your account' }}</h2>
+            <p class="auth-copy">
+                Save your wishlist, track orders, and shop faster with a secure account.
+            </p>
+
+            <ul class="auth-benefitsts">
+                <li>Fast checkout</li>
+                <li>Track orders</li>
+                <li>Wishlist sync</li>
+            </ul>
+        </div>
+
+        <!-- Right panel -->
+        <div class="auth-form-panel">
+            <div class="auth-tabs">
+                <button [class.active]="activeAuthTab === 'login'" (click)="openTab('login')">Login</button>
+                <button [class.active]="activeAuthTab === 'register'"
+                    (click)="activeAuthTab='register'">Register</button>
+            </div>
+
+            <!-- Login -->
+            <form *ngIf="activeAuthTab === 'login'" class="auth-form" [formGroup]="loginForm" (ngSubmit)="login()"
+                autocomplete="off">
+
+                <label>Phone Number</label>
+
+                <input type="text" formControlName="phone" placeholder="Enter your phone number" autocomplete="off" />
+
+                <label>Password</label>
+
+                <div class="password-wrap">
+
+                    <input [type]="showLoginPassword ? 'text' : 'password'" formControlName="password"
+                        placeholder="Enter your password" autocomplete="new-password" />
+
+                    <button type="button" class="eye-btn" (click)="showLoginPassword = !showLoginPassword">
+
+                        <i class="fa" [ngClass]="showLoginPassword ? 'fa-eye-slash' : 'fa-eye'">
+                        </i>
+
+                    </button>
+
+                </div>
+
+                <div class="auth-row">
+
+                    <label class="remember">
+
+                        <input type="checkbox" />
+
+                        <span>
+                            Remember me
+                        </span>
+
+                    </label>
+
+                </div>
+
+                <button type="submit" class="auth-submit">
+
+                    Login
+
+                </button>
+
+            </form>
+            <!-- Register -->
+            <form *ngIf="activeAuthTab === 'register'" class="auth-form" [formGroup]="registerForm"
+                (ngSubmit)="register()" autocomplete="off">
+
+                <label>Full Name</label>
+
+                <input type="text" formControlName="name" placeholder="Enter your name">
+
+                <label>Email</label>
+
+                <input type="email" formControlName="email" placeholder="Enter your email">
+
+                <label>Phone Number</label>
+
+                <input type="text" formControlName="phone" placeholder="Enter your phone number">
+
+                <label>Password</label>
+
+                <div class="password-wrap">
+
+                    <input [type]="showRegisterPassword ? 'text' : 'password'" formControlName="password"
+                        placeholder="Create password">
+
+                    <button type="button" class="eye-btn" (click)="showRegisterPassword = !showRegisterPassword">
+
+                        <i class="fa" [ngClass]="showRegisterPassword ? 'fa-eye-slash' : 'fa-eye'">
+                        </i>
+
+                    </button>
+
+                </div>
+
+                <label>Confirm Password</label>
+
+                <input [type]="showRegisterPassword ? 'text' : 'password'" formControlName="confirmPassword"
+                    placeholder="Confirm password">
+
+                <label class="remember terms">
+
+                    <input type="checkbox" formControlName="acceptTerms">
+
+                    <span>
+                        I agree to Terms & Privacy Policy
+                    </span>
+
+                </label>
+
+                <button type="submit" class="auth-submit">
+
+                    Create Account
+
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>

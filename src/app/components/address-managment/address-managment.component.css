@@ -1,0 +1,299 @@
+.addr-shell {
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 18px 40px rgba(28, 22, 14, 0.08);
+}
+
+.addr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.addr-header h2 {
+    margin: 0;
+    font-size: 26px;
+    color: #1e1a17;
+}
+
+.addr-header p {
+    margin: 6px 0 0;
+    color: #7e746a;
+    font-size: 14px;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, #d90429, #a1031f);
+    color: #fff;
+    border: 0;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.addr-empty {
+    text-align: center;
+    padding: 40px 16px;
+    border: 1px dashed rgba(30, 26, 23, 0.14);
+    border-radius: 20px;
+    background: #fcf8f2;
+}
+
+.empty-icon {
+    font-size: 44px;
+    margin-bottom: 12px;
+}
+
+.addr-empty h3 {
+    margin: 0 0 8px;
+    color: #1e1a17;
+}
+
+.addr-empty p {
+    margin: 0 0 18px;
+    color: #7e746a;
+}
+
+.addr-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.addr-card {
+    border: 1px solid rgba(30, 26, 23, 0.08);
+    border-radius: 18px;
+    padding: 18px;
+    background: #fcf8f2;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.addr-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(28, 22, 14, 0.08);
+}
+
+.addr-card.selected {
+    border-color: #d90429;
+    box-shadow: 0 0 0 3px rgba(217, 4, 41, 0.08);
+}
+
+.addr-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.radio-wrap {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.radio-dot {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #d90429;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex: 0 0 auto;
+    background: transparent;
+}
+
+.radio-dot.active {
+    background: #d90429;
+}
+
+.addr-card h4,
+.manage-card h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #1e1a17;
+}
+
+.addr-card p,
+.manage-card p {
+    margin: 4px 0 0;
+    color: #7e746a;
+    font-size: 14px;
+}
+
+.addr-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.chip {
+    background: #118a43;
+    color: #fff;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.ghost-btn {
+    background: #fff;
+    border: 1px solid rgba(30, 26, 23, 0.12);
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.addr-body {
+    margin-top: 14px;
+    display: grid;
+    gap: 4px;
+}
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.addr-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(980px, calc(100vw - 20px));
+    max-height: 90vh;
+    overflow: auto;
+    background: #fff;
+    border-radius: 24px;
+    z-index: 1000;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+}
+
+.modal-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(30, 26, 23, 0.08);
+}
+
+.modal-head h3 {
+    margin: 0;
+    font-size: 22px;
+    color: #1e1a17;
+}
+
+.modal-head p {
+    margin: 6px 0 0;
+    color: #7e746a;
+    font-size: 14px;
+}
+
+.close-btn {
+    border: 0;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-tabs {
+    display: flex;
+    gap: 10px;
+    padding: 16px 22px 0;
+}
+
+.tab-btn {
+    border: 1px solid rgba(30, 26, 23, 0.12);
+    background: #fff;
+    border-radius: 999px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #d90429, #a1031f);
+    color: #fff;
+    border-color: transparent;
+}
+
+.modal-body {
+    padding: 22px;
+}
+
+.manage-list {
+    display: grid;
+    gap: 14px;
+}
+
+.manage-card {
+    border: 1px solid rgba(30, 26, 23, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    background: #fcf8f2;
+}
+
+.manage-card.active {
+    border-color: #d90429;
+}
+
+.manage-card-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.default-badge {
+    background: #d4af37;
+    color: #1e1a17;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.manage-text {
+    margin: 4px 0;
+    color: #7e746a;
+    font-size: 14px;
+}
+
+.manage-footer {
+    display: flex;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.text-btn {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-weight: 700;
+    color: #d90429;
+}
+
+.text-btn.danger {
+    color: #d94c4c;
+}
+
+@media (max-width: 900px) {
+    .addr-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .addr-header,
+    .addr-top,
+    .manage-card-head,
+    .modal-head {
+        flex-direction: column;
+    }
+}

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -13,7 +13,15 @@ import { FooterComponent } from './footer/footer.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { WhishlistComponent } from './components/whishlist/whishlist.component';
 import { ProductComponent } from './components/product/product.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthModalComponent } from './shared/auth-modal/auth-modal.component';
+import { ToastrModule } from 'ngx-toastr';
+import { LoaderComponent } from './components/loader/loader.component';
+import { BuyProductComponent } from './components/buy-product/buy-product.component';
+import { ProceedPaymentComponent } from './components/proceed-payment/proceed-payment.component';
+import { AddressFormComponent } from './components/address-form/address-form.component';
+import { AddressManagmentComponent } from './components/address-managment/address-managment.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,12 +34,27 @@ import { FormsModule } from '@angular/forms';
     FooterComponent,
     CategoriesComponent,
     WhishlistComponent,
-    ProductComponent
+    ProductComponent,
+    AuthModalComponent,
+    LoaderComponent,
+    BuyProductComponent,
+    ProceedPaymentComponent,
+    AddressFormComponent,
+    AddressManagmentComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      closeButton: true
+    })
 
   ],
   providers: [],

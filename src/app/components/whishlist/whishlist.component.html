@@ -6,14 +6,14 @@
         </div>
 
         <div class="wishlist-count">
-            {{ wishlist?.length || 0 }} Items
+            {{ wishlistItems.length || 0 }} Items
         </div>
     </div>
 
-    <div class="wishlist-grid" *ngIf="wishlist?.length; else emptyWishlist">
-        <div class="wishlist-card" *ngFor="let item of wishlist">
+    <div class="wishlist-grid" *ngIf="wishlistItems?.length; else emptyWishlist">
+        <div class="wishlist-card" *ngFor="let item of wishlistItems">
 
-            <button class="remove-icon" (click)="remove(item)" aria-label="Remove from wishlist">
+            <button class="remove-icon" (click)="removeFromWishlist(item)" aria-label="Remove from wishlist">
                 <i class="fa fa-times"></i>
             </button>
 
@@ -23,18 +23,58 @@
             </div>
 
             <div class="wishlist-details">
-                <p class="brand-name">OZO JEWELS</p>
+                <p class="brand-name">
+
+                    {{ item.brand }}
+
+                </p>
                 <h5>{{ item.name }}</h5>
 
-                <p class="category">Gold Jewellery</p>
+                <p class="category">
+
+                    {{ item.selectedVariant?.metalPurity }}
+                    |
+                    {{ item.selectedVariant?.metalColor | titlecase }}
+
+                </p>
 
                 <div class="price-row">
-                    <span class="price">₹ {{ item.price }}</span>
-                    <span class="old-price">₹ {{ item.price + 1200 }}</span>
-                    <span class="discount">20% OFF</span>
+
+                    <span class="price">
+                        ₹ {{ item.selectedVariant?.finalPrice | number:'1.0-0' }}
+                    </span>
+
+                    <span class="old-price" *ngIf="item.oldPrice > item.selectedVariant?.finalPrice">
+
+                        ₹ {{ item.oldPrice | number:'1.0-0' }}
+
+                    </span>
+
+                    <span class="discount" *ngIf="item.discount > 0">
+
+                        {{ item.discount }}% OFF
+
+                    </span>
+
                 </div>
 
-                <p class="stock-text">In stock • Ready for dispatch</p>
+                <p class="stock-text text-success" *ngIf="item.inStock">
+
+                    In Stock • Ready For Dispatch
+
+                </p>
+
+                <p class="stock-text text-danger" *ngIf="!item.inStock">
+
+                    Out Of Stock
+
+                </p>
+                <div class="variant-info">
+
+                    Size :
+                    {{ item.selectedVariant?.size }}
+
+                </div>
 
                 <div class="wishlist-meta">
                     <span>Free Delivery</span>
@@ -48,8 +88,10 @@
                     Move to Bag
                 </button> -->
 
-                <button class="btn outline-btn">
+                <button class="btn outline-btn" [routerLink]="['/product', item.productId]">
+
                     View Product
+
                 </button>
             </div>
         </div>

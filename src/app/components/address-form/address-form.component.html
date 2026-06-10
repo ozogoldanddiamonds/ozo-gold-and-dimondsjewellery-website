@@ -1,0 +1,65 @@
+<form [formGroup]="formGroup" class="address-form" (ngSubmit)="onSubmit()">
+    <div class="form-title">
+        <h3>Address Details</h3>
+        <p>Enter your delivery address carefully</p>
+    </div>
+
+    <div class="grid-2">
+        <div class="field">
+            <label>Full Name</label>
+            <input type="text" formControlName="fullName" placeholder="Enter full name" />
+        </div>
+
+        <div class="field">
+            <label>Phone Number</label>
+            <input type="text" formControlName="phone" maxlength="10" placeholder="10 digit mobile number" />
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="field">
+            <label>Address Line 1</label>
+            <input type="text" formControlName="addressLine1" placeholder="House no, street, apartment" />
+        </div>
+
+        <div class="field">
+            <label>Address Line 2</label>
+            <input type="text" formControlName="addressLine2" placeholder="Landmark, area (optional)" />
+        </div>
+    </div>
+
+
+    <div class="grid-2">
+        <div class="field">
+            <label>City</label>
+            <input type="text" formControlName="city" placeholder="City" />
+        </div>
+
+        <div class="field">
+            <label>State</label>
+            <input type="text" formControlName="state" placeholder="State" />
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="field">
+            <label>Pincode</label>
+            <input type="text" formControlName="pincode" maxlength="6" placeholder="Pincode" />
+        </div>
+
+        <div class="field">
+            <label>Country</label>
+            <input type="text" formControlName="country" placeholder="Country" />
+        </div>
+    </div>
+
+    <div class="check-row">
+        <input type="checkbox" formControlName="isDefault" id="isDefaultAddr" />
+        <label for="isDefaultAddr">Make this my default address</label>
+    </div>
+
+    <div class="form-actions">
+        <button type="button" class="secondary-btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="primary-btn">{{ submitLabel }}</button>
+    </div>
+</form>

@@ -1,0 +1,148 @@
+ /* Global loader css */
+
+ .global-loader {
+
+     position: fixed;
+
+     inset: 0;
+
+     background: rgba(255, 255, 255, .95);
+
+     z-index: 999999;
+
+     display: flex;
+
+     align-items: center;
+
+     justify-content: center;
+
+ }
+
+ .loader-wrapper {
+
+     position: relative;
+
+     width: 180px;
+
+     height: 180px;
+
+     display: flex;
+
+     align-items: center;
+
+     justify-content: center;
+
+ }
+
+ .loader-wrapper img {
+
+     width: 90px;
+
+     animation:
+         diamondSpin 2s linear infinite,
+         diamondPulse 1.2s ease infinite;
+
+ }
+
+ .wave {
+
+     position: absolute;
+
+     border: 2px solid #d90429;
+
+     border-radius: 50%;
+
+     animation: waveAnim 2.5s infinite;
+
+ }
+
+ .wave1 {
+
+     width: 80px;
+
+     height: 80px;
+
+ }
+
+ .wave2 {
+
+     width: 120px;
+
+     height: 120px;
+
+     animation-delay: .4s;
+
+ }
+
+ .wave3 {
+
+     width: 160px;
+
+     height: 160px;
+
+     animation-delay: .8s;
+
+ }
+
+ .wave4 {
+
+     width: 200px;
+
+     height: 200px;
+
+     animation-delay: 1.2s;
+
+ }
+
+ @keyframes waveAnim {
+
+     0% {
+
+         transform: scale(.7);
+
+         opacity: 1;
+
+     }
+
+     100% {
+
+         transform: scale(1.3);
+
+         opacity: 0;
+
+     }
+
+ }
+
+ @keyframes diamondSpin {
+
+     from {
+
+         transform: rotateY(0deg);
+
+     }
+
+     to {
+
+         transform: rotateY(360deg);
+
+     }
+
+ }
+
+ @keyframes diamondPulse {
+
+     0%,
+     100% {
+
+         transform: scale(1);
+
+     }
+
+     50% {
+
+         transform: scale(1.15);
+
+     }
+
+ }

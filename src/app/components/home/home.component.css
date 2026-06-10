@@ -940,3 +940,13 @@
          gap: 10px;
      }
  }
+
+ .pagination-wrapper .page-link {
+     cursor: pointer;
+ }
+
+ .pagination-wrapper .active .page-link {
+     background: #c9a14a;
+     border-color: #c9a14a;
+     color: #fff;
+ }

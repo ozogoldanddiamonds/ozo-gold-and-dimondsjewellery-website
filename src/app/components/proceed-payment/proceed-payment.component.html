@@ -1,0 +1,397 @@
+<div class="payment-container">
+    <!-- Header -->
+    <div class="payment-header">
+        <div class="back-button" (click)="goBack()">
+            ← Back
+        </div>
+        <h2>Secure Checkout</h2>
+        <div class="security-badge">
+            🔒 Secure Payment
+        </div>
+    </div>
+
+    <div class="payment-wrapper">
+
+        <!-- Left Side: Order Summary -->
+        <div class="order-summary-section">
+            <div class="checkout-address-section">
+                <div class="section-head">
+                    <div>
+                        <h3>Delivery Address</h3>
+                        <p>Select where you want your order delivered</p>
+                    </div>
+
+                    <button class="primary-btn" (click)="openAddAddress()">
+                        + Add Address
+                    </button>
+                </div>
+
+                <div *ngIf="addressList.length > 0; else emptyAddressState" class="address-list">
+                    <div class="address-card" *ngFor="let addr of addressList; trackBy: trackByAddressId"
+                        [class.active]="selectedAddress?._id === addr._id" (click)="selectAddress(addr)">
+                        <div class="card-top">
+                            <div class="left">
+                                <span class="radio" [class.checked]="selectedAddress?._id === addr._id"></span>
+                                <div>
+                                    <h4>{{ addr.fullName }}</h4>
+                                    <p>{{ addr.phone }}</p>
+                                </div>
+                            </div>
+
+                            <button class="ghost-btn" (click)="openManageAddress(addr, $event)">
+                                Manage Address
+                            </button>
+                        </div>
+
+                        <div class="card-body">
+                            <p>{{ addr.addressLine1 }}</p>
+                            <p *ngIf="addr.addressLine2">{{ addr.addressLine2 }}</p>
+                            <p>{{ addr.city }}, {{ addr.state }} - {{ addr.pincode }}</p>
+                            <p>{{ addr.country }}</p>
+                        </div>
+
+                        <div class="chip-row">
+                            <span class="chip" *ngIf="addr.isDefault">Default</span>
+                            <span class="chip outline">Delivery Address</span>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #emptyAddressState>
+                    <div class="empty-state">
+                        <div class="empty-icon">📍</div>
+                        <h4>No address found</h4>
+                        <p>Add an address to continue with checkout.</p>
+                        <button class="primary-btn" (click)="openAddAddress()">
+                            Add Address
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+
+            <div class="modal-backdrop" *ngIf="isAddressModalOpen" (click)="closeAddressModal()"></div>
+
+            <div class="address-modal" *ngIf="isAddressModalOpen">
+                <div class="modal-head">
+                    <div>
+                        <h3>{{ modalMode === 'add' ? 'Add Address' : 'Manage Address' }}</h3>
+                        <p *ngIf="modalMode === 'manage'">Edit your saved addresses or add a new one</p>
+                        <p *ngIf="modalMode === 'add'">Fill your delivery details carefully</p>
+                    </div>
+
+                    <button class="close-btn" (click)="closeAddressModal()">✕</button>
+                </div>
+
+                <div class="modal-tabs" *ngIf="modalMode === 'manage'">
+                    <button class="tab-btn" [class.active]="manageView === 'list'" (click)="manageView = 'list'">
+                        Address List
+                    </button>
+                    <button class="tab-btn" [class.active]="manageView === 'add'" (click)="switchToAddMode()">
+                        + Add New
+                    </button>
+                </div>
+
+                <div class="modal-body" *ngIf="modalMode === 'manage' && manageView === 'list'">
+                    <div class="manage-list">
+                        <div class="manage-card" *ngFor="let addr of addresses">
+                            <div class="manage-top">
+                                <div>
+                                    <h4>{{ addr.fullName }}</h4>
+                                    <p>{{ addr.phone }}</p>
+                                </div>
+                                <span class="default-badge" *ngIf="addr.isDefault">Default</span>
+                            </div>
+
+                            <p>{{ addr.addressLine1 }}</p>
+                            <p *ngIf="addr.addressLine2">{{ addr.addressLine2 }}</p>
+                            <p>{{ addr.city }}, {{ addr.state }} - {{ addr.pincode }}</p>
+
+                            <div class="manage-actions">
+                                <button class="text-btn" (click)="editAddress(addr, $event)">Edit</button>
+                                <button class="text-btn danger" (click)="deleteAddress(addr)">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-body" *ngIf="modalMode === 'add' || (modalMode === 'manage' && manageView === 'add')">
+                    <app-address-form [formGroup]="addressForm"
+                        [submitLabel]="editingAddress ? 'Update Address' : 'Save Address'"
+                        (submitForm)="saveAddress($event)" (cancelForm)="closeAddressModal()"></app-address-form>
+                </div>
+            </div>
+            <div class="summary-card">
+                <h3>Order Summary</h3>
+
+                <!-- Product Details -->
+                <div class="product-item">
+                    <img [src]="product?.images?.[0] || 'placeholder.jpg'" alt="{{ product?.name }}" />
+                    <div class="product-info">
+                        <h4>{{ product?.name }}</h4>
+                        <p class="product-meta">
+                            {{ selectedVariant?.metalPurity }} | {{ selectedVariant?.metalColor | titlecase }} |
+                            Size: {{ selectedVariant?.size }} | {{ selectedVariant?.netWeight }}g
+                        </p>
+                        <p class="product-sku">SKU: {{ selectedVariant?.sku }}</p>
+                    </div>
+                </div>
+
+                <!-- Price Breakdown -->
+                <div class="price-breakdown-card">
+                    <div class="breakdown-row">
+                        <span>Metal Value ({{ selectedVariant?.metalPurity }})</span>
+                        <span>₹{{ selectedVariant?.priceBreakup?.metalValue | number:'1.0-0' }}</span>
+                    </div>
+
+                    <div class="breakdown-row" *ngIf="selectedVariant?.priceBreakup?.stoneValue > 0">
+                        <span>Stone Value</span>
+                        <span>₹{{ selectedVariant?.priceBreakup?.stoneValue | number:'1.0-0' }}</span>
+                    </div>
+
+                    <div class="breakdown-row">
+                        <span>Making Charges ({{ selectedVariant?.makingChargeType }})</span>
+                        <span>₹{{ selectedVariant?.makingCharges | number:'1.0-0' }}</span>
+                    </div>
+
+                    <div class="breakdown-row">
+                        <span>Wastage ({{ selectedVariant?.wastagePercentage }}%)</span>
+                        <span>₹{{ selectedVariant?.priceBreakup?.wastageAmount | number:'1.0-0' }}</span>
+                    </div>
+
+                    <div class="breakdown-row" *ngIf="selectedVariant?.discountPercentage > 0">
+                        <span>Discount ({{ selectedVariant?.discountPercentage }}%)</span>
+                        <span class="discount-amount">-₹{{ selectedVariant?.priceBreakup?.discountAmount |
+                            number:'1.0-0' }}</span>
+                    </div>
+
+                    <div class="breakdown-row">
+                        <span>GST (18%)</span>
+                        <span>₹{{ selectedVariant?.priceBreakup?.gstAmount | number:'1.0-0' }}</span>
+                    </div>
+
+                    <div class="breakdown-divider"></div>
+
+                    <div class="breakdown-row total">
+                        <span><strong>Order Total</strong></span>
+                        <span><strong>₹{{ calculatedTotal | number:'1.0-0' }}</strong></span>
+                    </div>
+
+                    <div class="quantity-info">
+                        Quantity: {{ quantity }} × ₹{{ selectedVariant?.priceBreakup?.finalPrice | number:'1.0-0' }}
+                    </div>
+                </div>
+
+                <!-- Savings Badge -->
+                <div class="savings-badge" *ngIf="selectedVariant?.discountPercentage > 0">
+                    🎉 You save ₹{{ selectedVariant?.priceBreakup?.discountAmount | number:'1.0-0' }}
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-methods-card">
+                <h3>Payment Method</h3>
+
+                <div class="payment-options">
+                    <!-- UPI -->
+                    <div class="payment-option" [class.active]="selectedPaymentMethod === 'upi'"
+                        (click)="selectPaymentMethod('upi')">
+                        <input type="radio" name="payment" value="upi" [checked]="selectedPaymentMethod === 'upi'" />
+                        <div class="payment-icon">📱</div>
+                        <div class="payment-info">
+                            <span class="payment-title">UPI Payment</span>
+                            <span class="payment-desc">Paytm, GPay, PhonePe, etc.</span>
+                        </div>
+                    </div>
+
+                    <!-- Credit Card -->
+                    <div class="payment-option" [class.active]="selectedPaymentMethod === 'credit'"
+                        (click)="selectPaymentMethod('credit')">
+                        <input type="radio" name="payment" value="credit"
+                            [checked]="selectedPaymentMethod === 'credit'" />
+                        <div class="payment-icon">💳</div>
+                        <div class="payment-info">
+                            <span class="payment-title">Credit Card</span>
+                            <span class="payment-desc">Visa, MasterCard, RuPay</span>
+                        </div>
+                    </div>
+
+                    <!-- Debit Card -->
+                    <div class="payment-option" [class.active]="selectedPaymentMethod === 'debit'"
+                        (click)="selectPaymentMethod('debit')">
+                        <input type="radio" name="payment" value="debit"
+                            [checked]="selectedPaymentMethod === 'debit'" />
+                        <div class="payment-icon">🏦</div>
+                        <div class="payment-info">
+                            <span class="payment-title">Debit Card</span>
+                            <span class="payment-desc">All Banks Accepted</span>
+                        </div>
+                    </div>
+
+                    <!-- Net Banking -->
+                    <div class="payment-option" [class.active]="selectedPaymentMethod === 'netbanking'"
+                        (click)="selectPaymentMethod('netbanking')">
+                        <input type="radio" name="payment" value="netbanking"
+                            [checked]="selectedPaymentMethod === 'netbanking'" />
+                        <div class="payment-icon">🌐</div>
+                        <div class="payment-info">
+                            <span class="payment-title">Net Banking</span>
+                            <span class="payment-desc">All Major Banks</span>
+                        </div>
+                    </div>
+
+                    <!-- Wallet -->
+                    <div class="payment-option" [class.active]="selectedPaymentMethod === 'wallet'"
+                        (click)="selectPaymentMethod('wallet')">
+                        <input type="radio" name="payment" value="wallet"
+                            [checked]="selectedPaymentMethod === 'wallet'" />
+                        <div class="payment-icon">👛</div>
+                        <div class="payment-info">
+                            <span class="payment-title">Wallet</span>
+                            <span class="payment-desc">Paytm, Amazon Pay, etc.</span>
+                        </div>
+                    </div>
+
+                    <!-- Cash on Delivery -->
+                    <div class="payment-option" [class.active]="selectedPaymentMethod === 'cod'"
+                        (click)="selectPaymentMethod('cod')">
+                        <input type="radio" name="payment" value="cod" [checked]="selectedPaymentMethod === 'cod'" />
+                        <div class="payment-icon">💵</div>
+                        <div class="payment-info">
+                            <span class="payment-title">Cash on Delivery</span>
+                            <span class="payment-desc">Pay when you receive</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Promo Code -->
+            <div class="promo-code-card">
+                <h3>Have a Promo Code?</h3>
+                <div class="promo-input-group">
+                    <input type="text" [(ngModel)]="promoCode" placeholder="Enter promo code" class="promo-input" />
+                    <button class="promo-apply-btn" (click)="applyPromoCode()">Apply</button>
+                </div>
+                <div class="promo-applied" *ngIf="appliedPromo">
+                    ✅ {{ appliedPromo.code }} applied! Save ₹{{ appliedPromo.discount | number:'1.0-0' }}
+                    <span class="promo-remove" (click)="removePromoCode()">✕</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Payment Form -->
+        <div class="payment-form-section">
+            <div class="payment-form-card">
+                <h3>Payment Details</h3>
+
+                <!-- UPI Form -->
+                <div class="payment-form" *ngIf="selectedPaymentMethod === 'upi'">
+                    <div class="form-group">
+                        <label>UPI ID</label>
+                        <input type="text" placeholder="example@upi" [(ngModel)]="upiId" class="form-input" />
+                    </div>
+                    <button class="pay-button" (click)="processPayment()">
+                        Pay ₹{{ calculatedTotal | number:'1.0-0' }}
+                    </button>
+                </div>
+
+                <!-- Credit/Debit Card Form -->
+                <div class="payment-form"
+                    *ngIf="selectedPaymentMethod === 'credit' || selectedPaymentMethod === 'debit'">
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" placeholder="1234 5678 9012 3456" [(ngModel)]="cardNumber" maxlength="19"
+                            class="form-input" />
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Cardholder Name</label>
+                            <input type="text" placeholder="Name on card" [(ngModel)]="cardName" class="form-input" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" placeholder="MM/YY" [(ngModel)]="cardExpiry" maxlength="5"
+                                class="form-input" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="password" placeholder="123" [(ngModel)]="cardCvv" maxlength="3"
+                                class="form-input" />
+                        </div>
+                    </div>
+
+                    <button class="pay-button" (click)="processPayment()">
+                        Pay ₹{{ calculatedTotal | number:'1.0-0' }}
+                    </button>
+                </div>
+
+                <!-- Net Banking Form -->
+                <div class="payment-form" *ngIf="selectedPaymentMethod === 'netbanking'">
+                    <div class="form-group">
+                        <label>Select Bank</label>
+                        <select [(ngModel)]="selectedBank" class="form-input">
+                            <option value="">Choose your bank</option>
+                            <option value="hdfc">HDFC Bank</option>
+                            <option value="icici">ICICI Bank</option>
+                            <option value="sbi">State Bank of India</option>
+                            <option value="axis">Axis Bank</option>
+                            <option value="kotak">Kotak Mahindra Bank</option>
+                            <option value="pnb">Punjab National Bank</option>
+                            <option value="boi">Bank of India</option>
+                        </select>
+                    </div>
+                    <button class="pay-button" (click)="processPayment()">
+                        Pay ₹{{ calculatedTotal | number:'1.0-0' }}
+                    </button>
+                </div>
+
+                <!-- Wallet Form -->
+                <div class="payment-form" *ngIf="selectedPaymentMethod === 'wallet'">
+                    <div class="form-group">
+                        <label>Select Wallet</label>
+                        <select [(ngModel)]="selectedWallet" class="form-input">
+                            <option value="">Choose wallet</option>
+                            <option value="paytm">Paytm</option>
+                            <option value="amazon">Amazon Pay</option>
+                            <option value="phonepe">PhonePe</option>
+                            <option value="googlepay">Google Pay</option>
+                            <option value="mobikwik">MobiKwik</option>
+                        </select>
+                    </div>
+                    <button class="pay-button" (click)="processPayment()">
+                        Pay ₹{{ calculatedTotal | number:'1.0-0' }}
+                    </button>
+                </div>
+
+                <!-- COD Info -->
+                <div class="payment-form" *ngIf="selectedPaymentMethod === 'cod'">
+                    <div class="cod-info">
+                        <h4>Cash on Delivery</h4>
+                        <p>Pay when you receive your order</p>
+                        <p class="cod-note">⚠️ COD charges: ₹100</p>
+                    </div>
+                    <button class="pay-button" (click)="processPayment()">
+                        Place Order (COD)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Order Confirmation -->
+            <div class="terms-conditions-card">
+                <div class="terms-check">
+                    <input type="checkbox" [(ngModel)]="acceptTerms" id="acceptTerms" />
+                    <label for="acceptTerms">
+                        I accept the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                </div>
+                <p class="security-note">
+                    🔒 Your payment is secure and encrypted
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

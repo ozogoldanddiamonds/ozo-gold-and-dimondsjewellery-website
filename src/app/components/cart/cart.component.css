@@ -195,3 +195,37 @@
         padding: 12px;
     }
 }
+
+.empty-cart-wrapper {
+
+    min-height: 70vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+.empty-cart-img {
+
+    width: 250px;
+
+    max-width: 100%;
+
+}
+
+.empty-cart-wrapper h2 {
+
+    font-weight: 700;
+
+}
+
+.empty-cart-wrapper p {
+
+    max-width: 500px;
+
+    margin: 0 auto;
+
+}

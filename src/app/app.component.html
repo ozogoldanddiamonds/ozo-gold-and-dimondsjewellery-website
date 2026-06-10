@@ -1,3 +1,23 @@
 <app-navbar></app-navbar>
+<!-- GLOBAL LOADER -->
+
+<div class="global-loader" *ngIf="isLoading">
+
+    <div class="loader-wrapper">
+
+        <div class="wave wave1"></div>
+
+        <div class="wave wave2"></div>
+
+        <img src="assets/images/diamond_png.png" alt="Loading">
+
+        <div class="wave wave3"></div>
+
+        <div class="wave wave4"></div>
+
+    </div>
+
+</div>
+
 <router-outlet></router-outlet>
 <app-footer></app-footer>

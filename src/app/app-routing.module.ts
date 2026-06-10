@@ -7,6 +7,8 @@ import { CategoriesComponent } from './components/categories/categories.componen
 import { CartComponent } from './components/cart/cart.component';
 import { WhishlistComponent } from './components/whishlist/whishlist.component';
 import { ProductComponent } from './components/product/product.component';
+import { BuyProductComponent } from './components/buy-product/buy-product.component';
+import { ProceedPaymentComponent } from './components/proceed-payment/proceed-payment.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,7 +18,9 @@ const routes: Routes = [
   { path: 'categories', component: CategoriesComponent },
   { path: 'cart', component: CartComponent },
   { path: 'whishlist', component: WhishlistComponent },
-  { path: 'product', component: ProductComponent },
+  { path: 'product/:id', component: ProductComponent },
+  { path: 'buy-product', component: BuyProductComponent },
+  { path: 'proceed-payment', component: ProceedPaymentComponent },
 ];
 
 @NgModule({

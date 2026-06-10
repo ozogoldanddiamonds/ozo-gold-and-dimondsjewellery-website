@@ -1,5 +1,4 @@
 <div class="container-fluid product-page">
-
     <div class="row">
 
         <!-- ================= LEFT FILTER ================= -->
@@ -8,42 +7,56 @@
             <div class="filter-section">
                 <h6 class="filter-title">CATEGORIES</h6>
 
-                <label class="filter-option">
-                    <input type="checkbox"> Gold
+                <label class="filter-option" *ngFor="let category of categories">
+                    <input type="radio" name="desktopCategory" [checked]="selectedCategory === category._id"
+                        (change)="filterByCategory(category._id)">
+                    {{ category.name }}
                 </label>
 
-                <label class="filter-option">
-                    <input type="checkbox"> Diamond
-                </label>
-
-                <label class="filter-option">
-                    <input type="checkbox"> Silver
-                </label>
-
-                <label class="filter-option">
-                    <input type="checkbox"> Rings
+                <label class="filter-option" *ngIf="categories?.length">
+                    <input type="radio" name="desktopCategory" [checked]="selectedCategory === ''"
+                        (change)="filterByCategory('')">
+                    All
                 </label>
             </div>
 
             <div class="filter-section">
                 <h6 class="filter-title">PRICE</h6>
 
-                <input type="range" class="form-range">
+                <div class="mb-2">
+                    <input type="number" class="form-control mb-2" placeholder="Min Price" [(ngModel)]="minPrice">
+                    <input type="number" class="form-control" placeholder="Max Price" [(ngModel)]="maxPrice">
+                </div>
 
                 <div class="price-text">
-                    ₹500 - ₹5,00,000+
+                    ₹ {{ minPrice || 0 }} - ₹ {{ maxPrice || 'Any' }}
                 </div>
             </div>
+
+            <!-- <div class="filter-section">
+                <h6 class="filter-title">PRODUCT TYPE</h6>
+
+                <select class="form-select" [(ngModel)]="selectedProductType">
+                    <option value="">All</option>
+                    <option value="gold">Gold</option>
+                    <option value="diamond">Diamond</option>
+                    <option value="silver">Silver</option>
+                </select>
+            </div> -->
 
             <div class="filter-section">
                 <h6 class="filter-title">SORT BY</h6>
 
-                <select class="form-select">
-                    <option>Recommended</option>
-                    <option>Latest</option>
-                    <option>Price Low to High</option>
-                    <option>Price High to Low</option>
+                <select class="form-select" [(ngModel)]="selectedSort" (change)="onSortChange()">
+                    <option value="latest">Latest</option>
+                    <option value="lowToHigh">Price Low to High</option>
+                    <option value="highToLow">Price High to Low</option>
                 </select>
+            </div>
+
+            <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-dark" (click)="applyFilters()">Apply Filters</button>
+                <button class="btn btn-outline-secondary" (click)="clearFilters()">Clear Filters</button>
             </div>
 
         </div>
@@ -53,223 +66,209 @@
 
             <!-- TOP BAR -->
             <div class="top-bar">
-
                 <div>
                     <h5 class="page-title">
                         Jewellery Collection
                     </h5>
 
                     <span class="product-count">
-                        120 Items
+                        {{ products.length }} Items
                     </span>
                 </div>
 
                 <div class="sort-box">
-                    <select class="form-select">
-                        <option>Sort by : Recommended</option>
-                        <option>Newest</option>
-                        <option>Popularity</option>
+                    <select class="form-select" [(ngModel)]="selectedSort" (change)="onSortChange()">
+                        <option value="latest">Sort by : Latest</option>
+                        <option value="lowToHigh">Price Low to High</option>
+                        <option value="highToLow">Price High to Low</option>
                     </select>
                 </div>
+            </div>
 
+            <!-- LOADER -->
+            <div class="text-center py-5" *ngIf="loading && page === 1">
+                <p>Loading products...</p>
+            </div>
+
+            <!-- EMPTY -->
+            <div class="text-center py-5" *ngIf="!loading && !products.length">
+                <p>{{ errorMessage || 'No products found' }}</p>
             </div>
 
             <!-- PRODUCTS -->
-            <div class="row g-4">
+            <div class="row g-4" *ngIf="products?.length">
 
                 <div class="col-lg-3 col-md-4 col-sm-6 col-6" *ngFor="let item of products">
-
-                    <div class="product-card" (click)="product()">
+                    <div class="product-card">
 
                         <!-- IMAGE -->
                         <div class="product-img">
+                            <img [src]="item.image" [alt]="item.name">
 
-                            <img [src]="item.image">
-
-                            <div class="wishlist">
-                                <i class="fa fa-heart-o"></i>
+                            <div class="wishlist" (click)="toggleWishlist(item); $event.stopPropagation()">
+                                <i class="fa" [ngClass]="item.isWishlisted ? 'fa-heart' : 'fa-heart-o'"></i>
                             </div>
 
                             <div class="hover-icons">
-                                <i class="fa fa-shopping-cart"></i>
-                                <i class="fa fa-eye"></i>
+                                <i class="fa fa-shopping-cart"
+                                    (click)="openVariantPopup(item); $event.stopPropagation()"></i>
+
+                                <i class="fa fa-eye" (click)="viewProduct(item._id); $event.stopPropagation()"></i>
                             </div>
 
+                            <div class="product-overlay" (click)="viewProduct(item._id)"></div>
                         </div>
 
                         <!-- INFO -->
-                        <div class="product-info">
-
-                            <h6>{{item.name}}</h6>
+                        <div class="product-info" (click)="viewProduct(item._id)">
+                            <h6>{{ item.name }}</h6>
 
                             <p class="category">
-                                Premium Jewellery
+                                {{ item.categoryName || 'Premium Jewellery' }}
                             </p>
 
                             <div class="price-section">
-
                                 <span class="price">
-                                    ₹ {{item.price}}
+                                    {{ item.displayPrice | currency:'INR':'symbol':'1.0-0' }}
                                 </span>
 
-                                <span class="old-price">
-                                    ₹ 99999
+                                <span class="old-price" *ngIf="item.oldPrice">
+                                    {{ item.oldPrice | currency:'INR':'symbol':'1.0-0' }}
                                 </span>
 
-                                <span class="discount">
-                                    (40% OFF)
+                                <span class="discount" *ngIf="item.discountPercentage > 0">
+                                    ({{ item.discountPercentage }}% OFF)
                                 </span>
-
                             </div>
-
                         </div>
 
                     </div>
-
                 </div>
 
             </div>
 
+            <!-- LOAD MORE -->
+            <div class="text-center my-4" *ngIf="hasMoreData && products.length">
+                <button class="btn btn-dark" (click)="loadMoreProducts()" [disabled]="loading">
+                    {{ loading ? 'Loading...' : 'Load More' }}
+                </button>
+            </div>
+
         </div>
-
     </div>
-
 </div>
-<!-- MOBILE FILTER BAR -->
-<!-- MOBILE BOTTOM BAR -->
 
+<!-- MOBILE BOTTOM BAR -->
 <div class="mobile-bottom-bar d-lg-none">
 
     <div class="bottom-tab" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
-
         <i class="fa fa-filter"></i>
         Filter
-
     </div>
 
     <div class="bottom-tab" data-bs-toggle="offcanvas" data-bs-target="#sortCanvas">
-
         <i class="fa fa-sort"></i>
         Sort
-
     </div>
 
 </div>
+
 <!-- FILTER OFFCANVAS -->
-
 <div class="offcanvas offcanvas-bottom" tabindex="-1" id="filterCanvas">
-
     <div class="offcanvas-header">
-
         <h5>Filters</h5>
-
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas">
-        </button>
-
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
 
     <div class="offcanvas-body">
 
-        <!-- CATEGORY -->
-
         <div class="mobile-filter-section">
-
             <h6>Categories</h6>
 
-            <label>
-                <input type="checkbox">
-                Gold
+            <label *ngFor="let category of categories">
+                <input type="radio" name="mobileCategory" [checked]="selectedCategory === category._id"
+                    (change)="filterByCategory(category._id)">
+                {{ category.name }}
             </label>
 
-            <label>
-                <input type="checkbox">
-                Diamond
+            <label *ngIf="categories?.length">
+                <input type="radio" name="mobileCategory" [checked]="selectedCategory === ''"
+                    (change)="filterByCategory('')">
+                All
             </label>
-
-            <label>
-                <input type="checkbox">
-                Silver
-            </label>
-
         </div>
 
-        <!-- PRICE -->
-
         <div class="mobile-filter-section">
-
             <h6>Price Range</h6>
 
-            <input type="range" class="form-range">
+            <input type="number" class="form-control mb-2" placeholder="Min Price" [(ngModel)]="minPrice">
 
+            <input type="number" class="form-control" placeholder="Max Price" [(ngModel)]="maxPrice">
         </div>
-
-        <!-- TYPE -->
 
         <div class="mobile-filter-section">
-
             <h6>Jewellery Type</h6>
 
-            <label>
-                <input type="checkbox">
-                Rings
-            </label>
-
-            <label>
-                <input type="checkbox">
-                Chains
-            </label>
-
-            <label>
-                <input type="checkbox">
-                Bangles
-            </label>
-
+            <select class="form-select" [(ngModel)]="selectedProductType">
+                <option value="">All</option>
+                <option value="gold">Gold</option>
+                <option value="diamond">Diamond</option>
+                <option value="silver">Silver</option>
+            </select>
         </div>
 
-        <!-- APPLY -->
-
-        <button class="btn apply-btn">
+        <button class="btn apply-btn" (click)="applyFilters()">
             Apply Filters
         </button>
 
     </div>
-
 </div>
+
 <!-- SORT OFFCANVAS -->
-
 <div class="offcanvas offcanvas-bottom" tabindex="-1" id="sortCanvas">
-
     <div class="offcanvas-header">
-
         <h5>Sort By</h5>
-
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas">
-        </button>
-
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
 
     <div class="offcanvas-body">
+        <div class="sort-option" (click)="selectSort('latest')">Latest</div>
+        <div class="sort-option" (click)="selectSort('lowToHigh')">Price Low To High</div>
+        <div class="sort-option" (click)="selectSort('highToLow')">Price High To Low</div>
+    </div>
+</div>
 
-        <div class="sort-option">
-            Recommended
+<!-- VARIANT POPUP -->
+<div class="variant-popup-backdrop" *ngIf="showVariantPopup" (click)="closeVariantPopup()"></div>
+
+<div class="variant-popup" *ngIf="showVariantPopup">
+    <div class="variant-popup-header">
+        <div class="variant-popup-body" *ngIf="selectedProduct">
+            <h6>{{ selectedProduct?.name }}</h6>
+
+            <div class="variant-list" *ngIf="selectedProduct?.variants?.length; else noVariants">
+                <button type="button" class="variant-btn" *ngFor="let variant of selectedProduct?.variants"
+                    [class.active]="selectedVariantId === getVariantId(variant)" (click)="selectVariant(variant)">
+
+                    Size: {{ variant?.size || 'Variant' }}
+                    <br>
+                    Price:
+                    {{ variant?.priceDetails?.finalPrice || 0 | currency:'INR':'symbol':'1.0-0' }}
+                </button>
+            </div>
+
+            <ng-template #noVariants>
+                <p>No variants available</p>
+            </ng-template>
+
+            <button class="btn btn-dark w-100 mt-3" (click)="confirmAddToCart()">
+                Add To Cart
+            </button>
         </div>
-
-        <div class="sort-option">
-            Price Low To High
-        </div>
-
-        <div class="sort-option">
-            Price High To Low
-        </div>
-
-        <div class="sort-option">
-            Latest
-        </div>
-
-        <div class="sort-option">
-            Popularity
-        </div>
-
+        <button type="button" class="btn-close" (click)="closeVariantPopup()"></button>
     </div>
 
+
 </div>
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-auth-modal>

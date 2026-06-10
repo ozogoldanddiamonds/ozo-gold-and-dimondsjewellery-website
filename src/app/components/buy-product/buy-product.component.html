@@ -1,0 +1,202 @@
+<div class="container">
+    <!-- Product Section -->
+    <div class="product-wrapper">
+
+        <!-- Image Gallery -->
+        <div class="product-gallery">
+            <div class="main-image">
+                <img [src]="selectedImage" alt="{{ product?.name }}" id="mainImg">
+            </div>
+            <div class="thumbnail-gallery">
+                <img *ngFor="let img of product?.images" [src]="img" class="thumb"
+                    [class.active]="selectedImage === img" (click)="changeImage(img)">
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="product-details">
+            <div class="breadcrumb">
+
+                Home >
+                {{ product?.category?.name }}
+                >
+                {{ product?.subCategory?.name }}
+
+            </div>
+
+            <h1 class="product-title">
+                {{ product.name }}
+            </h1>
+
+            <div class="rating">
+                <span class="stars">⭐⭐⭐⭐⭐</span>
+                <span class="rating-text">{{ product.rating }} ({{ product.reviews }} reviews)</span>
+            </div>
+
+            <div class="price-section">
+                <div class="price-section">
+
+                    <span class="current-price">
+
+                        ₹{{ selectedVariant?.priceBreakup?.finalPrice | number:'1.0-0' }}
+
+                    </span>
+
+                    <span class="original-price">
+
+                        ₹{{ selectedVariant?.priceBreakup?.metalValue | number:'1.0-0' }}
+
+                    </span>
+
+                    <span class="discount" *ngIf="selectedVariant?.discountPercentage">
+
+                        {{ selectedVariant?.discountPercentage }}% OFF
+
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="product-meta">
+
+                <p>
+                    <strong>Purity:</strong>
+                    {{ selectedVariant?.metalPurity }}
+                </p>
+
+                <p>
+                    <strong>Metal Type:</strong>
+                    {{ selectedVariant?.metalType }}
+                </p>
+
+                <p>
+                    <strong>Color:</strong>
+                    {{ selectedVariant?.metalColor }}
+                </p>
+
+                <p>
+                    <strong>Weight:</strong>
+                    {{ selectedVariant?.netWeight }} gm
+                </p>
+
+                <p>
+                    <strong>Size:</strong>
+                    {{ selectedVariant?.size }}
+                </p>
+
+                <p>
+                    <strong>Stock:</strong>
+                    {{ selectedVariant?.stock }}
+                </p>
+
+            </div>
+
+            <div class="color-option">
+
+                <strong>Metal Color:</strong>
+
+                <div class="color-swatches">
+
+                    <!-- Yellow Gold -->
+
+                    <span *ngIf="selectedVariant?.metalColor === 'yellow'" class="swatch yellow"
+                        [class.active]="selectedFinish === 'yellow'">
+                    </span>
+
+                    <!-- White Gold -->
+
+                    <span *ngIf="selectedVariant?.metalColor === 'white'" class="swatch white"
+                        [class.active]="selectedFinish === 'white'">
+                    </span>
+
+                    <!-- Rose Gold -->
+
+                    <span *ngIf="selectedVariant?.metalColor === 'rose'" class="swatch rose"
+                        [class.active]="selectedFinish === 'rose'">
+                    </span>
+
+                    <span class="ms-2">
+                        {{ selectedVariant?.metalColor | titlecase }}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="quantity-selector">
+                <strong>Quantity:</strong>
+                <div class="qty-controls">
+                    <button class="qty-btn" (click)="updateQty(-1)">-</button>
+                    <input type="number" [value]="quantity" min="1" readonly />
+                    <button class="qty-btn" (click)="updateQty(1)">+</button>
+                </div>
+                <div class="mt-3 fw-bold fs-5">
+
+                    Total :
+
+                    ₹{{
+                    (selectedVariant?.priceBreakup?.finalPrice || 0)
+                    *
+                    quantity
+                    | number:'1.0-0'
+                    }}
+
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" (click)="proceedToPayment()">Proceed To Payment</button>
+                <button class="btn btn-secondary" (click)="addToCart()">Add to Cart</button>
+            </div>
+
+            <div class="product-features">
+                <div class="feature">
+                    <span>🚚</span>
+                    <span>Free Delivery</span>
+                </div>
+                <div class="feature">
+                    <span>🔄</span>
+                    <span>7 Days Return</span>
+                </div>
+                <div class="feature">
+                    <span>🛡️</span>
+                    <span>Lifetime Warranty</span>
+                </div>
+                <div class="feature">
+                    <span>💎</span>
+                    <span>Certified Authentic</span>
+                </div>
+            </div>
+
+            <div class="delivery-info">
+                <strong>Delivery to:</strong>
+                <p>
+                    Free Delivery Across India
+                </p>
+                <!-- <p class="delivery-date">Expected delivery: <span>{{ deliveryDate }}</span></p> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Similar Products -->
+    <div class="similar-products">
+        <h2>You May Also Like</h2>
+        <div class="product-grid">
+            <div class="product-card" *ngFor="let item of similarProducts">
+                <img [src]="item.images[0]" alt="{{ item.name }}" (click)="productDetails(item._id)" />
+                <h4>{{ item.name }}</h4>
+
+                <!-- ✅ Priority: calculatedPrice → priceBreakup.finalPrice → 0 -->
+                <span>
+
+                    Price: ₹{{ item.variants?.[0]?.calculatedPrice || item.variants?.[0]?.priceBreakup?.finalPrice || 0
+                    |
+                    number:'1.0-0' }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-auth-modal>
