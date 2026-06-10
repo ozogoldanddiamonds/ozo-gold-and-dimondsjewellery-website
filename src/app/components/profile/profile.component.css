@@ -1,0 +1,259 @@
+.profile-page {
+    min-height: 100vh;
+    background: #f6f6f6;
+    padding-bottom: 40px;
+}
+
+.profile-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 72px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+}
+
+.profile-header h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+}
+
+.back-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.profile-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px;
+}
+
+.profile-card {
+    margin-bottom: 16px;
+    padding: 20px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #171717, #3d2e17);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.14);
+}
+
+.profile-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-avatar {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d4af5a, #b98a2f);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 700;
+    flex-shrink: 0;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.profile-info h2 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.profile-info p {
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.profile-info span {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.edit-btn,
+.member-btn,
+.logout-btn,
+.menu-item,
+.back-btn {
+    transition: all 0.25s ease;
+}
+
+.edit-btn {
+    border: none;
+    background: #c9a34e;
+    color: #111;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    background: #b68d35;
+}
+
+.member-btn {
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: transparent;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.member-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 18px 12px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card h3 {
+    margin: 0 0 4px;
+    font-size: 24px;
+    font-weight: 800;
+    color: #111;
+}
+
+.stat-card p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+.section-card {
+    margin-bottom: 16px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    padding: 16px 16px 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+}
+
+.menu-item {
+    width: 100%;
+    min-height: 56px;
+    border: none;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    text-align: left;
+}
+
+.menu-item:hover {
+    background: #faf7f0;
+}
+
+.menu-icon {
+    width: 26px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.menu-text {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+}
+
+.menu-arrow {
+    font-size: 22px;
+    color: #b68d35;
+    line-height: 1;
+}
+
+.logout-btn {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    background: #d90429;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(217, 4, 41, 0.16);
+}
+
+.logout-btn:hover {
+    background: #b80322;
+}
+
+@media (max-width: 480px) {
+    .profile-top {
+        align-items: flex-start;
+    }
+
+    .profile-info h2 {
+        font-size: 20px;
+    }
+
+    .stats-grid {
+        gap: 10px;
+    }
+
+    .stat-card h3 {
+        font-size: 20px;
+    }
+
+    .profile-avatar {
+        width: 68px;
+        height: 68px;
+        font-size: 22px;
+    }
+}

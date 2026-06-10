@@ -1,0 +1,103 @@
+<div class="profile-page">
+
+    <div class="profile-header">
+        <button class="back-btn" type="button" (click)="goBack()">
+            ←
+        </button>
+        <h1>User Profile</h1>
+    </div>
+
+    <div class="profile-container">
+
+        <div class="profile-card">
+            <div class="profile-top">
+                <div class="profile-avatar">
+                    {{ getInitials(profileData?.user?.name) }}
+                </div>
+
+                <div class="profile-info">
+                    <h2>{{ profileData?.user?.name || 'Guest User' }}</h2>
+                    <p>{{ profileData?.user?.email || 'No email available' }}</p>
+                    <span>{{ profileData?.user?.mobile || 'No mobile number' }}</span>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <button class="edit-btn" type="button">Edit Profile</button>
+                <button class="member-btn" type="button">Gold Member</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card" (click)="orders()">
+                <h3>{{ profileData?.counts?.orders || 0 }}</h3>
+                <p>Orders</p>
+            </div>
+
+            <div class="stat-card" (click)="wishlist()">
+                <h3>{{ profileData?.counts?.wishlist || 0 }}</h3>
+                <p>Wishlist</p>
+            </div>
+
+            <div class="stat-card" (click)="cart()">
+                <h3>{{ profileData?.counts?.cart || 0 }}</h3>
+                <p>Cart</p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">My Account</div>
+
+            <button class="menu-item" type="button" (click)="orders()">
+                <span class="menu-icon">🧾</span>
+                <span class="menu-text">My Orders</span>
+                <span class="menu-arrow">›</span>
+            </button>
+
+            <button class="menu-item" type="button" (click)="openAddressPage()">
+                <span class="menu-icon">📍</span>
+                <span class="menu-text">My Addresses</span>
+                <span class="menu-arrow">›</span>
+            </button>
+
+            <button class="menu-item" type="button">
+                <span class="menu-icon">💳</span>
+                <span class="menu-text">Payment Methods</span>
+                <span class="menu-arrow">›</span>
+            </button>
+
+            <button class="menu-item" type="button">
+                <span class="menu-icon">🔔</span>
+                <span class="menu-text">Notifications</span>
+                <span class="menu-arrow">›</span>
+            </button>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">Support</div>
+
+            <button class="menu-item" type="button">
+                <span class="menu-icon">❓</span>
+                <span class="menu-text">Help Center</span>
+                <span class="menu-arrow">›</span>
+            </button>
+
+            <button class="menu-item" type="button" (click)="openContactModal()">
+                <span class="menu-icon">💬</span>
+                <span class="menu-text">Contact Us</span>
+                <span class="menu-arrow">›</span>
+            </button>
+
+            <button class="menu-item" type="button">
+                <span class="menu-icon">📄</span>
+                <span class="menu-text">Terms & Privacy</span>
+                <span class="menu-arrow">›</span>
+            </button>
+        </div>
+
+        <button class="logout-btn" type="button" (click)="logout()">
+            Logout
+        </button>
+
+    </div>
+</div>

@@ -59,9 +59,11 @@
             <li class="nav-item">
                 <a class="nav-link" routerLink="/" (click)="closeMenu()">Home</a>
             </li>
-            <li class="nav-item dropdown mega-dropdown" [class.show]="isCategoryOpen">
 
-                <a class="nav-link dropdown-toggle" role="button" tabindex="0" (click)="toggleCategoryMenu()">
+            <li class="nav-item dropdown mega-dropdown" [class.show]="isCategoryOpen" [class.show]="isCategoryOpen"
+                (mouseenter)="openCategoryMenuDesktop()" (mouseleave)="closeCategoryMenuDesktop()">
+
+                <a class="nav-link dropdown-toggle" role="button" tabindex="0" (click)="toggleCategoryMenu($event)">
                     Categories <i class="fa fa-angle-down ms-1"></i>
                 </a>
 

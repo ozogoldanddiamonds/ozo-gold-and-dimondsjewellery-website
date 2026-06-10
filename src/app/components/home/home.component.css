@@ -172,6 +172,7 @@
  .collection-image-wrap {
      overflow: hidden;
      border-radius: 14px;
+     cursor: pointer;
  }
 
  .collection-card img {

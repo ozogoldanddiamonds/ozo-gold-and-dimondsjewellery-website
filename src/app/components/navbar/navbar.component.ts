@@ -12,9 +12,15 @@ import { WishlistService } from 'src/app/service/wishlist.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  constructor(public router: Router, private toastr: ToastrService,
-    private authService: AuthService, private wishlistService: WishlistService,
-    private cartService: CartService, private productService: ProductService) { }
+  constructor(
+    public router: Router,
+    private toastr: ToastrService,
+    private authService: AuthService,
+    private wishlistService: WishlistService,
+    private cartService: CartService,
+    private productService: ProductService
+  ) { }
+
   categories: any[] = [];
   products: any[] = [];
   userId: string | null = null;
@@ -26,31 +32,104 @@ export class NavbarComponent implements OnInit {
   isCategoryOpen = false;
   isMenuOpen = false;
   lastScrollTop = 0;
-  cartCount: number = 0;
+  cartCount = 0;
   isLoading = false;
   isLoggedIn = false;
 
-  toggleCategoryMenu() {
-    this.isCategoryOpen = !this.isCategoryOpen;
+  ngOnInit(): void {
+    this.getProducts();
+
+    const user = localStorage.getItem('user');
+    if (user) {
+      const userData = JSON.parse(user);
+      this.userId = userData?._id;
+    }
+
+    this.loadCartCount();
+
+    this.cartService.cartCount$.subscribe(count => {
+      this.cartCount = count;
+    });
+
+    this.authService.loginStatus$.subscribe(status => {
+      this.isLoggedIn = status;
+    });
+
+    this.checkLoginStatus();
+    this.loadWishlistCount();
+
+    this.wishlistService.wishlistCount$.subscribe(count => {
+      this.wishlistCount = count;
+    });
+  }
+
+  isMobileView(): boolean {
+    return window.innerWidth < 992;
+  }
+
+  toggleCategoryMenu(event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (this.isMobileView()) {
+      this.isCategoryOpen = !this.isCategoryOpen;
+    }
+  }
+
+  openCategoryMenuDesktop() {
+    if (!this.isMobileView()) {
+      this.isCategoryOpen = true;
+    }
+  }
+
+  closeCategoryMenuDesktop() {
+    if (!this.isMobileView()) {
+      this.isCategoryOpen = false;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+
+    const target =
+      event.target as HTMLElement;
+
+    const dropdown =
+      target.closest('.mega-dropdown');
+
+    if (
+      this.isMobileView() &&
+      !dropdown
+    ) {
+      this.isCategoryOpen = false;
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (!this.isMobileView()) {
+      const navbar = document.getElementById('navbarNav');
+      navbar?.classList.remove('show');
+      this.isMenuOpen = false;
+    }
+    this.isCategoryOpen = false;
   }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
     const topHeader = document.getElementById('topHeader');
     const navbar = document.getElementById('mainNavbar');
 
     if (scrollTop > this.lastScrollTop) {
-      // 🔽 Scroll down
       topHeader?.classList.add('hide');
     } else {
-      // 🔼 Scroll up
       topHeader?.classList.remove('hide');
     }
 
-    // Add shadow effect
     if (scrollTop > 50) {
       navbar?.classList.add('scrolled');
     } else {
@@ -59,140 +138,67 @@ export class NavbarComponent implements OnInit {
 
     this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
   }
+
   closeMenu() {
     setTimeout(() => {
       const navbar = document.getElementById('navbarNav');
       navbar?.classList.remove('show');
-
-      // 🔥 IMPORTANT FIX
       this.isMenuOpen = false;
-
+      this.isCategoryOpen = false;
     }, 200);
   }
 
-
-  ngOnInit(): void {
-    this.getProducts();
-    const user = localStorage.getItem('user');
-    if (user) {
-      const userData = JSON.parse(user);
-      this.userId = userData?._id;
-    }
-    this.loadCartCount();
-    this.cartService.cartCount$
-      .subscribe(count => {
-
-        this.cartCount = count;
-        console.log(count, 'cart count');
-
-      });
-    this.authService.loginStatus$
-      .subscribe(status => {
-
-        this.isLoggedIn = status;
-
-      });
-    this.checkLoginStatus();
-    this.loadWishlistCount();
-    this.wishlistService
-      .wishlistCount$
-      .subscribe(count => {
-
-        this.wishlistCount = count;
-
-      });
-  }
   checkLoginStatus() {
     const userId = localStorage.getItem('userId');
     this.isLoggedIn = !!userId;
   }
+
   loadWishlistCount() {
-
-    const userId =
-      localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
 
     if (!userId) {
-
       this.wishlistCount = 0;
-
       return;
-
     }
 
-    this.wishlistService
-      .getWishlist(userId)
-      .subscribe({
-
-        next: (res: any) => {
-
-          this.wishlistService
-            .updateWishlistCount(
-
-              res?.items?.length || 0
-
-            );
-
-        }
-
-      });
-
+    this.wishlistService.getWishlist(userId).subscribe({
+      next: (res: any) => {
+        this.wishlistService.updateWishlistCount(res?.items?.length || 0);
+      }
+    });
   }
-  loadCartCount() {
 
-    const userId =
-      localStorage.getItem('userId');
+  loadCartCount() {
+    const userId = localStorage.getItem('userId');
 
     if (!userId) {
-
       this.cartCount = 0;
-
       return;
     }
 
-    this.cartService
-      .getCart(userId)
-      .subscribe({
-
-        next: (res: any) => {
-
-          this.cartCount =
-            res.cartCount;
-
-          // 🔥 update subject also
-          this.cartService.updateCartCount(
-            res.cartCount
-          );
-
-        },
-
-        error: () => {
-
-          this.cartCount = 0;
-
-        }
-
-      });
-
+    this.cartService.getCart(userId).subscribe({
+      next: (res: any) => {
+        this.cartCount = res.cartCount;
+        this.cartService.updateCartCount(res.cartCount);
+      },
+      error: () => {
+        this.cartCount = 0;
+      }
+    });
   }
 
   openAuthModal() {
-
     this.isAuthOpen = true;
-
   }
 
   closeAuthModal(isLoggedIn?: boolean) {
-
     this.isAuthOpen = false;
 
     if (isLoggedIn) {
-
       this.checkLoginStatus();
       this.loadWishlistCount();
       this.loadCartCount();
-
     }
-
   }
 
   toggleLoginPassword() {
@@ -203,15 +209,11 @@ export class NavbarComponent implements OnInit {
     this.showRegisterPassword = !this.showRegisterPassword;
   }
 
-
-
-
   whishlist() {
-    this.router.navigate(["/whishlist"]);
+    this.router.navigate(['/whishlist']);
   }
 
   logout() {
-
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
@@ -219,51 +221,24 @@ export class NavbarComponent implements OnInit {
     this.userId = null;
     this.authService.updateLoginStatus(false);
     this.isLoggedIn = false;
-
     this.cartCount = 0;
-
     this.cartService.updateCartCount(0);
 
-    this.toastr.success(
-      'Logout Success'
-    );
-
+    this.toastr.success('Logout Success');
     this.router.navigate(['/']);
-
   }
+
   getProducts() {
-
-    this.productService
-      .getProducAllProducts()
-      .subscribe({
-
-        next: (res: any) => {
-
-          const products =
-            res?.data || [];
-
-          this.categories = [
-
-            ...new Map(
-
-              products.map(
-                (item: any) => [
-
-                  item.category?._id,
-
-                  item.category
-
-                ]
-              )
-
-            ).values()
-
-          ];
-
-        }
-
-      });
-
+    this.productService.getProducAllProducts().subscribe({
+      next: (res: any) => {
+        const products = res?.data || [];
+        this.categories = [
+          ...new Map(
+            products.map((item: any) => [item.category?._id, item.category])
+          ).values()
+        ];
+      }
+    });
   }
 
 }

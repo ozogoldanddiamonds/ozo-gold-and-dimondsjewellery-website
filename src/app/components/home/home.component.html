@@ -83,7 +83,7 @@
 
                     <div class="collection-card">
 
-                        <div class="collection-image-wrap">
+                        <div class="collection-image-wrap" (click)="product(item._id)">
 
                             <img [src]="item.image || item.images?.[0]" [alt]="item.name">
 
@@ -362,3 +362,6 @@
         </div>
     </div>
 </section>
+
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-auth-modal>

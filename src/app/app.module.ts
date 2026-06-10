@@ -22,6 +22,7 @@ import { BuyProductComponent } from './components/buy-product/buy-product.compon
 import { ProceedPaymentComponent } from './components/proceed-payment/proceed-payment.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';
 import { AddressManagmentComponent } from './components/address-managment/address-managment.component';
+import { ProfileComponent } from './components/profile/profile.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,8 @@ import { AddressManagmentComponent } from './components/address-managment/addres
     BuyProductComponent,
     ProceedPaymentComponent,
     AddressFormComponent,
-    AddressManagmentComponent
+    AddressManagmentComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

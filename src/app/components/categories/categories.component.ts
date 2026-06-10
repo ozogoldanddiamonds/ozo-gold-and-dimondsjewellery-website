@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -7,6 +7,10 @@ import { CategoriesService } from 'src/app/service/categories.service';
 import { LoadingService } from 'src/app/service/loading.service';
 import { ProductService } from 'src/app/service/product.service';
 import { WishlistService } from 'src/app/service/wishlist.service';
+import Swiper from 'swiper';
+import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
+
+SwiperCore.use([Navigation, Pagination, Autoplay]);
 declare var bootstrap: any;
 @Component({
   selector: 'app-categories',
@@ -14,6 +18,7 @@ declare var bootstrap: any;
   styleUrls: ['./categories.component.css']
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
+  categorySwiper!: Swiper;
 
   products: any[] = [];
   isAuthOpen = false;
@@ -49,6 +54,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   selectedVariantId = '';
   selectedVariantSize = '';
 
+  availablePurities: string[] = [];
+  selectedPurity = '';
+  filteredVariants: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -80,7 +88,47 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       }
     });
   }
+  initCategorySwiper() {
 
+    if (this.categorySwiper) {
+
+      this.categorySwiper.destroy(
+        true,
+        true
+      );
+
+    }
+
+    this.categorySwiper =
+      new Swiper('.categorySwiper', {
+
+        slidesPerView: 6,
+
+        spaceBetween: 15,
+
+        breakpoints: {
+
+          320: {
+            slidesPerView: 3.2
+          },
+
+          576: {
+            slidesPerView: 4
+          },
+
+          768: {
+            slidesPerView: 5
+          },
+
+          992: {
+            slidesPerView: 6
+          }
+
+        }
+
+      });
+
+  }
   ngOnDestroy(): void {
     if (this.wishlistRefreshSub) {
       this.wishlistRefreshSub.unsubscribe();
@@ -119,21 +167,33 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   openVariantPopup(item: any) {
 
-    console.log(item, 'clicked product');
-
     this.selectedProduct = item;
+
+    this.availablePurities = [
+
+      ...new Set<string>(
+
+        item.variants.map(
+          (v: any) =>
+            v.metalPurity
+        )
+
+      )
+
+    ];
 
     const defaultVariant =
       item?.selectedVariant ||
       item?.variants?.[0];
 
-    this.selectedVariantId =
-      defaultVariant?._id || '';
+    this.selectedPurity =
+      defaultVariant?.metalPurity;
+
+    this.filterVariantsByPurity();
 
     this.showVariantPopup = true;
 
   }
-
   selectVariant(variant: any) {
     this.selectedVariant = variant;
     this.selectedVariantId = variant?._id || '';
@@ -201,6 +261,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.categoriesService.getAllCategories().subscribe({
       next: (res: any) => {
         this.categories = res?.data || [];
+        setTimeout(() => {
+
+          this.initCategorySwiper();
+
+        }, 100);
       },
       error: (err: any) => {
         console.log(err);
@@ -225,15 +290,29 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   clearFilters() {
+
     this.selectedProductType = '';
     this.minPrice = '';
     this.maxPrice = '';
     this.selectedSort = 'latest';
-    this.selectedCategory = this.categoryId || '';
+
+    this.selectedCategory = '';
+    this.categoryId = '';
+
     this.page = 1;
     this.products = [];
     this.hasMoreData = true;
-    this.getProducts(this.selectedCategory);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        category: null
+      },
+      queryParamsHandling: 'merge'
+    });
+
+    this.getProducts();
+
     this.closeOffcanvas('filterCanvas');
   }
 
@@ -339,7 +418,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     const userId = localStorage.getItem('userId');
 
     if (!userId) {
-      alert('Please login first');
+      this.toastr.warning(
+        'Please login first'
+      );
       this.router.navigate(['/login']);
       return;
     }
@@ -348,7 +429,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     const variantId = typeof selectedVariant === 'string' ? selectedVariant : selectedVariant?._id;
 
     if (!variantId) {
-      alert('Variant not found');
+      this.toastr.warning(
+        'Variant not found'
+      );
       return;
     }
 
@@ -362,7 +445,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         },
         error: (err: any) => {
           console.log(err);
-          alert(err?.error?.message || 'Failed to remove wishlist');
+          this.toastr.warning(
+            err?.error?.message ||
+            'Failed to remove wishlist'
+          );
         }
       });
     } else {
@@ -385,7 +471,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
             item.isWishlisted = true;
             this.loadWishlistStatus();
           } else {
-            alert(err?.error?.message || 'Failed to add wishlist');
+            this.toastr.warning(
+              err?.error?.message ||
+              'Failed to add wishlist'
+            );
           }
         }
       });
@@ -429,7 +518,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     }
 
     if (!this.selectedProduct?._id || !this.selectedVariantId) {
-      alert('Please select a variant');
+      this.toastr.warning(
+        'Please login first'
+      );
       return;
     }
 
@@ -447,12 +538,16 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.showVariantPopup = false;
         this.cartService.loadCartCount();
-        alert('Added to cart');
+        this.toastr.success(
+          'Added to cart'
+        );
       },
       error: (err: any) => {
         this.loading = false;
         console.log(err);
-        alert(err?.error?.message || 'Failed to add cart');
+        this.toastr.warning(
+          err?.error?.message || 'Failed to add cart'
+        );
       }
     });
   }
@@ -488,6 +583,39 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     const instance = bootstrap?.Offcanvas.getInstance(element) || new bootstrap.Offcanvas(element);
     instance.hide();
   }
+  filterVariantsByPurity() {
 
+    if (!this.selectedProduct) return;
+
+    this.filteredVariants =
+      this.selectedProduct.variants.filter(
+        (v: any) =>
+          v.metalPurity ===
+          this.selectedPurity
+      );
+
+    if (this.filteredVariants.length) {
+
+      this.selectedVariant =
+        this.filteredVariants[0];
+
+      this.selectedVariantId =
+        this.filteredVariants[0]._id;
+
+      this.selectedVariantSize =
+        this.filteredVariants[0].size;
+
+    }
+
+  }
+
+  selectPurity(purity: string) {
+
+    this.selectedPurity =
+      purity;
+
+    this.filterVariantsByPurity();
+
+  }
 
 }

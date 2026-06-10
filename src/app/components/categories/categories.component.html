@@ -6,18 +6,18 @@
 
             <div class="filter-section">
                 <h6 class="filter-title">CATEGORIES</h6>
-
-                <label class="filter-option" *ngFor="let category of categories">
-                    <input type="radio" name="desktopCategory" [checked]="selectedCategory === category._id"
-                        (change)="filterByCategory(category._id)">
-                    {{ category.name }}
-                </label>
-
                 <label class="filter-option" *ngIf="categories?.length">
                     <input type="radio" name="desktopCategory" [checked]="selectedCategory === ''"
                         (change)="filterByCategory('')">
                     All
                 </label>
+                <label class="filter-option" *ngFor="let category of categories">
+                    <input type="radio" name="desktopCategory" [checked]="selectedCategory === category._id"
+                        (change)="filterByCategory(category._id)">
+                    {{ category.name |titlecase}}
+                </label>
+
+
             </div>
 
             <div class="filter-section">
@@ -63,7 +63,49 @@
 
         <!-- ================= RIGHT SIDE ================= -->
         <div class="col-lg-10">
+            <!-- CATEGORY SWIPER -->
+            <div class="category-swiper-wrapper" *ngIf="categories?.length">
 
+                <div class="swiper categorySwiper">
+
+                    <div class="swiper-wrapper">
+
+                        <!-- All Category -->
+                        <div class="swiper-slide">
+
+                            <div class="category-card" [class.active]="selectedCategory === ''"
+                                (click)="filterByCategory('')">
+
+                                <div class="category-image">
+                                    <i class="fa fa-th-large"></i>
+                                </div>
+
+                                <span>All</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="swiper-slide" *ngFor="let category of categories">
+
+                            <div class="category-card" [class.active]="selectedCategory === category._id"
+                                (click)="filterByCategory(category._id)">
+
+                                <img [src]="category.image" [alt]="category.name">
+
+                                <span>
+                                    {{ category.name | titlecase}}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
             <!-- TOP BAR -->
             <div class="top-bar">
                 <div>
@@ -76,13 +118,23 @@
                     </span>
                 </div>
 
-                <div class="sort-box">
+                <!-- Desktop -->
+                <div class="sort-box d-none d-lg-block">
                     <select class="form-select" [(ngModel)]="selectedSort" (change)="onSortChange()">
+
                         <option value="latest">Sort by : Latest</option>
                         <option value="lowToHigh">Price Low to High</option>
-                        <option value="highToLow">Price High to Low</option>
+                        <option value="highToLow">Price High To Low</option>
+
                     </select>
                 </div>
+
+                <!-- Mobile -->
+                <button class="mobile-clear-btn d-lg-none" (click)="clearFilters()">
+
+                    Clear
+
+                </button>
             </div>
 
             <!-- LOADER -->
@@ -184,18 +236,18 @@
 
         <div class="mobile-filter-section">
             <h6>Categories</h6>
-
-            <label *ngFor="let category of categories">
-                <input type="radio" name="mobileCategory" [checked]="selectedCategory === category._id"
-                    (change)="filterByCategory(category._id)">
-                {{ category.name }}
-            </label>
-
             <label *ngIf="categories?.length">
                 <input type="radio" name="mobileCategory" [checked]="selectedCategory === ''"
                     (change)="filterByCategory('')">
                 All
             </label>
+            <label *ngFor="let category of categories">
+                <input type="radio" name="mobileCategory" [checked]="selectedCategory === category._id"
+                    (change)="filterByCategory(category._id)">
+                {{ category.name | titlecase}}
+            </label>
+
+
         </div>
 
         <div class="mobile-filter-section">
@@ -241,34 +293,90 @@
 <!-- VARIANT POPUP -->
 <div class="variant-popup-backdrop" *ngIf="showVariantPopup" (click)="closeVariantPopup()"></div>
 
+<!-- Backdrop -->
+<div class="variant-popup-backdrop" *ngIf="showVariantPopup" (click)="closeVariantPopup()"></div>
+
+<!-- Popup -->
 <div class="variant-popup" *ngIf="showVariantPopup">
-    <div class="variant-popup-header">
-        <div class="variant-popup-body" *ngIf="selectedProduct">
-            <h6>{{ selectedProduct?.name }}</h6>
+    <div class="variant-popup-shell" *ngIf="selectedProduct">
 
-            <div class="variant-list" *ngIf="selectedProduct?.variants?.length; else noVariants">
-                <button type="button" class="variant-btn" *ngFor="let variant of selectedProduct?.variants"
-                    [class.active]="selectedVariantId === getVariantId(variant)" (click)="selectVariant(variant)">
-
-                    Size: {{ variant?.size || 'Variant' }}
-                    <br>
-                    Price:
-                    {{ variant?.priceDetails?.finalPrice || 0 | currency:'INR':'symbol':'1.0-0' }}
-                </button>
+        <!-- Header -->
+        <div class="variant-popup-header">
+            <div class="popup-title-wrap">
+                <span class="popup-kicker">Choose Variant</span>
+                <h5>{{ selectedProduct?.name }}</h5>
             </div>
 
-            <ng-template #noVariants>
-                <p>No variants available</p>
-            </ng-template>
+            <button type="button" class="popup-close" aria-label="Close popup" (click)="closeVariantPopup()">
+                <span>&times;</span>
+            </button>
+        </div>
 
-            <button class="btn btn-dark w-100 mt-3" (click)="confirmAddToCart()">
+        <!-- Body -->
+        <div class="variant-popup-body">
+            <div class="price-panel">
+                <div>
+                    <p class="price-label mb-1">Selected Price</p>
+                    <h4 class="final-price mb-0">
+                        ₹{{ selectedVariant?.priceDetails?.finalPrice | number:'1.0-0' }}
+                    </h4>
+                </div>
+
+                <div class="price-badge">
+                    Best Match
+                </div>
+            </div>
+
+            <!-- Purity -->
+            <div class="option-section" *ngIf="availablePurities?.length">
+                <label class="section-label">Purity</label>
+
+                <div class="purity-list">
+                    <button type="button" *ngFor="let purity of availablePurities" class="purity-btn"
+                        [class.active]="selectedPurity === purity" (click)="selectPurity(purity)">
+                        {{ purity }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Variants -->
+            <div class="option-section">
+                <label class="section-label">Available Sizes</label>
+
+                <div class="variant-list" *ngIf="selectedProduct?.variants?.length; else noVariants">
+                    <button type="button" class="variant-btn" *ngFor="let variant of filteredVariants"
+                        [class.active]="selectedVariantId === getVariantId(variant)" (click)="selectVariant(variant)">
+
+                        <div class="variant-top">
+                            <span class="variant-size">{{ variant?.size || 'Standard Variant' }}</span>
+                            <span class="variant-check" *ngIf="selectedVariantId === getVariantId(variant)">✓</span>
+                        </div>
+
+                        <div class="variant-price">
+                            {{ variant?.priceDetails?.finalPrice || 0 | currency:'INR':'symbol':'1.0-0' }}
+                        </div>
+
+                        <div class="variant-meta">
+                            Ready to add
+                        </div>
+                    </button>
+                </div>
+
+                <ng-template #noVariants>
+                    <div class="no-variants-box">
+                        <p class="mb-0">No variants available for this product.</p>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="variant-popup-footer">
+            <button class="btn-add-cart" (click)="confirmAddToCart()">
                 Add To Cart
             </button>
         </div>
-        <button type="button" class="btn-close" (click)="closeVariantPopup()"></button>
     </div>
-
-
 </div>
 <app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
 </app-auth-modal>

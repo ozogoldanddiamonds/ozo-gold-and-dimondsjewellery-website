@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BannersService } from 'src/app/service/banners.service';
+import { LoadingService } from 'src/app/service/loading.service';
 import { ProductService } from 'src/app/service/product.service';
 import { WishlistService } from 'src/app/service/wishlist.service';
 import Swiper from 'swiper';
@@ -23,7 +24,7 @@ export class HomeComponent implements OnInit {
   currentPage = 1;
   limit = 8;
   search = '';
-
+  isAuthOpen = false;
   totalPages = 0;
   totalPagesArray: number[] = [];
   wishlistId: string = '';
@@ -57,7 +58,8 @@ export class HomeComponent implements OnInit {
     }
   ];
   constructor(public router: Router, private bannerService: BannersService, private toastr: ToastrService,
-    private wishlistService: WishlistService, private productService: ProductService) { }
+    private wishlistService: WishlistService, private productService: ProductService,
+    private loaderService: LoadingService,) { }
   ngOnInit(): void {
     this.getAllBanners();
     this.getNewProducts();
@@ -145,7 +147,7 @@ export class HomeComponent implements OnInit {
     this.router.navigate(["/product", id]);
   }
   getProducts() {
-
+    this.loaderService.show();
     this.productService
       .getAllProducts(
         this.currentPage,
@@ -158,6 +160,7 @@ export class HomeComponent implements OnInit {
 
           console.log(response);
 
+          this.loaderService.hide();
           this.totalPages = response.totalPages || 0;
 
           this.totalPagesArray = Array(this.totalPages)
@@ -168,13 +171,13 @@ export class HomeComponent implements OnInit {
             response.products ||
             response.data ||
             [];
-
+          this.loadWishlistStatus();
         },
 
         error: (error) => {
 
           console.log(error);
-
+          this.loaderService.hide();
         }
 
       });
@@ -217,20 +220,23 @@ export class HomeComponent implements OnInit {
 
   }
   getAllBanners(): void {
+    this.loaderService.show();
     this.bannerService.getAllBanners().subscribe({
       next: (res: any) => {
         if (res.success) {
+          this.loaderService.hide();
           this.banners = res.data;
         }
       },
       error: (err) => {
         console.error('Banner Load Error:', err);
+        this.loaderService.hide();
       }
     });
   }
 
   getNewProducts(): void {
-
+    this.loaderService.show();
     this.productService
       .getProductsByType('NEW')
       .subscribe({
@@ -240,7 +246,7 @@ export class HomeComponent implements OnInit {
           console.log('New Products:', res);
 
           if (res.success) {
-
+            this.loaderService.hide();
             this.newProducts = res.data;
             setTimeout(() => {
               this.initPopularSwiper();
@@ -252,14 +258,14 @@ export class HomeComponent implements OnInit {
         error: (err) => {
 
           console.error(err);
-
+          this.loaderService.hide();
         }
 
       });
 
   }
   getfeatureProducts() {
-
+    this.loaderService.show();
     this.productService
       .getProductsByType('FEATURED')
       .subscribe({
@@ -269,7 +275,7 @@ export class HomeComponent implements OnInit {
           console.log('FEATURED PRODUCTS', res);
 
           if (res.success) {
-
+            this.loaderService.hide();
             this.featureProducts = res.data;
 
             setTimeout(() => {
@@ -285,20 +291,21 @@ export class HomeComponent implements OnInit {
         error: (err) => {
 
           console.log(err);
-
+          this.loaderService.hide();
         }
 
       });
 
   }
   loadWishlist() {
+    this.loaderService.show();
     this.loadWishlistStatus();
 
     this.wishlistService.wishlistRefresh$
       .subscribe(refresh => {
 
         if (refresh) {
-
+          this.loaderService.hide();
           this.loadWishlistStatus();
 
           this.wishlistService
@@ -309,7 +316,7 @@ export class HomeComponent implements OnInit {
       });
   }
   loadWishlistStatus() {
-
+    this.loaderService.show();
     const userId =
       localStorage.getItem('userId');
 
@@ -324,7 +331,7 @@ export class HomeComponent implements OnInit {
       .subscribe({
 
         next: (res: any) => {
-
+          this.loaderService.hide();
           this.wishlistId =
             res?.wishlistId || '';
 
@@ -379,10 +386,10 @@ export class HomeComponent implements OnInit {
         'Please login first'
       );
 
+      this.openLoginModal();
+
       return;
-
     }
-
     if (
       item.isWishlisted &&
       item.wishlistItemId
@@ -450,5 +457,19 @@ export class HomeComponent implements OnInit {
     }
 
   }
+
+
+  openLoginModal() {
+
+    this.isAuthOpen = true;
+
+  }
+  closeAuthModal(isLoggedIn?: boolean) {
+
+    this.isAuthOpen = false;
+
+  }
+
 }
+
 
