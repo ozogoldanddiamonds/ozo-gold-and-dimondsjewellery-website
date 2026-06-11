@@ -181,7 +181,7 @@
 
 .option-head {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin-bottom: 12px;
 }
@@ -643,7 +643,7 @@
     border: none;
     background-color: var(--primary-red-dark);
     color: white;
-    border-radius: 50px;
+    border-radius: 10px;
 
 }
 

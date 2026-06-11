@@ -3,7 +3,9 @@
 
         <!-- ================= LEFT FILTER ================= -->
         <div class="col-lg-2 filter-sidebar d-none d-lg-block">
-
+            <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-outline-secondary" (click)="clearFilters()">Clear Filters</button>
+            </div>
             <div class="filter-section">
                 <h6 class="filter-title">CATEGORIES</h6>
                 <label class="filter-option" *ngIf="categories?.length">
@@ -56,7 +58,6 @@
 
             <div class="d-grid gap-2 mt-3">
                 <button class="btn btn-dark" (click)="applyFilters()">Apply Filters</button>
-                <button class="btn btn-outline-secondary" (click)="clearFilters()">Clear Filters</button>
             </div>
 
         </div>
@@ -71,7 +72,7 @@
                     <div class="swiper-wrapper">
 
                         <!-- All Category -->
-                        <div class="swiper-slide">
+                        <!-- <div class="swiper-slide">
 
                             <div class="category-card" [class.active]="selectedCategory === ''"
                                 (click)="filterByCategory('')">
@@ -84,7 +85,7 @@
 
                             </div>
 
-                        </div>
+                        </div> -->
 
                         <div class="swiper-slide" *ngFor="let category of categories">
 

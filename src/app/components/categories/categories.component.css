@@ -790,10 +790,15 @@
     text-align: center;
 
     min-height: 120px;
+    transition: all 0.4s;
+    cursor: pointer;
 }
 
+.category-card span {
+    transition: all 0.4s;
+}
 
-.category-card:hover {
+.category-card:hover span {
 
     transform: translateY(-4px);
 

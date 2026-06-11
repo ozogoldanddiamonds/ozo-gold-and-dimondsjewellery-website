@@ -298,14 +298,14 @@ export class HomeComponent implements OnInit {
 
   }
   loadWishlist() {
-    this.loaderService.show();
+
     this.loadWishlistStatus();
 
     this.wishlistService.wishlistRefresh$
       .subscribe(refresh => {
 
         if (refresh) {
-          this.loaderService.hide();
+
           this.loadWishlistStatus();
 
           this.wishlistService
@@ -316,14 +316,10 @@ export class HomeComponent implements OnInit {
       });
   }
   loadWishlistStatus() {
-    this.loaderService.show();
     const userId =
       localStorage.getItem('userId');
-
     if (!userId || !this.products?.length) {
-
       return;
-
     }
 
     this.wishlistService
@@ -331,7 +327,6 @@ export class HomeComponent implements OnInit {
       .subscribe({
 
         next: (res: any) => {
-          this.loaderService.hide();
           this.wishlistId =
             res?.wishlistId || '';
 

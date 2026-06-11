@@ -304,11 +304,14 @@
 
                 <div class="option-head">
 
-                    <strong>Size</strong>
-
                     <button class="size-chart-link" *ngIf="sizeChart" (click)="openSizeChart()">
 
                         View Size Chart
+
+                    </button>
+                    <button class="size-chart-link" *ngIf="product.certificateUrl" (click)="openCertificate()">
+
+                        View Certificate
 
                     </button>
 
@@ -591,6 +594,42 @@
             <p>{{sizeChart?.description}}</p>
 
             <img [src]="sizeChart?.image" [alt]="sizeChart?.title" class="size-chart-image">
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Size Chart Modal -->
+
+<div class="size-chart-overlay" *ngIf="isCertificateModalOpen" (click)="closeCertificate()">
+
+    <div class="size-chart-modal" (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+
+        <div class="size-chart-header">
+
+            <h4>
+
+                Stone Certificate
+
+            </h4>
+
+
+            <button type="button" class="close-btn" (click)="closeCertificate()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <!-- Body -->
+
+        <div class="size-chart-body">
+            <img [src]="product?.certificateUrl" [alt]="product.certificateUrl" class="size-chart-image">
 
         </div>
 

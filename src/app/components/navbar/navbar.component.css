@@ -123,6 +123,10 @@
             display: block;
         }
 
+        .fa-angle-down {
+            margin-top: 10px;
+        }
+
         /* Hover effect (desktop) */
         @media (min-width: 992px) {
             .mega-dropdown:hover .mega-menu {

@@ -29,6 +29,7 @@ export class ProductComponent implements OnInit {
   categoryId: any;
   sizeChart: any = null;
   isSizeChartModalOpen = false;
+  isCertificateModalOpen = false;
   selectedPurity: string = '';
 
   filteredVariants: any[] = [];
@@ -472,7 +473,12 @@ export class ProductComponent implements OnInit {
   openSizeChart() {
     this.isSizeChartModalOpen = true;
   }
-
+  openCertificate() {
+    this.isCertificateModalOpen = true;
+  }
+  closeCertificate() {
+    this.isCertificateModalOpen = false;
+  }
   closeSizeChart() {
     this.isSizeChartModalOpen = false;
   }
