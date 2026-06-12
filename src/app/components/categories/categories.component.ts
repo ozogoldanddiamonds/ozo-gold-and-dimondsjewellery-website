@@ -568,7 +568,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   }
   viewProduct(id: string) {
-    this.router.navigate(['/product-detail', id]);
+    this.router.navigate(["/product", id]);
   }
 
   getDiscount(mrp: number, price: number): number {

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
 import { AuthService } from 'src/app/service/auth.service';
 import { CartService } from 'src/app/service/cart.service';
 
@@ -11,55 +12,40 @@ import { CartService } from 'src/app/service/cart.service';
 })
 export class AuthModalComponent implements OnInit {
   loginForm!: FormGroup;
-
+  isLoginLoading = false;
+  isRegisterLoading = false;
   registerForm!: FormGroup;
   constructor(private authService: AuthService,
     private cartService: CartService, private toastr: ToastrService, private fb: FormBuilder) { }
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-
-      phone: [
-        '',
-        [
-          Validators.required
-        ]
-      ],
-
-      password: [
-        '',
-        [
-          Validators.required
-        ]
-      ]
-
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      password: ['', [Validators.required]]
     });
     this.registerForm = this.fb.group({
-
       name: ['', Validators.required],
-
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
-
-      phone: ['', Validators.required],
-
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       password: ['', Validators.required],
-
       confirmPassword: ['', Validators.required],
-
       acceptTerms: [false, Validators.requiredTrue]
-
-    });
+    }, { validators: this.passwordMatchValidator });
   }
   @Input() isAuthOpen = false;
 
   @Output() close = new EventEmitter<boolean>();
 
   activeAuthTab: 'login' | 'register' = 'login';
+  passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+
+    if (password !== confirmPassword) {
+      return { passwordMismatch: true };
+    }
+
+    return null;
+  }
 
   showLoginPassword = false;
   showRegisterPassword = false;
@@ -73,7 +59,10 @@ export class AuthModalComponent implements OnInit {
   }
 
   login() {
-
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
     if (this.loginForm.invalid) {
 
       this.toastr.warning(
@@ -83,9 +72,15 @@ export class AuthModalComponent implements OnInit {
       return;
 
     }
+    if (this.isLoginLoading) return;
 
+    this.isLoginLoading = true;
     this.authService
-      .login(this.loginForm.value)
+      .login(this.loginForm.value).pipe(
+        finalize(() => {
+          this.isLoginLoading = false;
+        })
+      )
       .subscribe({
 
         next: (res: any) => {
@@ -130,7 +125,10 @@ export class AuthModalComponent implements OnInit {
 
   }
   register() {
-
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
     if (this.registerForm.invalid) {
 
       this.toastr.warning(
@@ -140,7 +138,9 @@ export class AuthModalComponent implements OnInit {
       return;
 
     }
+    if (this.isRegisterLoading) return;
 
+    this.isRegisterLoading = true;
     const formValue =
       this.registerForm.value;
 
@@ -171,6 +171,11 @@ export class AuthModalComponent implements OnInit {
 
     this.authService
       .register(payload)
+      .pipe(
+        finalize(() => {
+          this.isLoginLoading = false;
+        })
+      )
       .subscribe({
 
         next: (res: any) => {
@@ -203,5 +208,29 @@ export class AuthModalComponent implements OnInit {
 
       });
 
+  }
+
+  allowOnlyNumbers(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+    const controlName = input.getAttribute('formcontrolname');
+    if (controlName === 'phone') {
+      if (this.activeAuthTab === 'login') {
+        this.loginForm.get('phone')?.setValue(input.value, { emitEvent: false });
+      } else {
+        this.registerForm.get('phone')?.setValue(input.value, { emitEvent: false });
+      }
+    }
+  }
+  onPhoneInput(event: Event, formType: 'login' | 'register') {
+    const input = event.target as HTMLInputElement;
+    const cleanedValue = input.value.replace(/[^0-9]/g, '');
+    input.value = cleanedValue;
+
+    if (formType === 'login') {
+      this.loginForm.get('phone')?.setValue(cleanedValue, { emitEvent: false });
+    } else {
+      this.registerForm.get('phone')?.setValue(cleanedValue, { emitEvent: false });
+    }
   }
 }

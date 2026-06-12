@@ -9,7 +9,11 @@
     <div class="auth-grid">
         <!-- Left panel -->
         <div class="auth-brand-panel">
-            <p class="auth-kicker">Welcome to OZO</p>
+            <div class="image-grid">
+                <img src="../../../assets//images/logo2.png" alt="">
+                <p class="auth-kicker">Welcome to OZO</p>
+            </div>
+
             <h2 id="authTitle">{{ activeAuthTab === 'login' ? 'Sign in to your account' : 'Create your account' }}</h2>
             <p class="auth-copy">
                 Save your wishlist, track orders, and shop faster with a secure account.
@@ -36,8 +40,21 @@
 
                 <label>Phone Number</label>
 
-                <input type="text" formControlName="phone" placeholder="Enter your phone number" autocomplete="off" />
+                <input type="text" formControlName="phone" placeholder="Enter your phone number" maxlength="10"
+                    inputmode="numeric" (input)="allowOnlyNumbers($event)" (input)="onPhoneInput($event, 'login')" />
+                <small class="error"
+                    *ngIf="loginForm.get('phone')?.touched && loginForm.get('phone')?.hasError('required')">
+                    Phone number is required
+                </small>
+                <small class="error"
+                    *ngIf="loginForm.get('phone')?.touched && loginForm.get('phone')?.hasError('pattern')">
+                    Enter valid 10 digit mobile number
+                </small>
 
+                <small class="error"
+                    *ngIf="loginForm.get('phone')?.touched && loginForm.get('phone')?.hasError('pattern')">
+                    Not allowed. Enter only 10-digit mobile number
+                </small>
                 <label>Password</label>
 
                 <div class="password-wrap">
@@ -68,10 +85,12 @@
 
                 </div>
 
-                <button type="submit" class="auth-submit">
+                <button type="submit" class="auth-submit" [disabled]="loginForm.invalid || isLoginLoading">
 
-                    Login
-
+                    <span *ngIf="!isLoginLoading">Login</span>
+                    <span *ngIf="isLoginLoading" class="loading-dots">
+                        Logging in<span>.</span><span>.</span><span>.</span>
+                    </span>
                 </button>
 
             </form>
@@ -82,14 +101,33 @@
                 <label>Full Name</label>
 
                 <input type="text" formControlName="name" placeholder="Enter your name">
-
                 <label>Email</label>
-
                 <input type="email" formControlName="email" placeholder="Enter your email">
+                <small class="error"
+                    *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')">
+                    Email is required
+                </small>
+                <small class="error"
+                    *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')">
+                    Enter valid email address
+                </small>
 
                 <label>Phone Number</label>
+                <input type="text" formControlName="phone" placeholder="Enter your phone number" maxlength="10"
+                    inputmode="numeric" (input)="allowOnlyNumbers($event)" (input)="onPhoneInput($event, 'register')" />
+                <small class="error"
+                    *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.hasError('required')">
+                    Phone number is required
+                </small>
+                <small class="error"
+                    *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.hasError('pattern')">
+                    Enter valid 10 digit mobile number
+                </small>
+                <small class="error"
+                    *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.hasError('pattern')">
+                    Not allowed. Enter only 10-digit mobile number
+                </small>
 
-                <input type="text" formControlName="phone" placeholder="Enter your phone number">
 
                 <label>Password</label>
 
@@ -117,17 +155,19 @@
                     <input type="checkbox" formControlName="acceptTerms">
 
                     <span>
-                        I agree to Terms & Privacy Policy
+                        I accept OZO Gold and Diamonds <a href="">Terms and Conditions</a> and <a href="">Privacy
+                            Policy</a>
                     </span>
 
                 </label>
 
-                <button type="submit" class="auth-submit">
+                <button type="submit" class="auth-submit" [disabled]="registerForm.invalid || isRegisterLoading">
 
-                    Create Account
-
+                    <span *ngIf="!isRegisterLoading">Create Account</span>
+                    <span *ngIf="isRegisterLoading" class="loading-dots">
+                        Creating Account<span>.</span><span>.</span><span>.</span>
+                    </span>
                 </button>
-
             </form>
         </div>
     </div>

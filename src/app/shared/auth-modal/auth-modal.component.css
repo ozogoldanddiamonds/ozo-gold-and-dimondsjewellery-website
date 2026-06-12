@@ -9,6 +9,21 @@
     z-index: 999;
 }
 
+.auth-brand-panel .image-grid img {
+    width: 200px;
+    height: auto;
+    text-align: center;
+}
+
+.image-grid p {
+    margin-top: 30px;
+}
+
+.image-grid {
+    display: flex;
+    margin: 0;
+}
+
 .auth-modal {
     position: fixed;
     top: 50%;
@@ -186,13 +201,17 @@
 .remember {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     font-size: 13px;
     color: #5f554b;
 }
 
 .remember input[type="checkbox"] {
     width: 14px;
+}
+
+.remember a {
+    color: var(--primary-red-dark);
 }
 
 .forgot-link {
@@ -276,5 +295,53 @@
 
     .social-row {
         grid-template-columns: 1fr;
+    }
+}
+
+.auth-submit {
+    min-height: 44px;
+    position: relative;
+}
+
+.auth-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.loading-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.loading-dots span {
+    animation: blink 1.4s infinite;
+}
+
+.loading-dots span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+
+    0%,
+    20% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.2;
     }
 }
