@@ -65,14 +65,12 @@
      position: absolute;
      top: 16px;
      right: 16px;
+     z-index: 999;
      width: 38px;
      height: 38px;
      border: none;
      border-radius: 50%;
      background: #f7f4ef;
-     color: #6b6259;
-     font-size: 14px;
-     transition: all 0.25s ease;
  }
 
  .remove-icon:hover {
@@ -403,4 +401,41 @@
          font-size: 14px;
          line-height: 1.7;
      }
+ }
+
+
+ @media (max-width: 767px) {
+
+     .wishlist-card {
+         position: relative;
+     }
+
+     .remove-icon {
+         position: absolute;
+         top: 10px;
+         right: 10px;
+         z-index: 9999;
+         display: flex !important;
+         align-items: center;
+         justify-content: center;
+     }
+
+ }
+
+ @media (max-width: 767px) {
+
+     .wishlist-card {
+         position: relative;
+     }
+
+     .remove-icon {
+         position: absolute;
+         top: 10px;
+         right: 10px;
+         z-index: 9999;
+         display: flex !important;
+         align-items: center;
+         justify-content: center;
+     }
+
  }

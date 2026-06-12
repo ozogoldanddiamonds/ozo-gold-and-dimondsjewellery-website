@@ -7,10 +7,10 @@
             <div class="col-md-3">
                 <h5 class="footer-title">ABOUT US</h5>
                 <ul>
-                    <li>Store Locations</li>
-                    <li>Wholesalers</li>
-                    <li>Map Site</li>
-                    <li>Contact Us</li>
+                    <li><a href="">Store Locations</a></li>
+                    <li><a href="">Wholesalers</a></li>
+                    <li><a href="">Map Site</a></li>
+                    <li><a href="">Contact Us</a></li>
                 </ul>
             </div>
 
@@ -18,10 +18,10 @@
             <div class="col-md-3">
                 <h5 class="footer-title">INFORMATION</h5>
                 <ul>
-                    <li>Help & FAQs</li>
-                    <li>Advance Search</li>
-                    <li>Gift Cards</li>
-                    <li>Shop By Brands</li>
+                    <li><a href="">Help & FAQs</a></li>
+                    <li><a href="">Advance Search</a></li>
+                    <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
+                    <li><a routerLink="/terms-and-conditions">Terms and Conditions</a></li>
                 </ul>
             </div>
 
@@ -29,10 +29,10 @@
             <div class="col-md-3">
                 <h5 class="footer-title">ACCOUNT</h5>
                 <ul>
-                    <li>Preferences</li>
-                    <li>Order History</li>
-                    <li>Cart Page</li>
-                    <li>Sign In</li>
+                    <li><a routerLink="/about">About</a></li>
+                    <li><a routerLink="/orders">Order History</a></li>
+                    <li><a routerLink="/cart">Cart Page</a></li>
+                    <li (click)="openAuthModal()"><a>Sign In</a></li>
                 </ul>
             </div>
 
@@ -72,3 +72,6 @@
     </div>
 
 </footer>
+
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal()">
+</app-auth-modal>

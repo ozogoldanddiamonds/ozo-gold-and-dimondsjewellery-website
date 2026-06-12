@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/service/auth.service';
 import { CartService } from 'src/app/service/cart.service';
 import { WishlistService } from 'src/app/service/wishlist.service';
 import { Location } from '@angular/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -13,18 +14,21 @@ export class ProfileComponent implements OnInit {
   profileData: any;
   cartCount = 0;
   wishlistCount = 0;
+  isEditProfileOpen = false;
+  isProfileUpdating = false;
+  editProfileForm!: FormGroup;
 
   constructor(
     private authService: AuthService,
     private cartService: CartService,
     private wishlistService: WishlistService,
     private router: Router,
-    private location: Location
+    private location: Location, private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
     this.getProfileSummary();
-
+    this.initEditProfileForm();
     this.cartService.cartCount$.subscribe(count => {
       this.cartCount = count;
     });
@@ -34,6 +38,48 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  initEditProfileForm() {
+    this.editProfileForm = this.fb.group({
+      fullName: ['', [Validators.required]],
+      mobileNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      email: ['', [Validators.required, Validators.email]],
+      gender: [''],
+      dateOfBirth: [''],
+      anniversaryDate: [''],
+      addressLine1: [''],
+      addressLine2: [''],
+      city: [''],
+      state: [''],
+      pincode: ['', [Validators.pattern(/^[0-9]{6}$/)]],
+      country: ['India']
+    });
+  }
+
+  openEditProfileModal() {
+    this.isEditProfileOpen = true;
+  }
+
+  closeEditProfileModal() {
+    this.isEditProfileOpen = false;
+  }
+
+  updateProfile() {
+    if (this.editProfileForm.invalid) {
+      this.editProfileForm.markAllAsTouched();
+      return;
+    }
+
+    this.isProfileUpdating = true;
+
+    const payload = this.editProfileForm.value;
+    console.log('Profile Update Payload', payload);
+
+    // API call here
+    setTimeout(() => {
+      this.isProfileUpdating = false;
+      this.closeEditProfileModal();
+    }, 1200);
+  }
   getProfileSummary(): void {
     const userId = localStorage.getItem('userId');
 
@@ -83,7 +129,9 @@ export class ProfileComponent implements OnInit {
   openContactModal(): void {
     this.router.navigate(['/contact']);
   }
-
+  termsAndConditions() {
+    this.router.navigate(['/terms-and-conditions']);
+  }
   openAddressPage(): void {
     const userId = localStorage.getItem('userId');
 

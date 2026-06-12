@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit {
     private cartService: CartService,
     private productService: ProductService
   ) { }
-
+  profileData: any;
   categories: any[] = [];
   products: any[] = [];
   userId: string | null = null;
@@ -35,14 +35,17 @@ export class NavbarComponent implements OnInit {
   cartCount = 0;
   isLoading = false;
   isLoggedIn = false;
+  userName: string = '';
 
   ngOnInit(): void {
     this.getProducts();
+    this.getProfileSummary();
 
     const user = localStorage.getItem('user');
     if (user) {
       const userData = JSON.parse(user);
       this.userId = userData?._id;
+      this.userName = userData?.name || userData?.fullName || userData?.username || '';
     }
 
     this.loadCartCount();
@@ -61,10 +64,28 @@ export class NavbarComponent implements OnInit {
     this.wishlistService.wishlistCount$.subscribe(count => {
       this.wishlistCount = count;
     });
+
   }
 
   isMobileView(): boolean {
     return window.innerWidth < 992;
+  }
+  getProfileSummary(): void {
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+      return;
+    }
+
+    this.authService.getProfileSummary(userId).subscribe({
+      next: (res: any) => {
+        this.profileData = res?.data;
+        console.log(this.profileData, 'user data');
+      },
+      error: (err: any) => {
+        console.error('Profile summary error:', err);
+      }
+    });
   }
 
   toggleCategoryMenu(event?: Event) {

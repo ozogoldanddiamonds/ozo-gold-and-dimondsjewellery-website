@@ -900,6 +900,11 @@
          font-size: 24px;
      }
 
+     .popular-title {
+         font-size: 8px !important;
+         text-align: center;
+     }
+
      .description {
          font-size: 13px;
      }
@@ -950,4 +955,35 @@
      background: #c9a14a;
      border-color: #c9a14a;
      color: #fff;
+ }
+
+ @media (max-width: 991px) {
+
+     .hover-icons {
+         opacity: 1 !important;
+         transform: none !important;
+
+         position: absolute;
+         bottom: 10px;
+         left: 50%;
+
+         top: auto;
+         right: auto;
+
+         transform: translateX(-50%) !important;
+
+         flex-direction: row;
+         gap: 10px;
+     }
+
+     .product-card:hover .hover-icons {
+         opacity: 1 !important;
+         transform: none !important;
+     }
+
+     .hover-icons i {
+         width: 36px;
+         height: 36px;
+         font-size: 14px;
+     }
  }

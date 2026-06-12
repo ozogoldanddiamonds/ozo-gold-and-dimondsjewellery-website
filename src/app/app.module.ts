@@ -23,6 +23,8 @@ import { ProceedPaymentComponent } from './components/proceed-payment/proceed-pa
 import { AddressFormComponent } from './components/address-form/address-form.component';
 import { AddressManagmentComponent } from './components/address-managment/address-managment.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +44,9 @@ import { ProfileComponent } from './components/profile/profile.component';
     ProceedPaymentComponent,
     AddressFormComponent,
     AddressManagmentComponent,
-    ProfileComponent
+    ProfileComponent,
+    PrivacyPolicyComponent,
+    TermsAndConditionsComponent
   ],
   imports: [
     BrowserModule,

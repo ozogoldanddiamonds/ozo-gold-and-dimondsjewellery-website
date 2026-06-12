@@ -150,21 +150,22 @@
             </li>
             <li *ngIf="isLoggedIn" class="nav-item dropdown">
 
-                <a class="nav-link">
-
+                <a class="nav-link user-trigger">
                     <i class="fa fa-user-circle"></i>
-
+                    <span class="user-greeting">
+                        Hi, {{ profileData?.user?.name }}
+                    </span>
                 </a>
 
                 <div class="user-dropdown">
 
-                    <a routerLink="/profile">My Profile</a>
+                    <a routerLink="/profile" (click)="closeMenu()">My Profile</a>
 
-                    <a routerLink="/orders">My Orders</a>
+                    <a routerLink="/orders" (click)="closeMenu()">My Orders</a>
 
-                    <a routerLink="/wishlist">Wishlist</a>
+                    <a routerLink="/wishlist" (click)="closeMenu()">Wishlist</a>
 
-                    <a (click)="logout()">Logout</a>
+                    <a (click)="logout()" (click)="closeMenu()">Logout</a>
 
                 </div>
 

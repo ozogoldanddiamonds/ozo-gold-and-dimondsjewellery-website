@@ -10,6 +10,8 @@ import { ProductComponent } from './components/product/product.component';
 import { BuyProductComponent } from './components/buy-product/buy-product.component';
 import { ProceedPaymentComponent } from './components/proceed-payment/proceed-payment.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
+import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,6 +25,8 @@ const routes: Routes = [
   { path: 'buy-product', component: BuyProductComponent },
   { path: 'proceed-payment', component: ProceedPaymentComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
+  { path: 'terms-and-conditions', component: TermsAndConditionsComponent },
 
 ];
 
