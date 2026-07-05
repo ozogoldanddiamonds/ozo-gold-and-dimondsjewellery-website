@@ -93,6 +93,11 @@
                     View Product
 
                 </button>
+                <button class="btn outline-btn" (click)="addToCart(item)">
+
+                    Add to Cart
+
+                </button>
             </div>
         </div>
     </div>
@@ -106,3 +111,6 @@
         </div>
     </ng-template>
 </div>
+
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-auth-modal>

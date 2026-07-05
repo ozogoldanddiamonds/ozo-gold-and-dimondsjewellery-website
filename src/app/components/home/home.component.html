@@ -110,6 +110,181 @@
     </div>
 
 </section>
+<section class="desktop-section section-space">
+
+    <div class="container-xxl">
+
+        <div class="swiper categorySwiper">
+
+            <div class="section-header text-center">
+
+                <h2>Shop By Category</h2>
+
+                <p>Explore Our Collections</p>
+
+                <div class="divider">
+                    <span class="line"></span>
+
+                    <span class="icons">
+                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
+                    </span>
+
+                    <span class="line"></span>
+                </div>
+
+            </div>
+
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide" *ngFor="let item of categoriesList">
+
+                    <div class="collection-card" (click)="goToCategory(item._id)">
+
+                        <div class="collection-image-wrap">
+
+                            <img [src]="item.image || item.images?.[0]" [alt]="item.name">
+
+                        </div>
+
+                        <h5 class="popular-title">
+                            {{ item.name }}
+                        </h5>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="swiper-button-next"></div>
+
+            <div class="swiper-button-prev"></div>
+
+            <div class="swiper-pagination"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="desktop-section section-space">
+
+    <div class="container-xxl">
+
+        <div class="swiper subCategorySwiper">
+
+            <div class="section-header text-center">
+
+                <h2>Shop By Design</h2>
+
+                <p>Find Your Favourite Style</p>
+
+                <div class="divider">
+                    <span class="line"></span>
+
+                    <span class="icons">
+                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
+                    </span>
+
+                    <span class="line"></span>
+                </div>
+
+            </div>
+
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide" *ngFor="let item of subCategoriesList">
+
+                    <div class="collection-card" (click)="goToSubCategory(item._id)">
+
+                        <div class="collection-image-wrap">
+
+                            <img [src]="item.image || item.images?.[0]" [alt]="item.name">
+
+                        </div>
+
+                        <h5 class="popular-title">
+                            {{ item.name }}
+                        </h5>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="swiper-button-next"></div>
+
+            <div class="swiper-button-prev"></div>
+
+            <div class="swiper-pagination"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="desktop-section section-space">
+
+    <div class="container-xxl">
+
+        <div class="swiper subSubCategorySwiper">
+
+            <div class="section-header text-center">
+
+                <h2>Collections</h2>
+
+                <p>Handpicked Jewellery</p>
+
+                <div class="divider">
+                    <span class="line"></span>
+
+                    <span class="icons">
+                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
+                    </span>
+
+                    <span class="line"></span>
+                </div>
+
+            </div>
+
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide" *ngFor="let item of subSubCategoriesList">
+
+                    <div class="collection-card" (click)="goToSubSubCategory(item._id)">
+
+                        <div class="collection-image-wrap">
+
+                            <img [src]="item.image || item.images?.[0]" [alt]="item.name">
+
+                        </div>
+
+                        <h5 class="popular-title">
+                            {{ item.name }}
+                        </h5>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="swiper-button-next"></div>
+
+            <div class="swiper-button-prev"></div>
+
+            <div class="swiper-pagination"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
 <section class="desktop-section section-space bg-soft">
     <div class="container-xxl">
         <div class="section-header text-center">
@@ -163,7 +338,7 @@
                             </span>
 
                             <span class="product-name">
-                                {{ item.name }}
+                                {{ item.name | titlecase}}
                             </span>
 
                         </div>
@@ -310,7 +485,7 @@
 
                                     <!-- <i class="fa fa-shopping-cart"></i> -->
 
-                                    <i class="fa fa-eye" (click)="product(item)">
+                                    <i class="fa fa-eye" (click)="product(item._id)">
                                     </i>
 
                                     <i class="fa fa-heart"></i>

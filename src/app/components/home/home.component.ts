@@ -16,11 +16,24 @@ SwiperCore.use([Navigation, Pagination, Autoplay]);
 export class HomeComponent implements OnInit {
 
   banners: any[] = [];
+  allProducts: any[] = [];
+
+  categoriesList: any[] = [];
+
+  subCategoriesList: any[] = [];
+  allSubCategories: any[] = [];
+
+  subSubCategoriesList: any[] = [];
+  allSubSubCategories: any[] = [];
+
+  products: any[] = [];
+  categorySwiper!: Swiper;
+  subCategorySwiper!: Swiper;
+  subSubCategorySwiper!: Swiper;
   popularSwiper!: Swiper;
   featuredSwiper!: Swiper;
   newProducts: any[] = [];
   featureProducts: any[] = [];
-  products: any[] = [];
   currentPage = 1;
   limit = 8;
   search = '';
@@ -142,6 +155,135 @@ export class HomeComponent implements OnInit {
     });
 
   }
+  initCategorySwiper() {
+
+    if (this.categorySwiper) {
+
+      this.categorySwiper.destroy(
+        true,
+        true
+      );
+
+    }
+
+
+    this.categorySwiper =
+      new Swiper('.categorySwiper', {
+
+        slidesPerView: 5,
+
+        spaceBetween: 20,
+
+
+        breakpoints: {
+
+          320: {
+            slidesPerView: 2.2
+          },
+
+          576: {
+            slidesPerView: 3
+          },
+
+          768: {
+            slidesPerView: 4
+          },
+
+          992: {
+            slidesPerView: 5
+          }
+
+        }
+
+      });
+
+  }
+  initSubCategorySwiper() {
+
+    if (this.subCategorySwiper) {
+
+      this.subCategorySwiper.destroy(
+        true,
+        true
+      );
+
+    }
+
+
+    this.subCategorySwiper =
+      new Swiper('.subCategorySwiper', {
+
+        slidesPerView: 5,
+
+        spaceBetween: 20,
+
+
+        breakpoints: {
+
+          320: {
+            slidesPerView: 2.2
+          },
+
+          576: {
+            slidesPerView: 3
+          },
+
+          768: {
+            slidesPerView: 4
+          },
+
+          992: {
+            slidesPerView: 5
+          }
+
+        }
+
+      });
+
+  }
+  initSubSubCategorySwiper() {
+
+    if (this.subSubCategorySwiper) {
+
+      this.subSubCategorySwiper.destroy(
+        true,
+        true
+      );
+
+    }
+
+
+    this.subSubCategorySwiper =
+      new Swiper('.subSubCategorySwiper', {
+
+        slidesPerView: 5,
+
+        spaceBetween: 20,
+
+
+        breakpoints: {
+
+          320: {
+            slidesPerView: 2.2
+          },
+
+          576: {
+            slidesPerView: 3
+          },
+
+          768: {
+            slidesPerView: 4
+          },
+
+          992: {
+            slidesPerView: 5
+          }
+
+        }
+
+      });
+
+  }
 
   product(id: string) {
     this.router.navigate(["/product", id]);
@@ -160,6 +302,77 @@ export class HomeComponent implements OnInit {
 
           console.log(response);
 
+          const products = response.data || [];
+
+
+          // =====================
+          // UNIQUE CATEGORY
+          // =====================
+
+          this.categoriesList = [
+
+            ...new Map(
+
+              products
+                .filter((x: any) => x.category)
+                .map((x: any) => [
+                  x.category._id,
+                  x.category
+                ])
+
+            ).values()
+
+          ];
+
+          // =====================
+          // UNIQUE SUB CATEGORY
+          // =====================
+
+          this.subCategoriesList = [
+
+            ...new Map(
+
+              products
+                .filter((x: any) => x.subCategory)
+                .map((x: any) => [
+                  x.subCategory._id,
+                  x.subCategory
+                ])
+
+            ).values()
+
+          ];
+
+
+          // =====================
+          // UNIQUE SUB SUB CATEGORY
+          // =====================
+
+          this.subSubCategoriesList = [
+
+            ...new Map(
+
+              products
+                .filter((x: any) => x.subSubCategory)
+                .map((x: any) => [
+                  x.subSubCategory._id,
+                  x.subSubCategory
+                ])
+
+            ).values()
+
+          ];
+
+
+          setTimeout(() => {
+
+            this.initCategorySwiper();
+
+            this.initSubCategorySwiper();
+
+            this.initSubSubCategorySwiper();
+
+          }, 100);
           this.loaderService.hide();
           this.totalPages = response.totalPages || 0;
 
@@ -183,6 +396,7 @@ export class HomeComponent implements OnInit {
       });
 
   }
+
   goToPage(page: number) {
 
     this.currentPage = page;
@@ -195,6 +409,7 @@ export class HomeComponent implements OnInit {
     });
 
   }
+
 
   previousPage() {
 
@@ -464,7 +679,46 @@ export class HomeComponent implements OnInit {
     this.isAuthOpen = false;
 
   }
+  goToCategory(id: any) {
 
+    this.router.navigate(
+      ['/categories'],
+      {
+        queryParams: {
+          category: id
+        }
+      }
+    );
+
+  }
+
+
+  goToSubCategory(id: any) {
+
+    this.router.navigate(
+      ['/categories'],
+      {
+        queryParams: {
+          subCategory: id
+        }
+      }
+    );
+
+  }
+
+
+  goToSubSubCategory(id: any) {
+
+    this.router.navigate(
+      ['/categories'],
+      {
+        queryParams: {
+          subSubCategory: id
+        }
+      }
+    );
+
+  }
 }
 
 

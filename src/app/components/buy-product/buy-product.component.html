@@ -18,14 +18,14 @@
             <div class="breadcrumb">
 
                 Home >
-                {{ product?.category?.name }}
+                {{ product?.category?.name | titlecase}}
                 >
-                {{ product?.subCategory?.name }}
+                {{ product?.subCategory?.name | titlecase}}
 
             </div>
 
             <h1 class="product-title">
-                {{ product.name }}
+                {{ product.name | titlecase}}
             </h1>
 
             <div class="rating">
@@ -184,7 +184,7 @@
         <div class="product-grid">
             <div class="product-card" *ngFor="let item of similarProducts">
                 <img [src]="item.images[0]" alt="{{ item.name }}" (click)="productDetails(item._id)" />
-                <h4>{{ item.name }}</h4>
+                <h4>{{ item.name | titlecase}}</h4>
 
                 <!-- ✅ Priority: calculatedPrice → priceBreakup.finalPrice → 0 -->
                 <span>

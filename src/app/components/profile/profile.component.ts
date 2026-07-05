@@ -90,6 +90,7 @@ export class ProfileComponent implements OnInit {
     this.authService.getProfileSummary(userId).subscribe({
       next: (res: any) => {
         this.profileData = res?.data;
+        console.log(this.profileData, 'user data');
       },
       error: (err: any) => {
         console.error('Profile summary error:', err);

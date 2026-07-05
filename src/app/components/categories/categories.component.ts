@@ -43,6 +43,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   routeSub!: Subscription;
 
   showSortSheet = false;
+  selectedSubCategory = '';
+  selectedSubSubCategory = '';
+
+  subCategories: any[] = [];
+  subSubCategories: any[] = [];
 
   product: any = null;
   selectedVariant: any = null;
@@ -69,15 +74,22 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.routeSub = this.route.queryParams.subscribe(params => {
-      const categoryId = params['category'] || '';
-      this.categoryId = categoryId;
-      this.selectedCategory = categoryId;
-      this.page = 1;
-      this.products = [];
-      this.hasMoreData = true;
-      this.getProducts(categoryId);
-    });
+
+
+
+    this.routeSub =
+      this.route.queryParams.subscribe(
+        params => {
+          this.selectedCategory = params['category'] || '';
+          this.selectedSubCategory = params['subCategory'] || '';
+          this.selectedSubSubCategory = params['subSubCategory'] || '';
+          this.page = 1;
+          this.products = [];
+          this.hasMoreData = true;
+          this.getProducts();
+        }
+      );
+
 
     this.getAllCategories();
 
@@ -207,54 +219,198 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
 
-  getProducts(categoryId?: string, loadMore: boolean = false) {
+  getProducts(loadMore: boolean = false) {
+
     this.loading = true;
     this.errorMessage = '';
+
     this.loaderService.show();
 
+
     const query: any = {
+
       page: this.page,
+
       limit: this.limit,
+
       sort: this.selectedSort,
+
       productType: this.selectedProductType,
+
       minPrice: this.minPrice,
+
       maxPrice: this.maxPrice
+
     };
 
-    if (categoryId) {
-      query.category = categoryId;
+
+    if (this.selectedCategory) {
+
+      query.category =
+        this.selectedCategory;
+
     }
 
-    this.productService.getProductsByCategory(query).subscribe({
-      next: (res: any) => {
-        this.loading = false;
-        this.loaderService.hide();
 
-        const incomingProducts = (res?.products || res?.data || []).map((item: any) =>
-          this.mapProduct(item)
-        );
+    if (this.selectedSubCategory) {
 
-        if (loadMore) {
-          this.products = [...this.products, ...incomingProducts];
-        } else {
-          this.products = incomingProducts;
+      query.subCategory =
+        this.selectedSubCategory;
+
+    }
+
+
+    if (this.selectedSubSubCategory) {
+
+      query.subSubCategory =
+        this.selectedSubSubCategory;
+
+    }
+
+
+    console.log('FILTER QUERY', query);
+
+
+    this.productService
+      .getProductsByCategory(query)
+      .subscribe({
+
+        next: (res: any) => {
+
+
+          this.loading = false;
+
+          this.loaderService.hide();
+
+
+          const incomingProducts =
+
+            (res?.data || [])
+              .map((item: any) =>
+
+                this.mapProduct(item)
+
+              );
+
+          const allProducts = res?.data || [];
+
+
+          // =======================
+          // SUB CATEGORY LIST
+          // =======================
+
+          this.subCategories = [
+
+            ...new Map(
+
+              allProducts
+
+                .filter(
+                  (item: any) =>
+                    item.subCategory
+                )
+
+                .map(
+                  (item: any) => [
+
+                    item.subCategory._id,
+
+                    item.subCategory
+
+                  ]
+                )
+
+            ).values()
+
+          ];
+
+
+          // =======================
+          // SUB SUB CATEGORY LIST
+          // =======================
+
+          this.subSubCategories = [
+
+            ...new Map(
+
+              allProducts
+
+                .filter(
+                  (item: any) =>
+                    item.subSubCategory
+                )
+
+                .map(
+                  (item: any) => [
+
+                    item.subSubCategory._id,
+
+                    item.subSubCategory
+
+                  ]
+                )
+
+            ).values()
+
+          ];
+
+
+          console.log(
+            'SUB CATEGORIES',
+            this.subCategories
+          );
+
+
+          console.log(
+            'SUB SUB CATEGORIES',
+            this.subSubCategories
+          );
+          if (loadMore) {
+
+            this.products = [
+              ...this.products,
+              ...incomingProducts
+            ];
+
+          } else {
+
+            this.products =
+              incomingProducts;
+
+          }
+
+
+          this.hasMoreData =
+            incomingProducts.length >= this.limit;
+
+
+          if (!this.products.length) {
+
+            this.errorMessage =
+              "No products found";
+
+          }
+
+
+          this.loadWishlistStatus();
+
+
+        },
+
+
+        error: (err) => {
+
+          this.loading = false;
+
+          this.loaderService.hide();
+
+          console.log(err);
+
         }
 
-        this.hasMoreData = incomingProducts.length >= this.limit;
 
-        if (!this.products.length) {
-          this.errorMessage = 'No products found';
-        }
+      });
 
-        this.loadWishlistStatus();
-      },
-      error: (err: any) => {
-        this.loading = false;
-        this.loaderService.hide();
-        this.errorMessage = err?.error?.message || 'Failed to fetch products';
-        console.log(err);
-      }
-    });
   }
 
   getAllCategories() {
@@ -274,8 +430,12 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   filterByCategory(categoryId: string) {
-    this.selectedCategory = categoryId;
+    this.selectedCategory =
+      categoryId;
     this.categoryId = categoryId;
+    this.selectedSubCategory = '';
+
+    this.selectedSubSubCategory = '';
     this.page = 1;
     this.products = [];
     this.hasMoreData = true;
@@ -286,8 +446,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       queryParamsHandling: 'merge'
     });
 
-    this.getProducts(categoryId);
+    this.getProducts();
   }
+
 
   clearFilters() {
 
@@ -328,7 +489,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.page = 1;
     this.products = [];
     this.hasMoreData = true;
-    this.getProducts(this.selectedCategory);
+    this.getProducts();
   }
 
   selectSort(sort: string) {
@@ -336,7 +497,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.page = 1;
     this.products = [];
     this.hasMoreData = true;
-    this.getProducts(this.selectedCategory);
+    this.getProducts();
     this.closeOffcanvas('sortCanvas');
   }
 
@@ -344,21 +505,67 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.page = 1;
     this.products = [];
     this.hasMoreData = true;
-    this.getProducts(this.selectedCategory);
+    this.getProducts();
   }
 
   applyFilters() {
     this.page = 1;
     this.products = [];
     this.hasMoreData = true;
-    this.getProducts(this.selectedCategory);
+    this.getProducts();
     this.closeOffcanvas('filterCanvas');
   }
 
   loadMoreProducts() {
-    if (this.loading || !this.hasMoreData) return;
+
+    if (
+      this.loading ||
+      !this.hasMoreData
+    ) return;
+
+
     this.page++;
-    this.getProducts(this.selectedCategory || this.categoryId, true);
+
+
+    this.getProducts(true);
+
+  }
+  filterBySubCategory(id: string) {
+
+
+    this.selectedSubCategory = id;
+
+
+    this.selectedSubSubCategory = '';
+
+
+    this.page = 1;
+
+    this.products = [];
+
+    this.hasMoreData = true;
+
+
+    this.getProducts();
+
+
+  }
+  filterBySubSubCategory(id: string) {
+
+
+    this.selectedSubSubCategory = id;
+
+
+    this.page = 1;
+
+    this.products = [];
+
+    this.hasMoreData = true;
+
+
+    this.getProducts();
+
+
   }
 
   getWishlistKey(productId: string, variantId: string) {

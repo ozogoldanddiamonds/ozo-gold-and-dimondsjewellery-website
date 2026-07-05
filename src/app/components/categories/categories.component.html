@@ -21,7 +21,60 @@
 
 
             </div>
+            <div class="filter-section">
 
+                <h6 class="filter-title">
+                    SUB CATEGORIES
+                </h6>
+
+
+                <label class="filter-option">
+
+                    <input type="radio" name="subCategory" [checked]="selectedSubCategory === ''"
+                        (change)="filterBySubCategory('')">
+
+                    All
+
+                </label>
+
+
+                <label class="filter-option" *ngFor="let sub of subCategories">
+
+                    <input type="radio" name="subCategory" [checked]="selectedSubCategory === sub._id"
+                        (change)="filterBySubCategory(sub._id)">
+
+                    {{ sub.name | titlecase }}
+
+                </label>
+
+            </div>
+            <div class="filter-section">
+
+                <h6 class="filter-title">
+                    COLLECTIONS
+                </h6>
+
+
+                <label class="filter-option">
+
+                    <input type="radio" name="subSubCategory" [checked]="selectedSubSubCategory === ''"
+                        (change)="filterBySubSubCategory('')">
+
+                    All
+
+                </label>
+
+
+                <label class="filter-option" *ngFor="let subsub of subSubCategories">
+
+                    <input type="radio" name="subSubCategory" [checked]="selectedSubSubCategory === subsub._id"
+                        (change)="filterBySubSubCategory(subsub._id)">
+
+                    {{ subsub.name | titlecase }}
+
+                </label>
+
+            </div>
             <div class="filter-section">
                 <h6 class="filter-title">PRICE</h6>
 

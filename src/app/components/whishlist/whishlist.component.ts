@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { CartService } from 'src/app/service/cart.service';
 import { LoadingService } from 'src/app/service/loading.service';
 import { WishlistService } from 'src/app/service/wishlist.service';
 
@@ -9,7 +10,10 @@ import { WishlistService } from 'src/app/service/wishlist.service';
   styleUrls: ['./whishlist.component.css']
 })
 export class WhishlistComponent implements OnInit {
-  constructor(private loaderService: LoadingService,
+  pendingAddToCart = false;
+  pendingCartItem: any = null;
+  isAuthOpen = false;
+  constructor(private loaderService: LoadingService, private cartService: CartService,
     private toastr: ToastrService, private wishlistService: WishlistService) { }
   ngOnInit(): void {
     this.getWishlistItems();
@@ -98,5 +102,107 @@ export class WhishlistComponent implements OnInit {
         );
       }
     });
+  }
+
+  addToCart(item: any) {
+
+    const userId =
+      localStorage.getItem('userId');
+
+    if (!userId) {
+
+      this.toastr.warning(
+        'Please login first'
+      );
+
+      this.pendingAddToCart = true;
+
+      this.openLoginModal();
+
+      return;
+    }
+
+    if (
+      !item?.productId ||
+      !item?.selectedVariant?._id
+    ) {
+
+      this.toastr.warning(
+        'Product variant not found'
+      );
+
+      return;
+    }
+
+    const payload = {
+
+      user: userId,
+
+      product: item.productId,
+
+      variantId:
+        item.selectedVariant._id,
+
+      quantity: 1
+
+    };
+
+    this.cartService
+      .addToCart(payload)
+      .subscribe({
+
+        next: (res: any) => {
+
+          this.cartService.loadCartCount();
+
+          this.toastr.success(
+
+            res?.message ||
+            'Added to cart successfully'
+
+          );
+
+        },
+
+        error: (err: any) => {
+
+          this.toastr.error(
+
+            err?.error?.message ||
+            'Failed to add cart'
+
+          );
+
+        }
+
+      });
+
+  }
+
+  openLoginModal() {
+
+    this.isAuthOpen = true;
+
+  }
+  closeAuthModal(isLoggedIn?: boolean) {
+
+    this.isAuthOpen = false;
+
+    if (
+      isLoggedIn &&
+      this.pendingAddToCart &&
+      this.pendingCartItem
+    ) {
+
+      this.pendingAddToCart = false;
+
+      this.addToCart(
+        this.pendingCartItem
+      );
+
+      this.pendingCartItem = null;
+
+    }
+
   }
 }
