@@ -25,6 +25,8 @@ import { AddressManagmentComponent } from './components/address-managment/addres
 import { ProfileComponent } from './components/profile/profile.component';
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
+import { UserSchemesPageComponent } from './components/user-schemes-page/user-schemes-page.component';
+import { SchemePaymentDetailsComponent } from './components/scheme-payment-details/scheme-payment-details.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +48,9 @@ import { TermsAndConditionsComponent } from './components/terms-and-conditions/t
     AddressManagmentComponent,
     ProfileComponent,
     PrivacyPolicyComponent,
-    TermsAndConditionsComponent
+    TermsAndConditionsComponent,
+    UserSchemesPageComponent,
+    SchemePaymentDetailsComponent
   ],
   imports: [
     BrowserModule,

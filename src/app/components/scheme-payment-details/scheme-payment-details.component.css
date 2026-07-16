@@ -1,0 +1,423 @@
+/*==================================================
+ SCHEME PAYMENT PAGE
+==================================================*/
+
+.scheme-payment-page {
+    padding: 70px 0;
+    background: linear-gradient(180deg, #fffdf8 0%, #ffffff 100%);
+}
+
+/*==================================================
+ HEADER
+==================================================*/
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.page-header h2 {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.status {
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+}
+
+.status.active {
+    background: rgba(39, 174, 96, .12);
+    color: #27ae60;
+}
+
+/*==================================================
+ COMMON CARD
+==================================================*/
+
+.summary-card,
+.progress-card,
+.next-payment-card,
+.payment-history,
+.benefit-card,
+.terms-card {
+
+    background: #fff;
+
+    border-radius: 22px;
+
+    padding: 28px;
+
+    margin-bottom: 30px;
+
+    border: 1px solid #f1f1f1;
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .06);
+
+    transition: .35s;
+}
+
+.summary-card:hover,
+.progress-card:hover,
+.next-payment-card:hover,
+.payment-history:hover,
+.benefit-card:hover,
+.terms-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 25px 55px rgba(212, 175, 55, .15);
+}
+
+/*==================================================
+ SUMMARY
+==================================================*/
+
+.summary-card {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 25px;
+}
+
+.summary-item {
+
+    text-align: center;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    background: #fffaf2;
+
+    border: 1px solid rgba(212, 175, 55, .25);
+}
+
+.summary-item label {
+
+    display: block;
+
+    color: #888;
+
+    font-size: 14px;
+
+    margin-bottom: 10px;
+
+    font-weight: 500;
+}
+
+.summary-item h4 {
+
+    margin: 0;
+
+    color: var(--gold);
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+/*==================================================
+ PROGRESS
+==================================================*/
+
+.progress-card h5 {
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+.progress {
+
+    height: 18px;
+
+    border-radius: 50px;
+
+    overflow: hidden;
+
+    background: #eee;
+}
+
+.progress-bar {
+
+    background: linear-gradient(90deg, var(--gold), #ffd86f);
+
+    border-radius: 50px;
+}
+
+/*==================================================
+ NEXT PAYMENT
+==================================================*/
+
+.next-payment-card h5 {
+
+    font-size: 22px;
+
+    margin-bottom: 25px;
+
+    font-weight: 700;
+}
+
+.next-payment-card label {
+
+    color: #888;
+
+    font-size: 13px;
+
+    display: block;
+
+    margin-bottom: 6px;
+}
+
+.next-payment-card h6 {
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #333;
+}
+
+.pending {
+
+    color: #f39c12;
+}
+
+/*==================================================
+ PAYMENT HISTORY
+==================================================*/
+
+.payment-history h4 {
+
+    margin-bottom: 25px;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+.table {
+
+    margin: 0;
+}
+
+.table thead {
+
+    background: #fff7eb;
+}
+
+.table th {
+
+    color: #555;
+
+    border: none;
+
+    padding: 16px;
+
+    font-weight: 700;
+}
+
+.table td {
+
+    vertical-align: middle;
+
+    padding: 16px;
+
+    border-top: 1px solid #f3f3f3;
+}
+
+.table tbody tr {
+
+    transition: .3s;
+}
+
+.table tbody tr:hover {
+
+    background: #fffdf7;
+}
+
+.paid {
+
+    display: inline-block;
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+
+    background: #27ae60;
+
+    color: #fff;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+/*==================================================
+ BENEFITS
+==================================================*/
+
+.benefit-card h5 {
+
+    margin-bottom: 20px;
+
+    font-weight: 700;
+}
+
+.benefit-card ul {
+
+    list-style: none;
+
+    padding: 0;
+
+    margin: 0;
+}
+
+.benefit-card li {
+
+    padding: 12px 0;
+
+    border-bottom: 1px dashed #ececec;
+
+    font-size: 15px;
+
+    color: #555;
+}
+
+.benefit-card li::before {
+
+    content: "✔";
+
+    color: var(--gold);
+
+    font-weight: bold;
+
+    margin-right: 10px;
+}
+
+/*==================================================
+ TERMS
+==================================================*/
+
+.terms-card h5 {
+
+    margin-bottom: 20px;
+
+    font-weight: 700;
+}
+
+.terms-card p {
+
+    line-height: 1.8;
+
+    color: #666;
+
+    margin: 0;
+}
+
+/*==================================================
+ PAY BUTTON
+==================================================*/
+
+.pay-now-btn {
+
+    min-width: 320px;
+
+    height: 60px;
+
+    border: none;
+
+    border-radius: 50px;
+
+    background: linear-gradient(90deg, var(--primary-red), var(--gold));
+
+    color: #fff;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    letter-spacing: .5px;
+
+    box-shadow: 0 18px 40px rgba(217, 4, 41, .28);
+
+    transition: .35s;
+}
+
+.pay-now-btn:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 25px 60px rgba(212, 175, 55, .30);
+}
+
+/*==================================================
+ RESPONSIVE
+==================================================*/
+
+@media(max-width:992px) {
+
+    .summary-card {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+}
+
+@media(max-width:768px) {
+
+    .page-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+    .page-header h2 {
+
+        font-size: 26px;
+
+    }
+
+    .summary-card {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .pay-now-btn {
+
+        width: 100%;
+
+        min-width: auto;
+
+    }
+
+    .next-payment-card .row>div {
+
+        margin-bottom: 18px;
+
+    }
+
+    .table {
+
+        font-size: 14px;
+
+    }
+
+}

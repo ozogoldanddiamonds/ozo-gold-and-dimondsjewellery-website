@@ -1,0 +1,320 @@
+<section class="scheme-payment-page">
+
+    <div class="container">
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-header">
+
+            <h2>{{scheme?.schemeName}}</h2>
+
+            <span class="status active">
+
+                {{scheme?.status}}
+
+            </span>
+
+        </div>
+
+        <!-- SUMMARY CARD -->
+
+        <div class="summary-card">
+
+            <div class="summary-item">
+
+                <label>Total Scheme</label>
+
+                <h4>
+
+                    ₹ {{scheme?.schemeAmount | number}}
+
+                </h4>
+
+            </div>
+
+            <div class="summary-item">
+
+                <label>Monthly Installment</label>
+
+                <h4>
+
+                    ₹ {{scheme?.monthlyAmount | number}}
+
+                </h4>
+
+            </div>
+
+            <div class="summary-item">
+
+                <label>Duration</label>
+
+                <h4>
+
+                    {{scheme?.durationMonths}} Months
+
+                </h4>
+
+            </div>
+
+            <div class="summary-item">
+
+                <label>You Pay</label>
+
+                <h4>
+
+                    {{scheme?.userPayMonths}} Months
+
+                </h4>
+
+            </div>
+
+        </div>
+        <div class="summary-card">
+            <div class="summary-item">
+                <label>Paid Amount</label>
+                <h4>
+                    ₹ {{scheme.totalPaidAmount | number}}
+                </h4>
+            </div>
+
+            <div class="summary-item">
+                <label>Remaining Installments</label>
+                <h4>
+                    {{scheme.remainingInstallments}}
+                </h4>
+            </div>
+
+            <div class="summary-item">
+                <label>Next Due Date</label>
+                <h4>
+                    {{scheme.nextDueDate | date:'dd MMM yyyy'}}
+                </h4>
+            </div>
+
+            <div class="summary-item">
+                <label>Maturity Date</label>
+                <h4>
+                    {{scheme.maturityDate | date:'dd MMM yyyy'}}
+                </h4>
+            </div>
+        </div>
+
+        <!-- PROGRESS -->
+
+        <div class="progress-card">
+
+            <div class="d-flex justify-content-between">
+
+                <h5>Installment Progress</h5>
+
+                <span>
+
+                    {{scheme?.paidInstallments}} /
+
+                    {{scheme?.totalInstallments}}
+
+                </span>
+
+            </div>
+
+            <div class="progress mt-3">
+
+                <div class="progress-bar" [style.width.%]="
+
+                    (scheme?.paidInstallments /
+
+                    scheme?.totalInstallments)*100">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- NEXT PAYMENT -->
+
+        <div class="next-payment-card">
+
+            <h5>
+
+                Next Installment
+
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-3">
+
+                    <label>Month</label>
+
+                    <h6>
+
+                        {{scheme?.paidInstallments+1}}
+
+                    </h6>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label>Amount</label>
+
+                    <h6>
+
+                        ₹ {{scheme?.monthlyAmount}}
+
+                    </h6>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label>Due Date</label>
+
+                    <h6>
+
+                        {{scheme?.nextDueDate|date}}
+
+                    </h6>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label>Status</label>
+
+                    <h6 class="pending">
+
+                        Pending
+
+                    </h6>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PAYMENT HISTORY -->
+
+        <div class="payment-history">
+
+            <h4>
+
+                Payment History
+
+            </h4>
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Month</th>
+
+                        <th>Amount</th>
+
+                        <th>Date</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let payment of payments">
+
+                        <td>
+
+                            {{payment.monthNo}}
+
+                        </td>
+
+                        <td>
+
+                            ₹ {{payment.amount}}
+
+                        </td>
+
+                        <td>
+
+                            {{payment.paymentDate|date}}
+
+                        </td>
+
+                        <td>
+
+                            <span class="paid">
+
+                                {{payment.status}}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- BENEFITS -->
+
+        <div class="benefit-card">
+
+            <h5>
+
+                Scheme Benefits
+
+            </h5>
+
+            <ul>
+
+                <li *ngFor="let benefit of scheme?.scheme?.benefits">
+
+                    {{benefit}}
+
+                </li>
+
+            </ul>
+
+        </div>
+
+        <!-- TERMS -->
+
+        <div class="terms-card">
+
+            <h5>
+
+                Terms & Conditions
+
+            </h5>
+
+            <p>
+
+                {{scheme?.scheme?.terms}}
+
+            </p>
+
+        </div>
+
+        <!-- PAYMENT -->
+
+        <div class="text-center mt-5">
+
+            <button class="pay-now-btn" (click)="payNow()">
+
+                Pay ₹{{scheme?.monthlyAmount|number}}
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>

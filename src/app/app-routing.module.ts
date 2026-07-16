@@ -12,6 +12,8 @@ import { ProceedPaymentComponent } from './components/proceed-payment/proceed-pa
 import { ProfileComponent } from './components/profile/profile.component';
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
+import { UserSchemesPageComponent } from './components/user-schemes-page/user-schemes-page.component';
+import { SchemePaymentDetailsComponent } from './components/scheme-payment-details/scheme-payment-details.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,7 +29,8 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'terms-and-conditions', component: TermsAndConditionsComponent },
-
+  { path: 'schemes-page', component: UserSchemesPageComponent },
+  { path: 'scheme-payment/:id', component: SchemePaymentDetailsComponent },
 ];
 
 @NgModule({

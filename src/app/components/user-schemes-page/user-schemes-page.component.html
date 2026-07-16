@@ -1,0 +1,224 @@
+<section class="scheme-section">
+
+    <div class="container">
+
+        <div class="section-header text-center">
+
+            <h2>Jewellery Saving Schemes</h2>
+
+            <p>
+                Save every month and own your dream jewellery with OZO.
+            </p>
+
+        </div>
+
+        <!-- Search -->
+
+        <div class="row justify-content-center mb-5">
+
+            <div class="col-lg-5 col-md-7">
+
+                <div class="search-box">
+
+                    <i class="fa fa-search"></i>
+
+                    <input type="text" class="form-control" placeholder="Search Scheme..." [(ngModel)]="search"
+                        (input)="searchScheme()">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Schemes -->
+
+        <div class="row g-4">
+
+            <div class="col-lg-4 col-md-6" *ngFor="let item of filteredSchemes">
+
+                <div class="scheme-card">
+
+                    <div class="popular-badge">
+
+                        MOST POPULAR
+
+                    </div>
+
+                    <div class="scheme-icon">
+
+                        <i class="fa fa-diamond"></i>
+
+                    </div>
+
+                    <h3>
+
+                        {{item.name}}
+
+                    </h3>
+
+                    <h1>
+
+                        ₹ {{item.amount | number}}
+
+                    </h1>
+
+                    <p class="scheme-desc">
+
+                        {{item.description}}
+
+                    </p>
+
+                    <div class="scheme-info">
+
+                        <div class="info-row">
+
+                            <span>Total Amount</span>
+
+                            <strong>
+
+                                ₹ {{item.amount | number}}
+
+                            </strong>
+
+                        </div>
+
+                        <div class="info-row">
+
+                            <span>Monthly Installment</span>
+
+                            <strong>
+
+                                ₹ {{item.monthlyAmount | number}}
+
+                            </strong>
+
+                        </div>
+
+                        <div class="info-row">
+
+                            <span>Duration</span>
+
+                            <strong>
+
+                                {{item.durationMonths}} Months
+
+                            </strong>
+
+                        </div>
+
+                        <div class="info-row">
+
+                            <span>You Pay</span>
+
+                            <strong>
+
+                                {{item.userPayMonths}} Months
+
+                            </strong>
+
+                        </div>
+
+                        <div class="info-row">
+
+                            <span>Company Pays</span>
+
+                            <strong class="free-month">
+
+                                Last {{item.companyPayMonths}} Month FREE
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <div class="scheme-benefits">
+
+                        <div>
+
+                            <i class="fa fa-check-circle"></i>
+
+                            Zero Processing Fee
+
+                        </div>
+
+                        <div>
+
+                            <i class="fa fa-check-circle"></i>
+
+                            Company Pays Last Installment
+
+                        </div>
+
+                        <div>
+
+                            <i class="fa fa-check-circle"></i>
+
+                            Redeem Jewellery Worth
+
+                            ₹ {{item.amount | number}}
+
+                        </div>
+
+                    </div>
+
+                    <div class="scheme-buttons">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- <button class="btn details-btn" (click)="viewDetails(item)">
+
+                                    View Details
+
+                                </button> -->
+                            </div>
+                            <div class="col-12">
+                                <!-- NOT JOINED -->
+
+                                <button *ngIf="!joinedSchemes.includes(item._id)" class="btn join-btn"
+                                    (click)="joinScheme(item)">
+
+                                    Join Now
+
+                                </button>
+
+                                <!-- JOINED -->
+
+                                <button *ngIf="joinedSchemes.includes(item._id)" class="btn pay-btn"
+                                    (click)="payInstallment(item)">
+
+                                    <i class="fa fa-credit-card"></i>
+
+                                    Pay Installment
+
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Empty -->
+
+        <div class="text-center py-5" *ngIf="!loading && filteredSchemes.length==0">
+
+            <img src="assets/images/no-data.png" width="180">
+
+            <h4 class="mt-3">
+
+                No Schemes Found
+
+            </h4>
+
+        </div>
+
+    </div>
+
+</section>
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-auth-modal>
