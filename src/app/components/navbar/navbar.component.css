@@ -259,8 +259,8 @@
         overflow: hidden;
 
         transition:
-            transform 0.35s ease,
-            box-shadow 0.35s ease;
+            transform 3s ease,
+            box-shadow 3s ease;
     }
 
 
@@ -385,7 +385,7 @@
 
         -webkit-text-fill-color: transparent;
 
-        animation: goldShine 5s linear infinite;
+        animation: goldShine 9s linear infinite;
     }
 
 
@@ -474,7 +474,7 @@
 
         transform: rotate(20deg);
 
-        animation: glassSweep 6s ease-in-out infinite;
+        animation: glassSweep 9s ease-in-out infinite;
 
         pointer-events: none;
     }
@@ -555,7 +555,7 @@
 
         pointer-events: none;
 
-        animation: textGlassShine 4.5s ease-in-out infinite;
+        animation: textGlassShine 9s ease-in-out infinite;
     }
 
 
@@ -620,7 +620,7 @@
 
         -webkit-text-fill-color: transparent;
 
-        animation: goldTextShine 4s ease-in-out infinite;
+        animation: goldTextShine 9s ease-in-out infinite;
 
         text-shadow: none;
     }
@@ -1609,7 +1609,7 @@
         background: var(--white);
 
         /* IMPORTANT */
-        animation: ozoNavbarFlip 0.7s cubic-bezier(.22, .61, .36, 1) both;
+        animation: ozoNavbarFlip 0.9s cubic-bezier(.22, .61, .36, 1) both;
     }
 
 
@@ -1992,7 +1992,7 @@
         pointer-events: none;
 
         animation:
-            authGlassShine 4.5s ease-in-out infinite;
+            authGlassShine 6.5s ease-in-out infinite;
 
     }
 
