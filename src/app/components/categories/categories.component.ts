@@ -429,50 +429,119 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterByCategory(categoryId: string) {
-    this.selectedCategory =
-      categoryId;
-    this.categoryId = categoryId;
-    this.selectedSubCategory = '';
+  filterByCategory(categoryId: string): void {
 
+    console.log('CATEGORY SELECTED:', categoryId);
+
+    // ==========================================
+    // SET CATEGORY
+    // ==========================================
+
+    this.selectedCategory = categoryId || '';
+    this.categoryId = categoryId || '';
+
+    // Category change ayithe child filters clear
+    this.selectedSubCategory = '';
     this.selectedSubSubCategory = '';
+
+    // ==========================================
+    // RESET PRODUCTS / PAGINATION
+    // ==========================================
+
     this.page = 1;
     this.products = [];
     this.hasMoreData = true;
+    this.errorMessage = '';
+
+    // ==========================================
+    // UPDATE URL
+    // IMPORTANT:
+    // Old subCategory / subSubCategory kuda
+    // completely remove cheyyali.
+    // ==========================================
 
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { category: categoryId || null },
-      queryParamsHandling: 'merge'
+
+      queryParams: {
+        category: categoryId || null,
+        subCategory: null,
+        subSubCategory: null
+      },
+
+      // IMPORTANT:
+      // merge use cheyyakunda replace chestham
+      queryParamsHandling: ''
     });
+
+    // ==========================================
+    // LOAD PRODUCTS
+    // ==========================================
 
     this.getProducts();
   }
 
 
-  clearFilters() {
+  clearFilters(): void {
 
-    this.selectedProductType = '';
-    this.minPrice = '';
-    this.maxPrice = '';
-    this.selectedSort = 'latest';
+    console.log('CLEARING ALL FILTERS');
+
+    // ==========================================
+    // RESET ALL FILTER VALUES
+    // ==========================================
 
     this.selectedCategory = '';
     this.categoryId = '';
 
+    this.selectedSubCategory = '';
+    this.selectedSubSubCategory = '';
+
+    this.selectedProductType = '';
+
+    this.minPrice = '';
+    this.maxPrice = '';
+
+    this.selectedSort = 'latest';
+
+    // ==========================================
+    // RESET PAGINATION
+    // ==========================================
+
     this.page = 1;
     this.products = [];
     this.hasMoreData = true;
+    this.errorMessage = '';
+
+    // ==========================================
+    // CLEAR URL FILTERS
+    // ==========================================
 
     this.router.navigate([], {
+
       relativeTo: this.route,
+
       queryParams: {
-        category: null
+        category: null,
+        subCategory: null,
+        subSubCategory: null,
+        productType: null,
+        minPrice: null,
+        maxPrice: null,
+        sort: null
       },
-      queryParamsHandling: 'merge'
+
+      queryParamsHandling: ''
     });
 
+    // ==========================================
+    // LOAD ALL PRODUCTS
+    // ==========================================
+
     this.getProducts();
+
+    // ==========================================
+    // CLOSE MOBILE FILTER
+    // ==========================================
 
     this.closeOffcanvas('filterCanvas');
   }

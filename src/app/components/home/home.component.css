@@ -161,15 +161,27 @@
  }
 
  .collection-card {
+    width: 100%;
      background: var(--surface);
      border: 1px solid var(--border);
-     border-radius: var(--radius-md);
-     padding: 14px;
+     border-radius: 3px;
+     padding-bottom: 10px;
      box-shadow: var(--shadow-sm);
      transition: all 0.3s ease;
  }
+.collection-image-wrap {
+    overflow: hidden;
+    cursor: pointer;
+}
 
- .collection-image-wrap {
+.collection-card img {
+    border-radius: 3px;
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+ /* .collection-image-wrap {
      overflow: hidden;
      border-radius: 14px;
      cursor: pointer;
@@ -181,13 +193,14 @@
      width: 100%;
      object-fit: cover;
      transition: transform 0.4s ease;
- }
+ } */
 
  .collection-card h5 {
-     margin-top: 16px;
-     font-size: 18px;
-     font-weight: 600;
-     color: var(--text-dark);
+  margin: 0;
+    padding: 16px 10px 6px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dark);
  }
 
  .collection-card:hover {
@@ -206,7 +219,7 @@
  .product-card {
      background: var(--surface);
      border: 1px solid var(--border);
-     border-radius: var(--radius-md);
+     /* border-radius: var(--radius-md); */
      overflow: hidden;
      position: relative;
      transition: all 0.3s ease;
@@ -230,6 +243,7 @@
      object-fit: cover;
      transition: transform 0.4s ease;
      cursor: pointer;
+     border-radius: 5px;
  }
 
  .product-card:hover .product-img img {
@@ -237,6 +251,8 @@
  }
 
  .product-top-badge {
+
+    
      position: absolute;
      top: 18px;
      left: 18px;
@@ -291,6 +307,7 @@
      justify-content: space-between;
      align-items: flex-start;
      gap: 14px;
+    
      min-height: 104px;
  }
 
@@ -324,6 +341,7 @@
      font-size: 22px;
      font-weight: 700;
      color: var(--gold);
+
  }
 
  .old-price {
@@ -987,3 +1005,294 @@
          font-size: 14px;
      }
  }
+
+ /* subcategory boxs  */
+ .category-section {
+    padding: 40px 0;
+    background: var(--background);
+}
+
+.category-section .container-fluid {
+    padding: 0 28px;
+}
+
+
+/* =========================================================
+   MAIN MASONRY
+========================================================= */
+
+.category-masonry {
+    display: flex;
+    gap: 7px;
+    width: 100%;
+    margin-bottom: 7px;
+}
+
+
+/* =========================================================
+   LEFT / RIGHT WIDTH
+========================================================= */
+
+.category-rings {
+    width: 18.2%;
+    flex-shrink: 0;
+}
+
+.category-right {
+    width: 81.8%;
+}
+
+
+/* SECOND PATTERN */
+
+.category-masonry.reverse-layout .category-right {
+    width: 81.8%;
+}
+
+.category-featured-wrap {
+    width: 18.2%;
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   BOOTSTRAP COLUMN GAP
+========================================================= */
+
+.category-right .row {
+    margin-left: -3.5px;
+    margin-right: -3.5px;
+}
+
+.category-right [class*="col-"] {
+    padding-left: 3.5px;
+    padding-right: 3.5px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.category-card {
+    position: relative;
+    width: 100%;
+
+    height: 274px;
+
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    background: #f6f2eb;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.category-card img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition: transform 0.55s ease;
+}
+
+
+/* =========================================================
+   TALL CARD
+========================================================= */
+
+.tall-card,
+.featured-card {
+    height: 555px;
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.category-overlay {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 55%;
+
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.72),
+        rgba(0, 0, 0, 0)
+    );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   NAME
+========================================================= */
+
+.category-card h4 {
+    position: absolute;
+
+    left: 17px;
+    bottom: 17px;
+
+    z-index: 3;
+
+    margin: 0;
+
+    color: #fff;
+
+    font-family: Georgia, "Times New Roman", serif;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    line-height: 1.2;
+
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+
+/* LARGE CARD NAME */
+
+.tall-card h4,
+.featured-card h4 {
+    font-size: 21px;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.category-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.category-card:hover img {
+    transform: scale(1.06);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .category-masonry {
+        display: block;
+    }
+
+    .category-rings,
+    .category-right,
+    .category-featured-wrap {
+        width: 100% !important;
+    }
+
+    .category-rings,
+    .category-featured-wrap {
+        margin-bottom: 7px;
+    }
+
+    .tall-card,
+    .featured-card {
+        height: 420px;
+    }
+
+    .category-card {
+        height: 230px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 576px) {
+
+    .category-section .container-fluid {
+        padding: 0 12px;
+    }
+
+    .category-card {
+        height: 180px;
+        border-radius: 12px;
+    }
+
+    .tall-card,
+    .featured-card {
+        height: 350px;
+    }
+
+    .category-card h4 {
+        left: 13px;
+        bottom: 13px;
+        font-size: 16px;
+    }
+
+}
+.category-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.category-label {
+    display: inline-block;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+
+
+
+    margin-bottom: 10px;
+}
+
+.category-heading h2 {
+    margin: 0;
+
+    color: #2f2c4a;
+
+    font-size: 42px;
+    font-weight: 700;
+
+    letter-spacing: -1.5px;
+}
+
+
+
+.category-heading p {
+    margin: 12px auto 0;
+
+    max-width: 600px;
+
+    color: #77738a;
+
+    font-size: 15px;
+    line-height: 1.7;
+}

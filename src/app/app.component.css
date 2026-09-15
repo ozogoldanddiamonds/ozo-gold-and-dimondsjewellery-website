@@ -146,3 +146,37 @@
      }
 
  }
+
+ .loader-wrapper span {
+     position: absolute;
+
+     top: calc(40% + 48px);
+
+     left: 50%;
+
+     transform: translateX(-50%);
+
+     font-family: "Playfair Display", "Times New Roman", serif;
+
+     font-size: 16px;
+
+     font-weight: 700;
+
+     letter-spacing: 5px;
+
+     color: var(--primary-red-dark);
+
+     text-align: center;
+
+     line-height: 1;
+
+     /* Premium glass/shadow effect */
+     text-shadow:
+         0 1px 0 rgba(255, 255, 255, 0.95),
+         0 2px 3px rgba(0, 0, 0, 0.20),
+         0 4px 8px rgba(0, 0, 0, 0.12);
+
+     z-index: 10;
+
+     pointer-events: none;
+ }

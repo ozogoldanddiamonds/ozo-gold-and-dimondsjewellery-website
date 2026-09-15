@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
 
 @Injectable({
@@ -13,6 +13,7 @@ export class CartService {
 
   private cartRefreshSubject = new BehaviorSubject<boolean>(false);
   cartRefresh$ = this.cartRefreshSubject.asObservable();
+  apiUrl: any;
 
   constructor(private http: HttpClient) { }
 
@@ -83,5 +84,7 @@ export class CartService {
       });
 
   }
+
+
 
 }

@@ -15,6 +15,11 @@ body {
     font-family: "Ysabeau Office", sans-serif;
 }
 
+html,
+body {
+    overflow-x: clip;
+}
+
 :root {
 
     /* 🔴 Primary Brand (Red Gradient) */

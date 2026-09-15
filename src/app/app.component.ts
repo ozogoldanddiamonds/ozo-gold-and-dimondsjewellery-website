@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { LoadingService } from './service/loading.service';
 import { CartService } from './service/cart.service';
+import * as AOS from 'aos';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +31,17 @@ export class AppComponent implements OnInit {
 
       });
 
+  }
+
+  // aos animations  add
+  ngAfterViewInit(): void {
+    AOS.init({
+      duration: 1000,
+      once: false,
+      offset: 100
+    });
+
+    AOS.refresh();
   }
 
 

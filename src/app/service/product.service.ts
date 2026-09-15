@@ -14,12 +14,11 @@ export class ProductService {
   ) { }
 
   getProductsByType(type: string) {
-
     return this.http.get(
       `${environment.apiUrl}/getProductsByType/${type}`
     );
-
   }
+
   getAllProducts(
     page: number,
     limit: number,

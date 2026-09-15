@@ -2,8 +2,10 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BannersService } from 'src/app/service/banners.service';
+import { CategoriesService } from 'src/app/service/categories.service';
 import { LoadingService } from 'src/app/service/loading.service';
 import { ProductService } from 'src/app/service/product.service';
+import { SubcategoryService } from 'src/app/service/subcategory.service';
 import { WishlistService } from 'src/app/service/wishlist.service';
 import Swiper from 'swiper';
 import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
@@ -14,6 +16,10 @@ SwiperCore.use([Navigation, Pagination, Autoplay]);
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  subSubCategories: any[] = [];
+  categoryGroups: any[][] = [];
+
+
 
   banners: any[] = [];
   allProducts: any[] = [];
@@ -71,7 +77,7 @@ export class HomeComponent implements OnInit {
     }
   ];
   constructor(public router: Router, private bannerService: BannersService, private toastr: ToastrService,
-    private wishlistService: WishlistService, private productService: ProductService,
+    private wishlistService: WishlistService, private productService: ProductService, private subcategoryservices: SubcategoryService,
     private loaderService: LoadingService,) { }
   ngOnInit(): void {
     this.getAllBanners();
@@ -79,6 +85,7 @@ export class HomeComponent implements OnInit {
     this.getProducts();
     this.getfeatureProducts();
     this.loadWishlist();
+    this.getSubSubCategories();
   }
 
   initFeaturedSwiper() {
@@ -118,6 +125,7 @@ export class HomeComponent implements OnInit {
     });
 
   }
+
   initPopularSwiper() {
 
     if (this.popularSwiper) {
@@ -718,6 +726,46 @@ export class HomeComponent implements OnInit {
       }
     );
 
+  }
+  createCategoryGroups(): void {
+
+    this.categoryGroups = [];
+
+    for (let i = 0; i < this.subSubCategories.length; i += 7) {
+
+      this.categoryGroups.push(
+        this.subSubCategories.slice(i, i + 7)
+      );
+
+    }
+
+  }
+
+  getSubSubCategories(): void {
+
+    this.subcategoryservices.getAllSubCategories().subscribe({
+      next: (res: any) => {
+
+        this.subSubCategories =
+          res?.data ||
+          res?.result ||
+          res ||
+          [];
+
+        this.createCategoryGroups();
+      },
+
+      error: (err) => {
+        console.error(
+          'Failed to load sub sub categories',
+          err
+        );
+      }
+    });
+
+  }
+  trackByCategory(index: number, item: any): any {
+    return item._id || index;
   }
 }
 

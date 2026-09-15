@@ -40,3 +40,15 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# System files
+.DS_Store
+Thumbs.db
+
+# ZIP files
+*.zip
+
+# Environment files
+.env
+.env.*
+!.env.example

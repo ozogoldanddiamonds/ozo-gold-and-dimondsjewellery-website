@@ -16,19 +16,21 @@
             <img [src]="banner.image" class="d-block w-100" [alt]="banner.title">
 
             <div class="carousel-caption custom-caption">
-                <span class="hero-badge">
+                <span class="hero-badge" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
                     Luxury Jewellery
                 </span>
 
-                <h1 class="heading-1">
+                <h1 class="heading-1" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
                     {{ banner.title }}
                 </h1>
 
-                <p class="description">
+                <p class="description" data-aos="fade-left" data-aos-anchor="#example-anchor" data-aos-offset="500"
+                    data-aos-duration="500">
                     {{ banner.description }}
                 </p>
 
-                <a routerLink="/products" class="btn btn-gold">
+                <a routerLink="/products" class="btn btn-gold" data-aos="fade-right" data-aos-offset="300"
+                    data-aos-easing="ease-in-sine">
                     Shop Now
                 </a>
             </div>
@@ -79,7 +81,8 @@
 
             <div class="swiper-wrapper">
 
-                <div class="swiper-slide" *ngFor="let item of newProducts">
+                <div class="swiper-slide" *ngFor="let item of newProducts" data-aos="fade-down" data-aos-easing="linear"
+                    data-aos-duration="1500">
 
                     <div class="collection-card">
 
@@ -110,6 +113,9 @@
     </div>
 
 </section>
+
+
+
 <section class="desktop-section section-space">
 
     <div class="container-xxl">
@@ -142,7 +148,8 @@
 
                         <div class="collection-image-wrap">
 
-                            <img [src]="item.image || item.images?.[0]" [alt]="item.name">
+                            <img [src]="item.image || item.images?.[0]" [alt]="item.name" data-aos="fade-zoom-in"
+                                data-aos-easing="ease-in-back" data-aos-delay="300" data-aos-offset="0">
 
                         </div>
 
@@ -199,7 +206,8 @@
 
                     <div class="collection-card" (click)="goToSubCategory(item._id)">
 
-                        <div class="collection-image-wrap">
+                        <div class="collection-image-wrap" data-aos="fade-down" data-aos-easing="linear"
+                            data-aos-duration="1500">
 
                             <img [src]="item.image || item.images?.[0]" [alt]="item.name">
 
@@ -226,6 +234,165 @@
     </div>
 
 </section>
+<!-- display the images to all  -->
+
+<section class="category-section">
+
+    <div class="container-fluid">
+
+        <!-- HEADING -->
+        <div class="category-heading">
+
+            <span class="category-label">
+                EXPLORE COLLECTIONS
+            </span>
+
+            <h2>
+                Shop by <span>Category</span>
+            </h2>
+
+            <p>
+                Explore our collection and discover something perfect for you.
+            </p>
+
+        </div>
+
+
+        <!-- ALL CATEGORY GROUPS -->
+
+        <div class="category-masonry" *ngFor="let group of categoryGroups; let i = index"
+            [class.reverse-layout]="i % 2 === 1">
+
+            <!-- PATTERN 1 -->
+            <ng-container *ngIf="i % 2 === 0">
+
+                <!-- LARGE -->
+                <div class="category-rings" *ngIf="group[0]">
+                    <ng-container *ngTemplateOutlet="
+              categoryCard;
+              context: {
+                item: group[0],
+                className: 'tall-card'
+              }
+            "></ng-container>
+                </div>
+
+                <!-- SMALL / WIDE -->
+                <div class="category-right">
+
+                    <div class="row g-2">
+
+                        <div *ngFor="let item of group.slice(1, 4); let j = index"
+                            [class]="j === 0 ? 'col-lg-6' : 'col-lg-3'">
+
+                            <ng-container *ngTemplateOutlet="
+                  categoryCard;
+                  context: { item: item }
+                "></ng-container>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-2 mt-0">
+
+                        <div *ngFor="let item of group.slice(4, 7); let j = index"
+                            [class]="j === 1 ? 'col-lg-6' : 'col-lg-3'">
+
+                            <ng-container *ngTemplateOutlet="
+                  categoryCard;
+                  context: { item: item }
+                "></ng-container>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </ng-container>
+
+
+            <!-- PATTERN 2 -->
+
+            <ng-container *ngIf="i % 2 === 1">
+
+                <div class="category-right">
+
+                    <div class="row g-2">
+
+                        <div class="col-lg-4" *ngFor="let item of group.slice(0, 3)">
+
+                            <ng-container *ngTemplateOutlet="
+                  categoryCard;
+                  context: { item: item }
+                "></ng-container>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-2 mt-0">
+
+                        <div class="col-lg-4" *ngFor="let item of group.slice(3, 6)">
+
+                            <ng-container *ngTemplateOutlet="
+                  categoryCard;
+                  context: { item: item }
+                "></ng-container>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LARGE RIGHT -->
+
+                <div class="category-featured-wrap" *ngIf="group[6]">
+
+                    <ng-container *ngTemplateOutlet="
+              categoryCard;
+              context: {
+                item: group[6],
+                className: 'featured-card'
+              }
+            "></ng-container>
+
+                </div>
+
+            </ng-container>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+       REUSABLE CATEGORY CARD
+  ====================================================== -->
+
+    <ng-template #categoryCard let-item="item" let-className="className">
+
+        <div class="category-card" [ngClass]="className" (click)="goToSubCategory(item._id)">
+
+            <img [src]="item.image || item.images?.[0]" [alt]="item.name" />
+
+            <div class="category-overlay"></div>
+
+            <h4>
+                {{ item.name }}
+            </h4>
+
+        </div>
+
+    </ng-template>
+
+</section>
+
 
 <section class="desktop-section section-space">
 
@@ -257,7 +424,8 @@
 
                     <div class="collection-card" (click)="goToSubSubCategory(item._id)">
 
-                        <div class="collection-image-wrap">
+                        <div class="collection-image-wrap" data-aos="fade-right" data-aos-offset="300"
+                            data-aos-easing="ease-in-sine">
 
                             <img [src]="item.image || item.images?.[0]" [alt]="item.name">
 
@@ -288,7 +456,7 @@
 <section class="desktop-section section-space bg-soft">
     <div class="container-xxl">
         <div class="section-header text-center">
-            <h2>ALL Products</h2>
+            <h2>All Products</h2>
             <p>Where New Meets Beautiful</p>
             <div class="divider">
                 <span class="line"></span>
@@ -301,7 +469,8 @@
 
         <div class="row g-4">
 
-            <div class="col-lg-3 col-md-6" col-6 *ngFor="let item of products">
+            <div class="col-lg-3 col-md-6" col-6 *ngFor="let item of products" data-aos="flip-left"
+                data-aos-easing="ease-out-cubic" data-aos-duration="2000">
 
                 <div class="product-card">
 

@@ -25,6 +25,35 @@
             <a href="#" class="social-icon"><i class="fa fa-facebook"></i></a>
             <a href="#" class="social-icon"><i class="fa fa-instagram"></i></a>
             <a href="#" class="social-icon"><i class="fa fa-twitter"></i></a>
+            <!-- Logged In User -->
+            <div *ngIf="isLoggedIn" class="top-user">
+                <i class="fa fa-user-circle"></i>
+                <span>Hi, {{ profileData?.user?.name }}</span>
+
+                <div class="top-user-dropdown">
+
+                    <a routerLink="/profile">
+                        <i class="fa fa-user"></i>
+                        My Profile
+                    </a>
+
+                    <a routerLink="/orders">
+                        <i class="fa fa-shopping-bag"></i>
+                        My Orders
+                    </a>
+
+                    <a routerLink="/whishlist">
+                        <i class="fa fa-heart"></i>
+                        Wishlist
+                    </a>
+
+                    <a (click)="logout()">
+                        <i class="fa fa-sign-out"></i>
+                        Logout
+                    </a>
+
+                </div>
+            </div>
 
         </div>
 
@@ -33,11 +62,24 @@
 <nav class="navbar navbar-expand-lg" id="mainNavbar">
 
     <!-- Brand -->
-    <a class="navbar-brand fw-bold text-dark" routerLink="/">
-        <img src="../../../assets/images/logo2.png" alt="">
+    <a class="navbar-brand fw-bold text-dark brand-glass" routerLink="/">
+
+        <div class="brand-logo">
+            <img src="../../../assets/images/logo.jpg" alt="OZO Gold and Diamond Jewellery Mart">
+        </div>
+
         <span class="nav-title">
-            <span>OZO Gold and Diamond </span>
-            <span>Jewellery</span>
+
+            <span class="brand-name">
+                OZO
+                <span class="gold-text">Gold</span>
+                <span class="diamond-text">and DiamondJewellery Mart</span>
+            </span>
+
+            <span class="brand-subtitle">
+                Every shine has a story.
+            </span>
+
         </span>
 
     </a>
@@ -106,15 +148,6 @@
             <li class="nav-item">
                 <a class="nav-link" routerLink="/schemes-page" (click)="closeMenu()">OZO Schemes</a>
             </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link" routerLink="/categories" (click)="closeMenu()">Gold</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/categories" (click)="closeMenu()">Diamonds</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/categories" (click)="closeMenu()">Silver</a>
-            </li> -->
 
             <li class="nav-item">
                 <a class="nav-link" routerLink="/about" (click)="closeMenu()">About</a>
@@ -144,14 +177,14 @@
             <!-- Login -->
             <li *ngIf="!isLoggedIn">
 
-                <button class="auth-trigger" (click)="openAuthModal()">
+                <button class="auth-glass-btn" (click)="openAuthModal()">
 
                     Login / Register
 
                 </button>
 
             </li>
-            <li *ngIf="isLoggedIn" class="nav-item dropdown">
+            <!-- <li *ngIf="isLoggedIn" class="nav-item dropdown">
 
                 <a class="nav-link user-trigger">
                     <i class="fa fa-user-circle"></i>
@@ -172,7 +205,7 @@
 
                 </div>
 
-            </li>
+            </li> -->
         </ul>
     </div>
 </nav>

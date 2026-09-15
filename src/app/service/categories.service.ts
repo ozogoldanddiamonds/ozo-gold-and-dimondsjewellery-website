@@ -7,6 +7,9 @@ import { environment } from 'src/environment/environment';
   providedIn: 'root'
 })
 export class CategoriesService {
+  getAllSubSubCategories() {
+    throw new Error('Method not implemented.');
+  }
 
 
   constructor(
