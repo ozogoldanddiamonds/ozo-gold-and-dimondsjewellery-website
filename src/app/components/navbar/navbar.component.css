@@ -724,10 +724,10 @@
 
         .brand-logo {
 
-            width: 35px;
-            height: 35px;
+            width: 55px;
+            height: 55px;
 
-            min-width: 35px;
+            /* min-width: 35px; */
         }
 
 
