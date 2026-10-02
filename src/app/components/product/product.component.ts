@@ -5,6 +5,7 @@ import { CartService } from 'src/app/service/cart.service';
 import { LoadingService } from 'src/app/service/loading.service';
 import { ProductService } from 'src/app/service/product.service';
 import { SizeChartsService } from 'src/app/service/size-charts.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product',
@@ -12,12 +13,14 @@ import { SizeChartsService } from 'src/app/service/size-charts.service';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit {
+  
   quantity: number = 1;
   openAcc: string | null = null;
   errorMessage = '';
   product: any = null;
   selectedVariant: any = null;
   selectedImage: any;
+  showVideo: boolean = false;
   purityOptions: string[] = [];
   cartItems: any[] = [];
   cartId: string = '';
@@ -41,7 +44,8 @@ export class ProductComponent implements OnInit {
   constructor(public router: Router, private route: ActivatedRoute,
     private loaderService: LoadingService, private productService: ProductService,
     private cartService: CartService, private sizeChartService: SizeChartsService,
-    private toastr: ToastrService,
+    private toastr: ToastrService,  private meta: Meta,
+  private title: Title
   ) { }
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -62,6 +66,41 @@ export class ProductComponent implements OnInit {
 
         this.loaderService.hide();
         this.product = this.normalizeProduct(res?.data);
+// =========================
+// PRODUCT SEO
+// =========================
+
+if (this.product) {
+
+  // SEO Title
+  if (this.product.seoTitle) {
+    this.title.setTitle(this.product.seoTitle);
+  } else {
+    this.title.setTitle(
+      this.product.name
+        ? `${this.product.name} | OZO Jewelry`
+        : 'OZO Jewelry'
+    );
+  }
+
+  // SEO Description
+  if (this.product.seoDescription) {
+    this.meta.updateTag({
+      name: 'description',
+      content: this.product.seoDescription
+    });
+  }
+
+  // Meta Keywords
+  if (this.product.metaKeywords) {
+    this.meta.updateTag({
+      name: 'keywords',
+      content: this.product.metaKeywords
+    });
+  }
+
+}
+
         this.subCategoryId = this.product.subCategory._id;
         this.categoryId = this.product.category._id;
         console.log(this.categoryId, 'categoryid');
@@ -69,9 +108,9 @@ export class ProductComponent implements OnInit {
 
         if (this.product?.images?.length) {
 
-          this.selectedImage =
-            this.product.images[0];
+            this.selectedImage = this.product.images[0];
 
+  this.showVideo = false;
         }
 
         if (this.product?.variants?.length) {
@@ -111,6 +150,19 @@ export class ProductComponent implements OnInit {
       }
     });
   }
+  selectImage(img: string): void {
+
+  this.selectedImage = img;
+
+  // Video close
+  this.showVideo = false;
+
+}
+selectVideo(): void {
+
+  this.showVideo = true;
+
+}
   selectPurity(purity: string) {
 
     this.selectedPurity = purity;

@@ -126,6 +126,9 @@ export class ProfileComponent implements OnInit {
   orders(): void {
     this.router.navigate(['/orders']);
   }
+    Schems(): void {
+    this.router.navigate(['/schemes-page']);
+  }
 
   openContactModal(): void {
     this.router.navigate(['/contact']);

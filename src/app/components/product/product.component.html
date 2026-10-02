@@ -7,42 +7,103 @@
 
             <div class="product-gallery-wrap">
 
-                <div class="image-gallery">
+               <div class="image-gallery">
 
-                    <!-- Thumbnail Images -->
-                    <div class="thumb-list">
+    <!-- ================= THUMBNAILS ================= -->
+    <div class="thumb-list">
 
-                        <img *ngFor="let img of product?.images" [src]="img" [class.active]="selectedImage === img"
-                            (click)="selectedImage = img" alt="Product Image" />
+        <!-- IMAGE THUMBNAILS -->
+        <div
+            class="thumb-item"
+            *ngFor="let img of product?.images"
+            [class.active]="!showVideo && selectedImage === img"
+            (click)="selectImage(img)"
+        >
 
-                    </div>
+            <img
+                [src]="img"
+                alt="Product Image"
+            />
 
-                    <!-- Main Image -->
-                    <div class="main-image">
+        </div>
 
-                        <span class="product-badge" *ngIf="product?.bestSeller">
 
-                            Best Seller
+        <!-- VIDEO THUMBNAIL -->
+        <div
+            class="thumb-item video-thumb"
+            *ngIf="product?.video"
+            [class.active]="showVideo"
+            (click)="selectVideo()"
+        >
 
-                        </span>
+            <video
+                [src]="product.video"
+                muted
+                preload="metadata"
+            ></video>
 
-                        <span class="product-badge featured" *ngIf="product?.featured">
+            <!-- PLAY ICON -->
+            <div class="video-play-icon">
+                <i class="fa fa-play"></i>
+            </div>
 
-                            Featured
+        </div>
 
-                        </span>
+    </div>
 
-                        <span class="product-badge trending" *ngIf="product?.trending">
 
-                            Trending
+    <!-- ================= MAIN MEDIA ================= -->
+    <div class="main-image">
 
-                        </span>
+        <!-- BADGES -->
 
-                        <img [src]="selectedImage || product?.images?.[0]" [alt]="product?.name" />
+        <span
+            class="product-badge"
+            *ngIf="product?.bestSeller"
+        >
+            Best Seller
+        </span>
 
-                    </div>
+        <span
+            class="product-badge featured"
+            *ngIf="product?.featured"
+        >
+            Featured
+        </span>
 
-                </div>
+        <span
+            class="product-badge trending"
+            *ngIf="product?.trending"
+        >
+            Trending
+        </span>
+
+
+        <!-- ================= MAIN IMAGE ================= -->
+
+        <img
+            *ngIf="!showVideo"
+            [src]="selectedImage || product?.images?.[0]"
+            [alt]="product?.name"
+        />
+
+
+        <!-- ================= MAIN VIDEO ================= -->
+
+        <video
+            *ngIf="showVideo"
+            class="main-product-video"
+            [src]="product?.video"
+            controls
+            autoplay
+            playsinline
+        >
+            Your browser does not support the video tag.
+        </video>
+
+    </div>
+
+</div>
 
             </div>
             <!-- Accordion -->

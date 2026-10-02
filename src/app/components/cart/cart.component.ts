@@ -251,5 +251,13 @@ export class CartComponent implements OnInit {
     );
 
   }
+  product(id: string) {
+  if (!id) {
+    console.error('Product ID is missing');
+    return;
+  }
+
+  this.router.navigate(['/product', id]);
+}
 
 }

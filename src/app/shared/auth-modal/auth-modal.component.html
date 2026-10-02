@@ -93,6 +93,31 @@
                     </span>
                 </button>
 
+                <!-- GOOGLE LOGIN -->
+
+                <!-- ========================================= -->
+                <!-- GOOGLE LOGIN -->
+                <!-- ========================================= -->
+
+                <div *ngIf="activeAuthTab === 'login'" class="google-login-section">
+
+                    <div class="or-divider">
+
+                        <span>
+                            OR
+                        </span>
+
+                    </div>
+
+
+                    <div class="google-button-wrapper">
+
+                        <div id="google-btn"></div>
+
+                    </div>
+
+                </div>
+
             </form>
             <!-- Register -->
             <form *ngIf="activeAuthTab === 'register'" class="auth-form" [formGroup]="registerForm"

@@ -70,4 +70,17 @@ export class AuthService {
   updateLoginStatus(status: boolean) {
     this.loginStatusSubject.next(status);
   }
+
+
+  // =========================
+  // Google / Gmail Login
+  // =========================
+  googleLogin(data: any): Observable<any> {
+
+    return this.http.post<any>(
+      `${environment.apiUrl}/google-login`,
+      data
+    );
+
+  }
 }

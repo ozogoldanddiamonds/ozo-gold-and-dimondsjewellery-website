@@ -16,9 +16,12 @@
             <img [src]="banner.image" class="d-block w-100" [alt]="banner.title">
 
             <div class="carousel-caption custom-caption">
-                <span class="hero-badge" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
-                    Luxury Jewellery
-                </span>
+                <div class="hero-badge-tag" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
+                    <h5>OZO Gold and DiamondsJewellery</h5>
+                    <p>Every shine has a story </p>
+                </div>
+
+
 
                 <h1 class="heading-1" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
                     {{ banner.title }}
@@ -517,6 +520,10 @@
                             <span class="price">
                                 ₹{{ item?.variants?.[0]?.priceBreakup?.finalPrice }}
                             </span>
+                            <!-- making chaeges -->
+                            <div class="making-charge">
+  {{ item.variants?.[0]?.makingCharges }}% Making Charges
+</div>
 
 
 
