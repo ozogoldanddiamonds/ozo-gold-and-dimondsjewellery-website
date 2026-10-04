@@ -924,9 +924,9 @@
          margin: 10px 0;
      }
 
-     .collection-card img {
+     /* .collection-card img {
          height: 60px;
-     }
+     } */
 
      .product-img img {
          height: 160px;
@@ -1601,8 +1601,9 @@
          0 1px 0 rgba(255, 255, 255, 0.9),
          0 2px 5px rgba(138, 101, 0, 0.15);
  }
+
  /* making charges */
  .making-charge {
-    font-size: 12px;
-color: red;
+     font-size: 12px;
+     color: red;
  }

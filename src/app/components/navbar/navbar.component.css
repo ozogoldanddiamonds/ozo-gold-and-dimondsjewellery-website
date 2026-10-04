@@ -19,7 +19,7 @@
         overflow: visible;
 
         /* IMPORTANT */
-        z-index: 10000;
+        z-index: 1000;
     }
 
     /* Gold Shine */
@@ -2398,4 +2398,814 @@
     .top-user-dropdown i {
         width: 16px;
         text-align: center;
+    }
+
+
+
+    /* =========================================================
+   OZO FINAL NAVBAR RESPONSIVE OVERRIDES
+   Paste this at the VERY BOTTOM of your CSS
+   ========================================================= */
+
+
+    /* =========================================================
+   1. LARGE DESKTOP
+   1400px+
+   ========================================================= */
+
+    @media (min-width: 1400px) {
+
+        #mainNavbar {
+            min-height: 92px;
+            padding: 8px 24px;
+        }
+
+        #mainNavbar .navbar-brand {
+            flex-shrink: 0;
+        }
+
+        #mainNavbar .navbar-nav {
+            gap: 38px !important;
+            flex-wrap: nowrap;
+        }
+
+        #mainNavbar .nav-link {
+            font-size: 21px;
+            white-space: nowrap;
+        }
+
+        #mainNavbar .nav-link i {
+            font-size: 19px;
+        }
+
+        .brand-logo {
+            width: 82px;
+            min-width: 82px;
+        }
+
+        .brand-name {
+            font-size: 20px;
+        }
+
+        .brand-subtitle {
+            font-size: 8px;
+        }
+
+        .auth-glass-btn {
+            white-space: nowrap;
+            min-width: 142px;
+        }
+    }
+
+
+    /* =========================================================
+   2. LAPTOP / NORMAL DESKTOP
+   1200px - 1399px
+
+   This is important for 1366px screens
+   ========================================================= */
+
+    @media (min-width: 1200px) and (max-width: 1399px) {
+
+        #mainNavbar {
+            min-height: 88px;
+            padding: 7px 16px;
+        }
+
+        /* Brand */
+        #mainNavbar .navbar-brand {
+            flex-shrink: 1;
+            min-width: 0;
+            max-width: 470px;
+        }
+
+        .brand-glass {
+            gap: 8px;
+            padding: 6px 10px 6px 5px;
+            max-width: 470px;
+        }
+
+        .brand-logo {
+            width: 76px;
+            min-width: 76px;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            letter-spacing: 0;
+        }
+
+        .brand-subtitle {
+            font-size: 7px;
+            letter-spacing: 3px;
+        }
+
+        /* Navbar */
+        #mainNavbar .navbar-collapse {
+            flex: 1;
+            min-width: 0;
+        }
+
+        #mainNavbar .navbar-nav {
+            gap: 22px !important;
+            flex-wrap: nowrap;
+        }
+
+        #mainNavbar .nav-link {
+            font-size: 18px;
+            padding: 8px 0;
+            white-space: nowrap;
+        }
+
+        #mainNavbar .nav-link i {
+            font-size: 17px;
+            margin-left: 2px;
+        }
+
+        /* Icons */
+        #mainNavbar .icons {
+            flex-shrink: 0;
+        }
+
+        #mainNavbar .icons a i {
+            font-size: 19px;
+        }
+
+        /* Login */
+        .auth-glass-btn {
+            height: 40px;
+            padding: 0 15px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        /* Cart badge */
+        #mainNavbar .badge {
+            font-size: 9px;
+        }
+    }
+
+
+    /* =========================================================
+   3. SMALL LAPTOP / TABLET LANDSCAPE
+   992px - 1199px
+   ========================================================= */
+
+    @media (min-width: 992px) and (max-width: 1199px) {
+
+        #mainNavbar {
+            min-height: 82px;
+            padding: 6px 12px;
+        }
+
+        /* Brand */
+        #mainNavbar .navbar-brand {
+            max-width: 360px;
+            min-width: 0;
+            flex-shrink: 1;
+        }
+
+        .brand-glass {
+            gap: 6px;
+            padding: 5px 8px 5px 4px;
+            max-width: 360px;
+        }
+
+        .brand-logo {
+            width: 62px;
+            min-width: 62px;
+        }
+
+        .brand-name {
+            font-size: 15px;
+            letter-spacing: 0;
+        }
+
+        .brand-subtitle {
+            font-size: 6px;
+            letter-spacing: 2px;
+            margin-top: 3px;
+        }
+
+        /* Menu */
+        #mainNavbar .navbar-nav {
+            gap: 13px !important;
+            flex-wrap: nowrap;
+        }
+
+        #mainNavbar .nav-link {
+            font-size: 15px;
+            padding: 7px 0;
+            white-space: nowrap;
+        }
+
+        #mainNavbar .nav-link i {
+            font-size: 15px;
+            margin-left: 1px;
+        }
+
+        /* Icons */
+        #mainNavbar .icons a i {
+            font-size: 17px;
+        }
+
+        /* Login */
+        .auth-glass-btn {
+            height: 38px;
+            padding: 0 11px;
+            font-size: 12px;
+            white-space: nowrap;
+            border-radius: 10px;
+        }
+
+        /* Cart */
+        #mainNavbar .desk-cart {
+            margin-left: 0;
+        }
+    }
+
+
+    /* =========================================================
+   4. TABLET
+   768px - 991px
+
+   Bootstrap collapse starts here
+   ========================================================= */
+
+    @media (min-width: 768px) and (max-width: 991px) {
+
+        #mainNavbar {
+            min-height: 72px;
+            padding: 6px 15px;
+        }
+
+        /* Brand */
+        #mainNavbar .navbar-brand {
+            max-width: calc(100% - 100px);
+            min-width: 0;
+            flex: 1;
+        }
+
+        .brand-glass {
+            width: auto;
+            max-width: 100%;
+            gap: 7px;
+            padding: 5px 9px 5px 4px;
+        }
+
+        .brand-logo {
+            width: 58px;
+            min-width: 58px;
+        }
+
+        .brand-name {
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        .brand-subtitle {
+            font-size: 6px;
+            letter-spacing: 2.5px;
+        }
+
+        /* Cart */
+        .mobile-cart-wrapper {
+            display: flex;
+            align-items: center;
+            margin-right: 16px;
+            font-size: 21px;
+        }
+
+        /* Hamburger */
+        .custom-toggler {
+            width: 32px;
+            height: 28px;
+            padding: 4px;
+        }
+
+        /* Mobile menu */
+        #mainNavbar .navbar-collapse {
+            width: 100%;
+            flex-basis: 100%;
+            margin-top: 8px;
+            padding: 10px 15px 20px;
+            background: #fff;
+            border-top: 1px solid rgba(201, 163, 78, 0.15);
+        }
+
+        #mainNavbar .navbar-nav {
+            width: 100%;
+            gap: 0 !important;
+            align-items: stretch !important;
+        }
+
+        #mainNavbar .nav-item {
+            width: 100%;
+        }
+
+        #mainNavbar .nav-link {
+            width: 100%;
+            padding: 13px 5px;
+            font-size: 17px;
+            text-align: left;
+        }
+
+        /* Remove desktop underline behaviour */
+        #mainNavbar .navbar .nav-link::after,
+        #mainNavbar .nav-link::after {
+            display: none;
+        }
+
+        /* Login */
+        #mainNavbar .auth-glass-btn {
+            margin-top: 10px;
+            width: 100%;
+            height: 44px;
+        }
+
+        /* Mega menu */
+        #mainNavbar .mega-menu {
+            position: static !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            transform: none !important;
+            margin: 0 !important;
+            padding: 10px 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+            border-radius: 0;
+        }
+    }
+
+
+    /* =========================================================
+   5. MOBILE
+   576px - 767px
+   ========================================================= */
+
+    @media (min-width: 576px) and (max-width: 767px) {
+
+        #mainNavbar {
+            min-height: 68px;
+            padding: 5px 12px;
+        }
+
+        .top-header {
+            display: none !important;
+        }
+
+        /* Brand */
+        #mainNavbar .navbar-brand {
+            max-width: calc(100% - 90px);
+            min-width: 0;
+            flex: 1;
+        }
+
+        .brand-glass {
+            width: 100%;
+            max-width: 100%;
+            gap: 7px;
+            padding: 4px 7px 4px 3px;
+            border-radius: 12px;
+        }
+
+        .brand-logo {
+            width: 52px;
+            min-width: 52px;
+        }
+
+        .brand-name {
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .brand-subtitle {
+            font-size: 5.5px;
+            letter-spacing: 2px;
+            margin-top: 3px;
+        }
+
+        /* Mobile cart */
+        .mobile-cart-wrapper {
+            display: flex;
+            align-items: center;
+            margin-right: 14px;
+            font-size: 20px;
+        }
+
+        .cart-badge {
+            font-size: 9px;
+        }
+
+        /* Hamburger */
+        .custom-toggler {
+            width: 30px;
+            height: 26px;
+        }
+
+        /* Menu */
+        #mainNavbar .navbar-collapse {
+            margin-top: 7px;
+            padding: 8px 12px 18px;
+            background: #fff;
+        }
+
+        #mainNavbar .navbar-nav {
+            gap: 0 !important;
+            align-items: stretch !important;
+        }
+
+        #mainNavbar .nav-link {
+            font-size: 16px;
+            padding: 12px 5px;
+            text-align: left;
+        }
+
+        #mainNavbar .navbar .nav-link::after {
+            display: none;
+        }
+
+        #mainNavbar .auth-glass-btn {
+            width: 100%;
+            margin-top: 8px;
+        }
+    }
+
+
+    /* =========================================================
+   6. SMALL MOBILE
+   481px - 575px
+   ========================================================= */
+
+    @media (min-width: 481px) and (max-width: 575px) {
+
+        #mainNavbar {
+            min-height: 64px;
+            padding: 4px 10px;
+        }
+
+        #mainNavbar .navbar-brand {
+            max-width: calc(100% - 85px);
+        }
+
+        .brand-glass {
+            gap: 5px;
+            padding: 3px 6px 3px 3px;
+            border-radius: 11px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            min-width: 48px;
+        }
+
+        .brand-name {
+            font-size: 13px;
+            letter-spacing: 0;
+        }
+
+        .brand-subtitle {
+            font-size: 5px;
+            letter-spacing: 1.8px;
+        }
+
+        .mobile-cart-wrapper {
+            display: flex;
+            margin-right: 25px;
+            font-size: 19px;
+        }
+
+        .custom-toggler {
+            width: 28px;
+            height: 24px;
+        }
+
+        #mainNavbar .nav-link {
+            font-size: 15px;
+            padding: 11px 5px;
+        }
+    }
+
+
+    /* =========================================================
+   7. VERY SMALL MOBILE
+   <= 480px
+   ========================================================= */
+
+    @media (max-width: 480px) {
+
+        #mainNavbar {
+            min-height: 62px;
+            padding: 4px 8px;
+        }
+
+        /* Brand area */
+        #mainNavbar .navbar-brand {
+            max-width: calc(100% - 78px);
+            min-width: 0;
+            margin-right: 4px;
+        }
+
+        .brand-glass {
+            width: 100%;
+            max-width: 100%;
+            gap: 5px;
+            padding: 3px 5px 3px 3px;
+            border-radius: 10px;
+        }
+
+        /* Logo */
+        .brand-logo {
+            width: 43px;
+            min-width: 43px;
+            height: 43px;
+            padding: 2px;
+            border-radius: 9px;
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Brand text */
+        .nav-title {
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .brand-name {
+            display: block;
+            font-size: 11px;
+            line-height: 1.15;
+            letter-spacing: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .brand-subtitle {
+            display: block;
+            font-size: 4.5px;
+            letter-spacing: 1.5px;
+            margin-top: 2px;
+            white-space: nowrap;
+        }
+
+        /* Cart */
+        .mobile-cart-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 25px;
+            font-size: 18px;
+        }
+
+        .cart-badge {
+            top: -5px;
+            right: -7px;
+            font-size: 8px;
+            padding: 2px 4px;
+        }
+
+        /* Hamburger */
+        .custom-toggler {
+            width: 27px;
+            height: 23px;
+            padding: 3px;
+            flex-shrink: 0;
+        }
+
+        .toggler-icon {
+            height: 2.5px;
+        }
+
+        /* Mobile menu */
+        #mainNavbar .navbar-collapse {
+            margin-top: 5px;
+            padding: 6px 10px 15px;
+            background: #fff;
+            border-radius: 0 0 12px 12px;
+        }
+
+        #mainNavbar .navbar-nav {
+            width: 100%;
+            gap: 0 !important;
+        }
+
+        #mainNavbar .nav-link {
+            font-size: 15px;
+            padding: 11px 5px;
+            text-align: left;
+        }
+
+        #mainNavbar .nav-link i {
+            font-size: 15px;
+        }
+
+        /* Login */
+        #mainNavbar .auth-glass-btn {
+            width: 100%;
+            height: 42px;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* Mega menu */
+        #mainNavbar .mega-menu {
+            width: 100% !important;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 8px 0 !important;
+        }
+
+        #mainNavbar .mega-left {
+            padding: 8px 0 15px;
+        }
+
+        #mainNavbar .mega-right {
+            width: 100%;
+        }
+
+        #mainNavbar .mega-card {
+            height: 190px;
+        }
+
+        #mainNavbar .mega-card img {
+            height: 130px;
+        }
+
+        #mainNavbar .mega-card-content {
+            height: 60px;
+            padding: 8px;
+        }
+
+        #mainNavbar .mega-card-content h5 {
+            font-size: 13px;
+        }
+
+        #mainNavbar .mega-card-content p {
+            font-size: 10px;
+        }
+    }
+
+
+    /* =========================================================
+   8. EXTRA SMALL PHONES
+   <= 360px
+   ========================================================= */
+
+    @media (max-width: 360px) {
+
+        #mainNavbar {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        #mainNavbar .navbar-brand {
+            max-width: calc(100% - 70px);
+        }
+
+        .brand-logo {
+            width: 38px;
+            min-width: 38px;
+            height: 38px;
+        }
+
+        .brand-name {
+            font-size: 10px;
+        }
+
+        .brand-subtitle {
+            font-size: 4px;
+            letter-spacing: 1px;
+        }
+
+        .mobile-cart-wrapper {
+            font-size: 17px;
+            margin-right: 4px;
+        }
+
+        .custom-toggler {
+            width: 25px;
+            height: 21px;
+        }
+    }
+
+
+    /* =========================================================
+   9. PREVENT NAVBAR HORIZONTAL OVERFLOW
+   ========================================================= */
+
+    #mainNavbar,
+    #mainNavbar .container,
+    #mainNavbar .navbar-brand,
+    #mainNavbar .navbar-collapse {
+        max-width: 100%;
+    }
+
+    #mainNavbar {
+        overflow: visible;
+    }
+
+    #mainNavbar .navbar-nav {
+        min-width: 0;
+    }
+
+    #mainNavbar .nav-item {
+        flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+   10. PREVENT BRAND TEXT FROM BREAKING
+   ========================================================= */
+
+    #mainNavbar .brand-name,
+    #mainNavbar .gold-text,
+    #mainNavbar .diamond-text {
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+   11. LOGIN BUTTON NEVER BREAKS
+   ========================================================= */
+
+    #mainNavbar .auth-glass-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+   12. MOBILE TOP HEADER
+   ========================================================= */
+
+    @media (max-width: 991px) {
+
+        .top-header {
+            display: none !important;
+        }
+
+        #mainNavbar {
+            width: 100%;
+        }
+
+        #mainNavbar .navbar-collapse {
+            width: 100%;
+        }
+
+    }
+
+
+    /* =========================================================
+   13. MOBILE MENU SCROLL
+   ========================================================= */
+
+    @media (max-width: 991px) {
+
+        #mainNavbar .navbar-collapse.show {
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+    }
+
+
+    /* =========================================================
+   14. FIX BOOTSTRAP COLLAPSE WIDTH
+   ========================================================= */
+
+    @media (max-width: 991px) {
+
+        #mainNavbar .navbar-collapse {
+            flex-basis: 100%;
+            flex-grow: 1;
+        }
+
+    }
+
+
+    /* =========================================================
+   15. MOBILE MEGA MENU FIX
+   ========================================================= */
+
+    @media (max-width: 991px) {
+
+        #mainNavbar .mega-dropdown {
+            width: 100%;
+        }
+
+        #mainNavbar .mega-dropdown>.nav-link {
+            width: 100%;
+        }
+
+        #mainNavbar .mega-menu.show {
+            display: block !important;
+        }
+
     }

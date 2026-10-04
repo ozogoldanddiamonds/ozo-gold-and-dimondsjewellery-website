@@ -85,7 +85,7 @@
     </a>
     <a class="mobile-cart-wrapper position-relative" routerLink="/cart">
         <i class="fa fa-shopping-cart"></i>
-        <span class="cart-badge">{{ cartCount }}</span>
+        <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
     </a>
 
 
@@ -161,7 +161,8 @@
             <li class="nav-item desk-cart icons">
                 <a class="position-relative" routerLink="/cart" (click)="closeMenu()">
                     <i class="fa fa-shopping-cart"></i>
-                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
+                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill"
+                        *ngIf="cartCount > 0">
                         {{ cartCount }}
                     </span>
                 </a>
