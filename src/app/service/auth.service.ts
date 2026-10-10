@@ -1,12 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  // Inside AuthService class
+private loginRequestSubject = new Subject<void>();
+loginRequest$ = this.loginRequestSubject.asObservable();
+
+requestLogin(): void {
+  this.loginRequestSubject.next();
+}
   private loginStatusSubject = new BehaviorSubject<boolean>(false);
   loginStatus$ = this.loginStatusSubject.asObservable();
 
@@ -83,4 +90,10 @@ export class AuthService {
     );
 
   }
+  updateProfile(userId: string, data: any): Observable<any> {
+  return this.http.put(
+    `${environment.apiUrl}/update-profile/${userId}`,
+    data
+  );
+}
 }

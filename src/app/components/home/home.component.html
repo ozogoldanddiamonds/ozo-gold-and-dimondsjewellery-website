@@ -32,7 +32,7 @@
                     {{ banner.description }}
                 </p>
 
-                <a routerLink="/products" class="btn btn-gold" data-aos="fade-right" data-aos-offset="300"
+                <a routerLink="/categories" class="btn btn-gold" data-aos="fade-right" data-aos-offset="300"
                     data-aos-easing="ease-in-sine">
                     Shop Now
                 </a>
@@ -472,7 +472,7 @@
 
         <div class="row g-4">
 
-            <div class="col-lg-3 col-md-6 col-6" *ngFor="let item of products" data-aos="flip-left"
+            <div class="col-lg-3 col-md-6" col-6 *ngFor="let item of products" data-aos="flip-left"
                 data-aos-easing="ease-out-cubic" data-aos-duration="2000">
 
                 <div class="product-card">

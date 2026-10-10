@@ -85,7 +85,7 @@
     </a>
     <a class="mobile-cart-wrapper position-relative" routerLink="/cart">
         <i class="fa fa-shopping-cart"></i>
-        <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+        <span class="cart-badge" *ngIf="cartCount > 0 ">{{ cartCount }}</span>
     </a>
 
 
@@ -102,14 +102,14 @@
         <ul class="navbar-nav align-items-center gap-5">
 
             <li class="nav-item">
-                <a class="nav-link" routerLink="/" (click)="closeMenu()">Home</a>
+                <a class="nav-link" routerLink="/" (click)="closeMenu()">HOME</a>
             </li>
 
             <li class="nav-item dropdown mega-dropdown" [class.show]="isCategoryOpen" [class.show]="isCategoryOpen"
                 (mouseenter)="openCategoryMenuDesktop()" (mouseleave)="closeCategoryMenuDesktop()">
 
                 <a class="nav-link dropdown-toggle" role="button" tabindex="0" (click)="toggleCategoryMenu($event)">
-                    Categories <i class="fa fa-angle-down"></i>
+                    CATEGORIES <i class="fa fa-angle-down"></i>
                 </a>
 
                 <div class="dropdown-menu mega-menu p-4" [class.show]="isCategoryOpen"
@@ -146,15 +146,15 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" routerLink="/schemes-page" (click)="closeMenu()">OZO Schemes</a>
+                <a class="nav-link" routerLink="/schemes-page" (click)="closeMenu()">OZO SCHEMES</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" routerLink="/about" (click)="closeMenu()">About</a>
+                <a class="nav-link" routerLink="/about" (click)="closeMenu()">ABOUT</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" routerLink="/contact" (click)="closeMenu()">Contact</a>
+                <a class="nav-link" routerLink="/contact" (click)="closeMenu()">CONTACT</a>
             </li>
 
             <!-- Cart -->
@@ -162,7 +162,7 @@
                 <a class="position-relative" routerLink="/cart" (click)="closeMenu()">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill"
-                        *ngIf="cartCount > 0">
+                        *ngIf="cartCount > 0 " +>
                         {{ cartCount }}
                     </span>
                 </a>
@@ -183,6 +183,19 @@
                     Login / Register
 
                 </button>
+
+
+            </li>
+            <li>
+
+                <!-- <button
+       class="custom-design-btn"
+
+        routerLink="/custom-design">
+<i class="fa fa-diamond"></i>
+        Custom Design
+
+    </button> -->
 
             </li>
             <!-- <li *ngIf="isLoggedIn" class="nav-item dropdown">

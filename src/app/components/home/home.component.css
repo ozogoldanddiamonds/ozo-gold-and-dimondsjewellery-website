@@ -139,6 +139,7 @@
      width: 44px;
      height: 44px;
      object-fit: contain;
+     
  }
 
  .popularSwiper,
@@ -154,11 +155,13 @@
      padding-bottom: 10px;
      box-shadow: var(--shadow-sm);
      transition: all 0.3s ease;
+      
  }
 
  .collection-image-wrap {
      overflow: hidden;
      cursor: pointer;
+      
  }
 
  .collection-card img {
@@ -167,6 +170,7 @@
      width: 100%;
      object-fit: cover;
      transition: transform 0.4s ease;
+   
  }
 
  /* .collection-image-wrap {
@@ -212,6 +216,7 @@
      position: relative;
      transition: all 0.3s ease;
      box-shadow: var(--shadow-sm);
+      
  }
 
  .product-card:hover {
@@ -223,6 +228,8 @@
      position: relative;
      overflow: hidden;
      background: #f6f2eb;
+     
+
  }
 
  .product-img img {
@@ -232,6 +239,7 @@
      transition: transform 0.4s ease;
      cursor: pointer;
      border-radius: 5px;
+    
  }
 
  .product-card:hover .product-img img {
@@ -924,9 +932,9 @@
          margin: 10px 0;
      }
 
-     /* .collection-card img {
+     .collection-card img {
          height: 60px;
-     } */
+     }
 
      .product-img img {
          height: 160px;
@@ -1601,9 +1609,8 @@
          0 1px 0 rgba(255, 255, 255, 0.9),
          0 2px 5px rgba(138, 101, 0, 0.15);
  }
-
  /* making charges */
  .making-charge {
-     font-size: 12px;
-     color: red;
+    font-size: 12px;
+color: red;
  }

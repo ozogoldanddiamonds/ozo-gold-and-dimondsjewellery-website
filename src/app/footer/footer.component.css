@@ -1,19 +1,21 @@
 .footer {
-    background: #111;
-    color: #ccc;
+    background-color: var(--white) !important;
     padding: 40px 0 0;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
 }
 
 /* Titles */
 .footer-title {
-    color: #fff;
+    color: #222222;
     font-size: 16px;
+    font-weight: 700;
     margin-bottom: 15px;
 }
 
 .footer ul li a {
     text-decoration: none;
-    color: #ffffff;
+    color: #222222;
+    font-weight: 600;
 }
 
 /* List */
@@ -61,17 +63,483 @@
 .footer-bottom p {
     margin: 0;
     font-size: 13px;
+    color: #ffffff;
 }
 
 /* Payments */
 .payments i {
     font-size: 20px;
     margin-left: 10px;
-    color: #fff;
+    color: #ffffff;
 }
 
 @media (max-width:570px) {
     .footer {
         display: none;
     }
+}
+
+
+.brand-logo {
+
+    width: 100px;
+    height: auto;
+
+    min-width: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    /* background: rgba(255, 255, 255, 0.8); */
+
+    padding: 4px;
+    /* 
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.9); */
+}
+
+
+.brand-logo img {
+
+    width: 100%;
+    height: auto;
+
+    object-fit: cover;
+
+    /* border-radius: 10px; */
+
+    display: block;
+}
+
+
+/* =========================================================
+   TITLE CONTAINER
+========================================================= */
+
+.nav-title {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    line-height: 1;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   MAIN BRAND NAME
+========================================================= */
+
+.brand-name {
+
+    /* font-family:
+            "Playfair Display",
+            "Times New Roman",
+            serif; */
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+
+    white-space: nowrap;
+
+    color: #181818;
+
+    text-shadow:
+        0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+
+/* =========================================================
+   GOLD TEXT
+========================================================= */
+
+.gold-text {
+
+    background:
+        linear-gradient(120deg,
+            #8a6500,
+            #d4af37,
+            #f5d76e,
+            #b8860b,
+            #d4af37);
+
+    background-size: 250% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    animation: goldShine 9s linear infinite;
+}
+
+
+/* =========================================================
+   DIAMOND TEXT
+========================================================= */
+
+.diamond-text {
+
+    color: #555;
+
+    font-weight: 600;
+
+    margin-left: 3px;
+}
+
+
+/* =========================================================
+   SUB TITLE
+========================================================= */
+
+.brand-subtitle {
+
+    margin-top: 5px;
+
+    /* font-family:
+            Arial,
+            sans-serif; */
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    color: #777;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   GOLD SHINE ANIMATION
+========================================================= */
+
+@keyframes goldShine {
+
+    0% {
+        background-position: 0% center;
+    }
+
+    50% {
+        background-position: 100% center;
+    }
+
+    100% {
+        background-position: 0% center;
+    }
+
+}
+
+
+/* =========================================================
+   GLASS LIGHT SWEEP
+========================================================= */
+
+.brand-glass::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: -100%;
+
+    left: -70%;
+
+    width: 45%;
+
+    height: 300%;
+
+    background:
+        linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.55),
+            transparent);
+
+    transform: rotate(20deg);
+
+    animation: glassSweep 9s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+
+@keyframes glassSweep {
+
+    0% {
+        left: -70%;
+    }
+
+    45% {
+        left: 130%;
+    }
+
+    100% {
+        left: 130%;
+    }
+
+}
+
+/* =========================================================
+   PREMIUM GLASS TEXT
+========================================================= */
+
+.brand-name {
+    position: relative;
+
+    display: inline-block;
+
+    /* font-family: "Playfair Display", "Times New Roman", serif; */
+
+    font-size: 20px;
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+
+    white-space: nowrap;
+
+    color: #222;
+
+    /* Glass / depth shadow */
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.95),
+        0 2px 3px rgba(0, 0, 0, 0.15),
+        0 5px 10px rgba(0, 0, 0, 0.10);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   TEXT GLASS REFLECTION
+========================================================= */
+
+.brand-name::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: -100%;
+    left: -60%;
+
+    width: 35%;
+    height: 300%;
+
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.05) 25%,
+            rgba(255, 255, 255, 0.95) 50%,
+            rgba(255, 255, 255, 0.08) 75%,
+            transparent 100%);
+
+    transform: rotate(20deg);
+
+    filter: blur(1px);
+
+    pointer-events: none;
+
+    animation: textGlassShine 9s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   TEXT SHINE MOVEMENT
+========================================================= */
+
+@keyframes textGlassShine {
+
+    0% {
+        left: -70%;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 0.8;
+    }
+
+    50% {
+        left: 130%;
+        opacity: 0.9;
+    }
+
+    60% {
+        left: 130%;
+        opacity: 0;
+    }
+
+    100% {
+        left: 130%;
+        opacity: 0;
+    }
+
+}
+
+
+/* =========================================================
+   GOLD TEXT
+========================================================= */
+
+.gold-text {
+
+    position: relative;
+
+    background: linear-gradient(120deg,
+            #8a6500,
+            #b8860b,
+            #d4af37,
+            #fff1a8,
+            #d4af37,
+            #b8860b,
+            #8a6500);
+
+    background-size: 300% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    animation: goldTextShine 9s ease-in-out infinite;
+
+    text-shadow: none;
+}
+
+
+/* =========================================================
+   GOLD MOVING LIGHT
+========================================================= */
+
+@keyframes goldTextShine {
+
+    0% {
+        background-position: 0% center;
+    }
+
+    50% {
+        background-position: 100% center;
+    }
+
+    100% {
+        background-position: 0% center;
+    }
+
+}
+
+
+/* =========================================================
+   DIAMOND TEXT
+========================================================= */
+
+.diamond-text {
+
+    position: relative;
+
+    color: #555;
+
+    font-weight: 600;
+
+    margin-left: 3px;
+
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 1),
+        0 2px 4px rgba(0, 0, 0, 0.15),
+        0 5px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .brand-glass {
+
+        padding: 5px 10px 5px 5px;
+
+        gap: 8px;
+
+        border-radius: 14px;
+    }
+
+
+    .brand-logo {
+
+        width: 40px;
+        height: 40px;
+
+        min-width: 40px;
+
+        border-radius: 11px;
+    }
+
+
+    .brand-name {
+
+        font-size: 16px;
+    }
+
+
+    .brand-subtitle {
+
+        font-size: 6px;
+
+        letter-spacing: 2.5px;
+
+        margin-top: 4px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .brand-glass {
+
+        padding-right: 8px;
+
+        gap: 6px;
+    }
+
+
+    .brand-logo {
+
+        width: 55px;
+        height: 55px;
+
+        /* min-width: 35px; */
+    }
+
+
+    .brand-name {
+
+        font-size: 13px;
+    }
+
+
+    .brand-subtitle {
+
+        font-size: 5px;
+
+        letter-spacing: 2px;
+    }
+
 }

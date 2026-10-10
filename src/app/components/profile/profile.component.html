@@ -11,20 +11,31 @@
 
         <div class="profile-card">
             <div class="profile-top">
-                <div class="profile-avatar">
-                    {{ getInitials(profileData?.user?.name) }}
-                </div>
+               <div class="profile-avatar">
+
+  <img
+    *ngIf="profileData?.user?.profileImage"
+    [src]="profileData.user.profileImage"
+    [alt]="profileData?.user?.name || 'User'"
+    class="profile-avatar-img"
+  />
+
+  <span *ngIf="!profileData?.user?.profileImage">
+    {{ getInitials(profileData?.user?.name) }}
+  </span>
+
+</div>
 
                 <div class="profile-info">
                     <h2>{{ profileData?.user?.name || 'Guest User' }}</h2>
                     <p>{{ profileData?.user?.email || 'No email available' }}</p>
-                    <span>{{ profileData?.user?.phone || 'No mobile number' }}</span>
-                </div>
+<span>
+{{ profileData?.user?.phone || 'No mobile number' }}</span>                </div>
             </div>
 
             <div class="profile-actions">
                 <button class="edit-btn" type="button" (click)="openEditProfileModal()">Edit Profile</button>
-                <button class="member-btn" type="button" (click)="Schems()">Gold Member</button>
+                <button class="member-btn" type="button" (click)="Schems()">Custom Design</button>
             </div>
         </div>
 
@@ -209,9 +220,14 @@
 
             <div class="edit-profile-footer">
                 <button type="button" class="btn-cancel" (click)="closeEditProfileModal()">Cancel</button>
-                <button type="submit" class="btn-save" [disabled]="editProfileForm.invalid || isProfileUpdating">
-                    {{ isProfileUpdating ? 'Updating...' : 'Save Changes' }}
-                </button>
+                <button
+  type="submit"
+  class="btn-save"
+  [disabled]="editProfileForm.invalid || isProfileUpdating">
+
+  {{ isProfileUpdating ? 'Updating...' : 'Save Changes' }}
+
+</button>
             </div>
         </form>
 

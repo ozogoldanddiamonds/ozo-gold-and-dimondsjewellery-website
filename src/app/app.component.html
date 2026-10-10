@@ -3,21 +3,32 @@
 
 <div class="global-loader" *ngIf="isLoading">
 
-    <div class="loader-wrapper">
+  <div class="loader-wrapper">
 
-        <div class="wave wave1"></div>
+    <div class="wave wave1"></div>
 
-        <div class="wave wave2"></div>
+    <div class="wave wave2"></div>
 
-        <img src="assets/images/diamond_png.png" alt="Loading">
-        <!-- <span>OZO</span> -->
-        <div class="wave wave3"></div>
+    <img src="assets/images/diamond_png.png" alt="Loading">
+    <!-- <span>OZO</span> -->
+    <div class="wave wave3"></div>
 
-        <div class="wave wave4"></div>
+    <div class="wave wave4"></div>
 
-    </div>
+  </div>
 
 </div>
 
 <router-outlet></router-outlet>
+
+
+
+<!-- Fixed Custom Design Button -->
+<button type="button" class="floating-custom-design-btn" routerLink="/custom-design" aria-label="Custom Design"
+  title="Custom Design">
+
+  <img src="assets/images/diamond_png.png" alt="Loading">
+  <span>Custom Design</span>
+</button>
+
 <app-footer></app-footer>

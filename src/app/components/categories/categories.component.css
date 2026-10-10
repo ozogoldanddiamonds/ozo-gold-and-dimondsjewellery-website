@@ -97,6 +97,8 @@
     height: 320px;
     object-fit: cover;
     transition: 0.4s;
+    
+    
 }
 
 .product-card:hover .product-img img {

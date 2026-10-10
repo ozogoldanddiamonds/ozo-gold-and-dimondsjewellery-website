@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit {
   ];
   constructor(public router: Router, private bannerService: BannersService, private toastr: ToastrService,
     private wishlistService: WishlistService, private productService: ProductService, private subcategoryservices: SubcategoryService,
-    private loaderService: LoadingService,  private meta: Meta,
+    private loaderService: LoadingService, private meta: Meta,
     private title: Title) { }
   ngOnInit(): void {
     this.getAllBanners();
@@ -299,7 +299,7 @@ export class HomeComponent implements OnInit {
     this.router.navigate(["/product", id]);
   }
   getProducts() {
-    
+
     this.loaderService.show();
     this.productService
       .getAllProducts(
@@ -315,43 +315,43 @@ export class HomeComponent implements OnInit {
 
           const products = response.data || [];
 
-  // =====================
-  // HOME PAGE SEO
-  // =====================
+          // =====================
+          // HOME PAGE SEO
+          // =====================
 
-  const seoProducts = products;
+          const seoProducts = products;
 
-  const keywords = seoProducts
-    .map((product: any) => product.metaKeywords)
-    .filter((keyword: string) => keyword)
-    .join(', ');
+          const keywords = seoProducts
+            .map((product: any) => product.metaKeywords)
+            .filter((keyword: string) => keyword)
+            .join(', ');
 
-  const uniqueKeywords = [...new Set(
-    keywords
-      .split(',')
-      .map((keyword: string) => keyword.trim())
-      .filter((keyword: string) => keyword)
-  )].join(', ');
+          const uniqueKeywords = [...new Set(
+            keywords
+              .split(',')
+              .map((keyword: string) => keyword.trim())
+              .filter((keyword: string) => keyword)
+          )].join(', ');
 
-  const seoDescription = seoProducts
-    .map((product: any) => product.seoDescription)
-    .find((description: string) => description);
+          const seoDescription = seoProducts
+            .map((product: any) => product.seoDescription)
+            .find((description: string) => description);
 
-  this.title.setTitle('OZO Jewelry');
+          this.title.setTitle('OZO Jewelry');
 
-  if (uniqueKeywords) {
-    this.meta.updateTag({
-      name: 'keywords',
-      content: uniqueKeywords
-    });
-  }
+          if (uniqueKeywords) {
+            this.meta.updateTag({
+              name: 'keywords',
+              content: uniqueKeywords
+            });
+          }
 
-  if (seoDescription) {
-    this.meta.updateTag({
-      name: 'description',
-      content: seoDescription
-    });
-  }
+          if (seoDescription) {
+            this.meta.updateTag({
+              name: 'description',
+              content: seoDescription
+            });
+          }
 
 
           // =====================

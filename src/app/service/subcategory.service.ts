@@ -7,7 +7,7 @@ import { environment } from 'src/environment/environment';
   providedIn: 'root'
 })
 export class SubcategoryService {
-  apiUrl: any;
+  private apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
   
   // subcategory
@@ -19,5 +19,21 @@ getAllSubCategories(): Observable<any> {
   return this.http.get(
      `${environment.apiUrl}/Getsubcategory`
   );
+}
+ getSubCategoryByCategory(categoryId: string): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/get-subcategoryby-category/${categoryId}`
+    );
+  }
+ getSubSubCategoryBySubCategory(
+  subCategoryId: string
+): Observable<any> {
+
+  return this.http.get(
+
+`${this.apiUrl}/get-subsubcategorybysubcategory/${subCategoryId}`
+
+  );
+
 }
 }

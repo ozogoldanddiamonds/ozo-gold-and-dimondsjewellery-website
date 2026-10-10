@@ -1,0 +1,966 @@
+<div class="custom-design-page container-fluid py-5">
+
+  <!-- =========================================
+       PAGE HEADING
+  ========================================== -->
+  <div class="page-heading text-center mb-5">
+    <span class="eyebrow">MADE JUST FOR YOU</span>
+    <h2>Custom Jewellery Design</h2>
+    <p>Share your idea and let us create something special for you.</p>
+  </div>
+
+  <!-- =========================================
+       ALERTS
+  ========================================== -->
+  <div *ngIf="successMessage" class="alert custom-alert-success mb-4">
+    <span class="alert-icon">✓</span>
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert custom-alert-danger mb-4">
+    <span class="alert-icon">!</span>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <div *ngIf="errorMessage && (!localUserLoggedIn)" class="alert alert-warning" role="alert">
+    {{ errorMessage }}
+  </div>
+
+
+  <!-- =========================================
+       FORM + IMAGE GRID
+  ========================================== -->
+  <div class="row g-4 g-lg-5 align-items-stretch mb-5">
+
+    <!-- LEFT SIDE: FORM -->
+    <div class="col-lg-6">
+      <div class="form-card h-100">
+
+        <div class="form-card-header">
+          <div>
+            <span class="eyebrow">CREATE REQUEST</span>
+            <h4>Design Your Jewellery</h4>
+            <p>
+              Tell us your preference and our team will create a special design for you.
+            </p>
+          </div>
+
+          <div class="form-header-icon">
+            <i class="fa fa-diamond input-icon"></i>
+
+          </div>
+        </div>
+
+        <form #designForm="ngForm" (ngSubmit)="submitRequest(designForm)" novalidate>
+
+          <div class="row g-3">
+
+            <!-- JEWELLERY TYPE -->
+            <div class="col-12 col-md-6">
+              <label class="form-label">
+                Jewellery Type <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-diamond input-icon"></i>
+
+                <select class="form-select" name="jewelleryType" [(ngModel)]="formData.jewelleryType" required>
+                  <option value="">Select jewellery type</option>
+
+                  <option *ngFor="let type of jewelleryTypes" [value]="type">
+                    {{ type.replace('_', ' ') }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- DESIGN TYPE -->
+            <div class="col-12 col-md-6">
+              <label class="form-label">
+                Design Type <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-paint-brush input-icon"></i>
+
+                <select class="form-select" name="designType" [(ngModel)]="formData.designType"
+                  (ngModelChange)="onDesignTypeChange()" required>
+                  <option value="NEW_DESIGN">New Design</option>
+                  <option value="REFERENCE_DESIGN">Reference Design</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- METAL TYPE -->
+            <div class="col-12 col-md-6">
+              <label class="form-label">
+                Metal Type <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-cubes input-icon"></i>
+
+                <select class="form-select" name="metalType" [(ngModel)]="formData.metalType"
+                  (ngModelChange)="onMetalTypeChange()" required>
+                  <option value="">Select metal type</option>
+
+                  <option *ngFor="let metal of metalTypes" [value]="metal">
+                    {{ metal.replace('_', ' ') }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- STONE PREFERENCE -->
+            <div class="col-12 col-md-6">
+              <label class="form-label">
+                Stone Preference <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-diamond input-icon"></i>
+
+                <select class="form-select" name="stoneType" [(ngModel)]="formData.stoneType"
+                  (ngModelChange)="onStoneTypeChange()" required>
+                  <option *ngFor="let stone of stoneTypes" [value]="stone">
+                    {{ stone.replace('_', ' ') }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- GOLD PURITY -->
+            <div class="col-12 col-md-6" *ngIf="isGoldType">
+              <label class="form-label">
+                Gold Purity <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-shield input-icon"></i>
+
+                <select class="form-select" name="goldPurity" [(ngModel)]="formData.goldPurity" required>
+                  <option value="">Select purity</option>
+
+                  <option *ngFor="let purity of goldPurities" [value]="purity">
+                    {{ purity }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- GOLD COLOR -->
+            <div class="col-12 col-md-6" *ngIf="isGoldType">
+              <label class="form-label">
+                Gold Color <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-tint input-icon"></i>
+
+                <select class="form-select" name="goldColor" [(ngModel)]="formData.goldColor" required>
+                  <option value="">Select color</option>
+
+                  <option *ngFor="let color of goldColors" [value]="color">
+                    {{ color }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- DIAMOND TYPE -->
+            <div class="col-12 col-md-6" *ngIf="isDiamond">
+              <label class="form-label">
+                Diamond Type <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-diamond input-icon"></i>
+
+                <select class="form-select" name="diamondType" [(ngModel)]="formData.diamondType" required>
+                  <option value="">Select diamond type</option>
+
+                  <option *ngFor="let diamond of diamondTypes" [value]="diamond">
+                    {{ diamond.replace('_', ' ') }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- GEMSTONE TYPE -->
+            <div class="col-12 col-md-6" *ngIf="isGemstone">
+              <label class="form-label">
+                Gemstone Type <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-star input-icon"></i>
+
+                <input type="text" class="form-control" name="gemstoneType" [(ngModel)]="formData.gemstoneType"
+                  placeholder="Enter gemstone type" required />
+              </div>
+            </div>
+
+            <!-- GOLD WEIGHT -->
+            <div class="col-12 col-md-6">
+              <label class="form-label">
+                Gold Weight (grams) <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-lock input-icon"></i>
+
+                <input type="number" class="form-control" name="goldWeight" [(ngModel)]="formData.goldWeight" min="0.1"
+                  step="0.1" placeholder="Enter weight" required />
+              </div>
+            </div>
+
+            <!-- QUANTITY -->
+            <div class="col-12 col-md-6">
+              <label class="form-label">
+                Quantity <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-cubes input-icon"></i>
+
+                <input type="number" class="form-control" name="quantity" [(ngModel)]="formData.quantity" min="1"
+                  step="1" placeholder="Enter quantity" required />
+              </div>
+            </div>
+
+            <!-- REQUIRED DATE -->
+            <div class="col-12 col-md-6">
+              <label class="form-label">
+                Required Date
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-calendar input-icon"></i>
+
+                <input type="date" class="form-control" name="requiredDate" [(ngModel)]="formData.requiredDate"
+                  [min]="today" />
+              </div>
+            </div>
+
+            <!-- CONTACT METHOD -->
+            <div class="col-12 col-md-6">
+              <label class="form-label">
+                Preferred Contact Method <span>*</span>
+              </label>
+
+              <div class="input-icon-wrap">
+                <i class="fa fa-phone input-icon"></i>
+
+                <select class="form-select" name="preferredContactMethod" [(ngModel)]="formData.preferredContactMethod"
+                  required>
+                  <option *ngFor="let method of contactMethods" [value]="method">
+                    {{ method }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="col-12">
+              <label class="form-label">
+                Design Description <span>*</span>
+              </label>
+
+              <div class="textarea-icon-wrap">
+                <i class="fa fa-pencil input-icon"></i>
+
+                <textarea class="form-control" name="description" [(ngModel)]="formData.description" rows="3"
+                  minlength="5" maxlength="2000"
+                  placeholder="Describe your design idea, inspiration, or specific requirements..." required></textarea>
+              </div>
+            </div>
+
+            <!-- ADDITIONAL NOTES -->
+            <div class="col-12">
+              <label class="form-label">
+                Additional Notes
+              </label>
+
+              <div class="textarea-icon-wrap">
+                <i class="fa fa-sticky-note input-icon"></i>
+
+                <textarea class="form-control" name="additionalNotes" [(ngModel)]="formData.additionalNotes" rows="2"
+                  maxlength="2000"
+                  placeholder="Any additional information, special requests, or questions..."></textarea>
+              </div>
+            </div>
+
+            <!-- EXISTING REFERENCE IMAGES - EDIT MODE -->
+            <div class="col-12" *ngIf="isEditMode && existingImageUrls.length > 0">
+              <label class="form-label">
+                <i class="fa fa-picture-o input-icon"></i>
+                Existing Reference Images
+              </label>
+
+              <div class="image-preview-grid mt-3">
+                <div class="preview-item" *ngFor="let imageUrl of existingImageUrls">
+                  <img [src]="imageUrl" alt="Existing reference image" />
+                  <span class="existing-image-badge">Saved</span>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- REFERENCE IMAGES -->
+            <div class="col-12" *ngIf="requiresImages">
+              <label class="form-label">
+                Reference Images <span>*</span>
+              </label>
+
+              <div class="upload-box">
+                <label class="upload-label" for="referenceImages">
+                  <i class="fa fa-cloud-upload upload-icon"></i>
+
+                  <span>Choose images or drag &amp; drop</span>
+
+                  <small>
+                    Upload up to 5 images. Maximum 5 MB per image.
+                  </small>
+                </label>
+
+                <input id="referenceImages" type="file" class="form-control" accept="image/*" multiple
+                  (change)="onImagesSelected($event)" />
+              </div>
+
+              <!-- IMAGE PREVIEWS -->
+              <div class="image-preview-grid mt-3" *ngIf="imagePreviews.length">
+
+                <div class="preview-item" *ngFor="let preview of imagePreviews; let i = index">
+
+                  <img [src]="preview" alt="Design reference preview" />
+
+                  <button type="button" class="remove-image" (click)="removeImage(i)" aria-label="Remove image">
+                    <i class="fa fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUBMIT -->
+            <div class="col-12 pt-1">
+              <button type="submit" class="btn submit-btn w-100" [disabled]="loading">
+
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2">
+                </span>
+
+                <i *ngIf="!loading" class="fa fa-paper-plane"></i>
+                {{ isEditMode ? 'Update Request' : 'Submit Request' }}
+                {{
+                loading
+                ? 'Submitting Your Request...'
+                : 'Submit Request'
+                }}
+              </button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE: JEWELLERY IMAGE / INFORMATION -->
+    <div class="col-lg-6">
+      <div class="design-visual-card h-100">
+
+        <div class="visual-top-content">
+          <span class="eyebrow">HANDCRAFTED FOR YOU</span>
+          <h3>Your Dream Jewellery,<br />Designed With Care.</h3>
+
+          <p>
+            Every jewellery piece tells a story. Share your design preference,
+            choose the metal and stone, and our expert team will create it for you.
+          </p>
+
+          <div class="visual-feature-list">
+            <div class="visual-feature">
+              <span class="feature-icon">✦</span>
+              <div>
+                <strong>Personalised Design</strong>
+                <small>Created based on your preference.</small>
+              </div>
+            </div>
+
+            <div class="visual-feature">
+              <span class="feature-icon">◈</span>
+              <div>
+                <strong>Premium Craftsmanship</strong>
+                <small>Designed with expert attention to detail.</small>
+              </div>
+            </div>
+
+            <div class="visual-feature">
+              <span class="feature-icon">✓</span>
+              <div>
+                <strong>Clear Quotation</strong>
+                <small>We will share the final price before production.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Change only image path if needed -->
+        <div class="visual-image-wrap">
+          <img src="../../../assets/images/custome_image.jpg" alt="Custom jewellery design" class="visual-image" />
+
+          <div class="image-overlay-content">
+            <span>CREATE SOMETHING UNIQUE</span>
+            <strong>Made Especially For You</strong>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =========================================
+       USER REQUEST SUMMARY
+       myRequests.length = total times user submitted form
+  ========================================== -->
+  <div class="request-summary-section mb-5">
+
+    <div class="summary-heading">
+      <div>
+        <span class="eyebrow">YOUR ACTIVITY</span>
+        <h4>Custom Design Request Summary</h4>
+        <p>Track all the custom jewellery designs you have submitted.</p>
+      </div>
+
+      <button type="button" class="btn refresh-btn" (click)="getMyCustomDesignRequests()" [disabled]="listLoading">
+
+        <span *ngIf="listLoading" class="spinner-border spinner-border-sm me-2">
+        </span>
+
+        {{ listLoading ? 'Refreshing...' : 'Refresh Requests' }}
+      </button>
+    </div>
+
+    <div class="row g-3">
+
+      <!-- Total Form Submissions -->
+      <div class="col-sm-6 col-lg-3">
+        <div class="summary-card summary-card-primary">
+          <div class="summary-icon">▣</div>
+
+          <div>
+            <span>Total Requests</span>
+            <strong>{{ myRequests.length || 0 }}</strong>
+            <small>Forms submitted by you</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Latest Request -->
+      <div class="col-sm-6 col-lg-3">
+        <div class="summary-card">
+          <div class="summary-icon gold-icon">⌁</div>
+
+          <div>
+            <span>Latest Request</span>
+            <strong class="summary-request-number">
+              {{ myRequests.length ? myRequests[0]?.requestNumber : 'N/A' }}
+            </strong>
+            <small>Your most recent submission</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending -->
+      <div class="col-sm-6 col-lg-3">
+        <div class="summary-card">
+          <div class="summary-icon pending-icon">◷</div>
+
+          <div>
+            <span>Current Status</span>
+            <strong class="summary-request-number">
+              {{ selectedRequest?.status || 'No selection' }}
+            </strong>
+            <small>Selected request status</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected / Current -->
+      <div class="col-sm-6 col-lg-3">
+        <div class="summary-card">
+          <div class="summary-icon success-icon">✓</div>
+
+          <div>
+            <span>Selected Request</span>
+            <strong class="summary-request-number">
+              {{ selectedRequest?.requestNumber || 'None' }}
+            </strong>
+            <small>Currently viewing details</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================
+       SELECTED REQUEST DETAILS
+  ========================================== -->
+  <div class="details-card mb-5" *ngIf="selectedRequest">
+
+    <div class="details-heading">
+      <div>
+        <span class="eyebrow">REQUEST DETAILS</span>
+        <h4>{{ selectedRequest.requestNumber }}</h4>
+        <p>Complete details of your custom jewellery request.</p>
+      </div>
+
+      <button type="button" class="btn close-details-btn" (click)="closeDetails()">
+        Close Details
+      </button>
+    </div>
+
+    <div class="details-table-wrap">
+      <table class="table details-table mb-0">
+
+        <tbody>
+          <tr>
+            <th>Jewellery Type</th>
+            <td>{{ selectedRequest.jewelleryType }}</td>
+
+            <th>Design Type</th>
+            <td>{{ selectedRequest.designType }}</td>
+          </tr>
+
+          <tr>
+            <th>Metal Type</th>
+            <td>{{ selectedRequest.metalType }}</td>
+
+            <th>Gold Purity</th>
+            <td>{{ selectedRequest.goldPurity || 'N/A' }}</td>
+          </tr>
+
+          <tr>
+            <th>Gold Color</th>
+            <td>{{ selectedRequest.goldColor || 'N/A' }}</td>
+
+            <th>Stone Preference</th>
+            <td>{{ selectedRequest.stoneType }}</td>
+          </tr>
+
+          <tr>
+            <th>Diamond Type</th>
+            <td>{{ selectedRequest.diamondType || 'N/A' }}</td>
+
+            <th>Gemstone</th>
+            <td>{{ selectedRequest.gemstoneType || 'N/A' }}</td>
+          </tr>
+
+          <tr>
+            <th>Estimated Gold Weight</th>
+            <td>{{ selectedRequest.goldWeight }} g</td>
+
+            <th>Quantity</th>
+            <td>{{ selectedRequest.quantity }}</td>
+          </tr>
+
+          <tr>
+            <th>Required Date</th>
+            <td>
+              {{
+              selectedRequest.requiredDate
+              ? (selectedRequest.requiredDate | date:'dd MMM yyyy')
+              : 'Not specified'
+              }}
+            </td>
+
+            <th>Contact Method</th>
+            <td>{{ selectedRequest.preferredContactMethod }}</td>
+          </tr>
+
+          <tr>
+            <th>Status</th>
+            <td>
+              <span class="status-pill">
+                {{ selectedRequest.status }}
+              </span>
+            </td>
+
+            <th>Quoted Price</th>
+            <td>
+              {{
+              selectedRequest.quotedPrice != null
+              ? (selectedRequest.quotedPrice | currency:'INR':'symbol')
+              : 'Awaiting quotation'
+              }}
+            </td>
+          </tr>
+
+          <tr>
+            <th>Description</th>
+            <td colspan="3" class="long-text">
+              {{ selectedRequest.description }}
+            </td>
+          </tr>
+
+          <tr *ngIf="selectedRequest.additionalNotes">
+            <th>Additional Notes</th>
+            <td colspan="3" class="long-text">
+              {{ selectedRequest.additionalNotes }}
+            </td>
+          </tr>
+
+          <tr *ngIf="selectedRequest.adminNotes">
+            <th>Admin Notes</th>
+            <td colspan="3" class="long-text admin-note-text">
+              {{ selectedRequest.adminNotes }}
+            </td>
+          </tr>
+
+          <tr *ngIf="selectedRequest.referenceImages?.length">
+            <th>Reference Images</th>
+
+            <td colspan="3">
+              <div class="submitted-images">
+
+                <a *ngFor="let image of selectedRequest.referenceImages" [href]="image.url" target="_blank"
+                  rel="noopener noreferrer" class="submitted-image-item">
+
+                  <img [src]="image.url" alt="Custom jewellery reference image" />
+
+                </a>
+
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+  <!-- =========================================
+       USER REQUEST TABLE
+  ========================================== -->
+  <div class="requests-card">
+
+    <div class="requests-heading">
+      <div>
+        <span class="eyebrow">YOUR DESIGNS</span>
+        <h4>My Custom Design Requests</h4>
+        <p>
+          You have submitted
+          <strong>{{ myRequests.length || 0 }}</strong>
+          custom jewellery request(s).
+        </p>
+      </div>
+
+      <div class="request-count-badge">
+        <span>Total</span>
+        <strong>{{ myRequests.length || 0 }}</strong>
+      </div>
+    </div>
+
+    <!-- Loader -->
+    <div *ngIf="listLoading" class="table-loader">
+      <div class="spinner-border" role="status"></div>
+      <p>Loading your custom design requests...</p>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive" *ngIf="!listLoading && myRequests.length > 0">
+
+      <table class="table align-middle custom-request-table mb-0">
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Request Number</th>
+            <th>Jewellery</th>
+            <th>Design Details</th>
+            <th>Required Date</th>
+            <th>Status</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let request of myRequests; let i = index; trackBy: trackByRequestId">
+
+            <!-- Serial Number -->
+            <td>
+              <span class="serial-number">
+                {{ i + 1 }}
+              </span>
+            </td>
+
+            <!-- Request Number -->
+            <td>
+              <span class="request-number-pill">
+                {{ request.requestNumber }}
+              </span>
+            </td>
+
+            <!-- Jewellery -->
+            <td>
+              <div class="jewellery-info">
+                <strong>{{ request.jewelleryType }}</strong>
+                <small>{{ request.metalType || 'Metal not specified' }}</small>
+              </div>
+            </td>
+
+            <!-- Description -->
+            <td>
+              <div class="design-description-cell">
+                {{ request.description }}
+              </div>
+            </td>
+
+            <!-- Date -->
+            <td>
+              <span class="date-text">
+                {{
+                request.requiredDate
+                ? (request.requiredDate | date:'dd MMM yyyy')
+                : 'Not specified'
+                }}
+              </span>
+            </td>
+
+            <!-- Status -->
+            <td>
+              <span class="status-pill">
+                {{ request.status }}
+              </span>
+            </td>
+
+            <!-- Action -->
+            <td class="text-end">
+              <button type="button" class="btn view-details-btn" (click)="viewRequest(request)">
+                <span class="view-icon">⌕</span>
+                View Details
+              </button>
+              <!-- EDIT BUTTON -->
+              <button type="button" class="btn edit-request-btn" (click)="editRequest(request)" title="Edit Request"
+                aria-label="Edit Request">
+                <i class="fa fa-pencil"></i>
+              </button>
+            </td>
+
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!listLoading && myRequests.length === 0">
+
+      <div class="empty-icon">♢</div>
+      <h5>No Custom Requests Yet</h5>
+      <p>
+        Your submitted custom jewellery design requests will be displayed here.
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- REQUEST DETAILS MODAL -->
+<div class="modal fade" id="requestDetailsModal" tabindex="-1" aria-labelledby="requestDetailsModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content custom-details-modal">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow">CUSTOM JEWELLERY</span>
+          <h5 class="modal-title" id="requestDetailsModalLabel">
+            {{ selectedRequest?.requestNumber || 'Request Details' }}
+          </h5>
+          <small class="text-muted">
+            Complete details of your submitted design
+          </small>
+        </div>
+
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeDetails()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body" *ngIf="selectedRequest as request">
+
+        <div class="request-modal-status mb-4">
+          <span class="status-pill">{{ request.status }}</span>
+
+          <span class="text-muted">
+            Submitted:
+            {{ request.createdAt
+            ? (request.createdAt | date:'dd MMM yyyy, hh:mm a')
+            : 'N/A' }}
+          </span>
+        </div>
+
+        <h6 class="modal-section-title">Design Information</h6>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Jewellery Type</label>
+              <strong>{{ request.jewelleryType }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Design Type</label>
+              <strong>{{ request.designType }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Metal Type</label>
+              <strong>{{ request.metalType }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Gold Purity</label>
+              <strong>{{ request.goldPurity || 'N/A' }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Gold Color</label>
+              <strong>{{ request.goldColor || 'N/A' }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Stone Preference</label>
+              <strong>{{ request.stoneType }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Diamond Type</label>
+              <strong>{{ request.diamondType || 'N/A' }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Gemstone</label>
+              <strong>{{ request.gemstoneType || 'N/A' }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Gold Weight</label>
+              <strong>{{ request.goldWeight }} grams</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Quantity</label>
+              <strong>{{ request.quantity }}</strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Required Date</label>
+              <strong>
+                {{ request.requiredDate
+                ? (request.requiredDate | date:'dd MMM yyyy')
+                : 'Not specified' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="modal-detail">
+              <label>Contact Method</label>
+              <strong>{{ request.preferredContactMethod }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <h6 class="modal-section-title">Description & Notes</h6>
+
+        <div class="modal-detail mb-3">
+          <label>Design Description</label>
+          <p>{{ request.description }}</p>
+        </div>
+
+        <div class="modal-detail mb-4" *ngIf="request.additionalNotes">
+          <label>Additional Notes</label>
+          <p>{{ request.additionalNotes }}</p>
+        </div>
+
+        <h6 class="modal-section-title">Quotation & Delivery</h6>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <div class="modal-detail">
+              <label>Quoted Price</label>
+              <strong>
+                {{ request.quotedPrice != null
+                ? (request.quotedPrice | currency:'INR':'symbol')
+                : 'Awaiting quotation' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="modal-detail">
+              <label>Estimated Delivery</label>
+              <strong>
+                {{ request.estimatedDeliveryDate
+                ? (request.estimatedDeliveryDate | date:'dd MMM yyyy')
+                : 'Not specified' }}
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-detail mb-4" *ngIf="request.adminNotes">
+          <label>Team Notes</label>
+          <p>{{ request.adminNotes }}</p>
+        </div>
+
+        <div *ngIf="request.referenceImages?.length">
+          <h6 class="modal-section-title">Reference Images</h6>
+
+          <div class="modal-image-grid">
+            <a *ngFor="let image of request.referenceImages" [href]="image.url" target="_blank"
+              rel="noopener noreferrer">
+              <img [src]="image.url" alt="Custom jewellery reference" />
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeDetails()">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-auth-modal>

@@ -7,103 +7,69 @@
 
             <div class="product-gallery-wrap">
 
-               <div class="image-gallery">
+                <div class="image-gallery">
 
-    <!-- ================= THUMBNAILS ================= -->
-    <div class="thumb-list">
+                    <!-- ================= THUMBNAILS ================= -->
+                    <div class="thumb-list">
 
-        <!-- IMAGE THUMBNAILS -->
-        <div
-            class="thumb-item"
-            *ngFor="let img of product?.images"
-            [class.active]="!showVideo && selectedImage === img"
-            (click)="selectImage(img)"
-        >
+                        <!-- IMAGE THUMBNAILS -->
+                        <div class="thumb-item" *ngFor="let img of product?.images"
+                            [class.active]="!showVideo && selectedImage === img" (click)="selectImage(img)">
 
-            <img
-                [src]="img"
-                alt="Product Image"
-            />
+                            <img [src]="img" alt="Product Image" />
 
-        </div>
+                        </div>
 
 
-        <!-- VIDEO THUMBNAIL -->
-        <div
-            class="thumb-item video-thumb"
-            *ngIf="product?.video"
-            [class.active]="showVideo"
-            (click)="selectVideo()"
-        >
+                        <!-- VIDEO THUMBNAIL -->
+                        <div class="thumb-item video-thumb" *ngIf="product?.video" [class.active]="showVideo"
+                            (click)="selectVideo()">
 
-            <video
-                [src]="product.video"
-                muted
-                preload="metadata"
-            ></video>
+                            <video [src]="product.video" muted preload="metadata"></video>
 
-            <!-- PLAY ICON -->
-            <div class="video-play-icon">
-                <i class="fa fa-play"></i>
-            </div>
+                            <!-- PLAY ICON -->
+                            <div class="video-play-icon">
+                                <i class="fa fa-play"></i>
+                            </div>
 
-        </div>
+                        </div>
 
-    </div>
+                    </div>
 
 
-    <!-- ================= MAIN MEDIA ================= -->
-    <div class="main-image">
+                    <!-- ================= MAIN MEDIA ================= -->
+                    <div class="main-image">
 
-        <!-- BADGES -->
+                        <!-- BADGES -->
 
-        <span
-            class="product-badge"
-            *ngIf="product?.bestSeller"
-        >
-            Best Seller
-        </span>
+                        <span class="product-badge" *ngIf="product?.bestSeller">
+                            Best Seller
+                        </span>
 
-        <span
-            class="product-badge featured"
-            *ngIf="product?.featured"
-        >
-            Featured
-        </span>
+                        <span class="product-badge featured" *ngIf="product?.featured">
+                            Featured
+                        </span>
 
-        <span
-            class="product-badge trending"
-            *ngIf="product?.trending"
-        >
-            Trending
-        </span>
+                        <span class="product-badge trending" *ngIf="product?.trending">
+                            Trending
+                        </span>
 
 
-        <!-- ================= MAIN IMAGE ================= -->
+                        <!-- ================= MAIN IMAGE ================= -->
 
-        <img
-            *ngIf="!showVideo"
-            [src]="selectedImage || product?.images?.[0]"
-            [alt]="product?.name"
-        />
+                        <img *ngIf="!showVideo" [src]="selectedImage || product?.images?.[0]" [alt]="product?.name" />
 
 
-        <!-- ================= MAIN VIDEO ================= -->
+                        <!-- ================= MAIN VIDEO ================= -->
 
-        <video
-            *ngIf="showVideo"
-            class="main-product-video"
-            [src]="product?.video"
-            controls
-            autoplay
-            playsinline
-        >
-            Your browser does not support the video tag.
-        </video>
+                        <video *ngIf="showVideo" class="main-product-video" [src]="product?.video" controls autoplay
+                            playsinline>
+                            Your browser does not support the video tag.
+                        </video>
 
-    </div>
+                    </div>
 
-</div>
+                </div>
 
             </div>
             <!-- Accordion -->
@@ -113,6 +79,98 @@
 
                     <div class="product-detail-panels">
 
+                        <!-- PRICE BREAK-UP -->
+                        <div class="price-breakup-card mt-4" *ngIf="selectedVariant?.priceBreakup as breakup">
+
+                            <div class="price-breakup-header">
+                                <div>
+                                    <span class="price-breakup-eyebrow">TRANSPARENT PRICING</span>
+                                    <h4>Price Break-up</h4>
+                                </div>
+
+                                <div class="price-breakup-icon">
+                                    <i class="bi bi-gem"></i>
+                                </div>
+                            </div>
+
+                            <div class="price-breakup-table">
+
+                                <!-- Gold -->
+                                <div class="price-breakup-row">
+                                    <span>Gold</span>
+                                    <span class="price-value">
+                                        {{ (breakup.metalValue || 0) + (breakup.wastageAmount || 0)
+                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                                    </span>
+                                </div>
+
+                                <!-- Stone Charges -->
+                                <div class="price-breakup-row" *ngIf="breakup.stoneValue > 0">
+
+                                    <span>Stone Charges</span>
+
+                                    <span class="price-value">
+                                        {{ breakup.stoneValue
+                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                                    </span>
+                                </div>
+
+                                <!-- Individual stones, if provided -->
+                                <ng-container *ngFor="let stone of breakup.stones">
+
+                                    <div class="price-breakup-row" *ngIf="stone.stoneValue > 0">
+
+                                        <span>{{ stone.stoneType | titlecase }}</span>
+
+                                        <span class="price-value">
+                                            {{ stone.stoneValue
+                                            | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                                        </span>
+                                    </div>
+
+                                </ng-container>
+
+                                <!-- Making Charges -->
+                                <div class="price-breakup-row">
+                                    <span>Making Charge</span>
+
+                                    <span class="price-value">
+                                        {{ breakup.makingCharges
+                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                                    </span>
+                                </div>
+
+                                <!-- GST -->
+                                <div class="price-breakup-row">
+                                    <span>GST</span>
+
+                                    <span class="price-value">
+                                        {{ breakup.gstAmount
+                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                                    </span>
+                                </div>
+
+                                <!-- Total -->
+                                <div class="price-breakup-row price-breakup-total">
+                                    <div>
+                                        <strong>Total</strong>
+                                        <small>Inclusive of applicable charges</small>
+                                    </div>
+
+                                    <strong class="price-total-value">
+                                        {{ breakup.finalPrice
+                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                            <div class="price-breakup-footer">
+                                <i class="bi bi-shield-check"></i>
+                                <span>Transparent pricing for your selected variant</span>
+                            </div>
+
+                        </div>
 
                         <!-- Specs -->
                         <div class="acc-item" (click)="toggleAcc('specs')">

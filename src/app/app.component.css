@@ -180,3 +180,162 @@
 
      pointer-events: none;
  }
+
+ .floating-custom-design-btn img {
+     width: 50px;
+ }
+
+ .floating-custom-design-btn {
+     position: fixed;
+     right: 20px;
+     bottom: 25px;
+     z-index: 9999;
+
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 14px 20px;
+     border: none;
+     border-radius: 30px;
+
+     background: #681b2b;
+     color: #fff;
+     font-size: 14px;
+     font-weight: 600;
+     cursor: pointer;
+
+     overflow: hidden;
+
+     box-shadow:
+         0 6px 18px rgba(0, 0, 0, 0.10),
+         inset 0 1px 0 rgba(255, 255, 255, 0.95),
+         inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+
+     transition:
+         transform 0.3s ease,
+         box-shadow 0.3s ease;
+ }
+
+ .floating-custom-design-btn::after {
+
+     content: "";
+
+     position: absolute;
+
+     inset: 1px;
+
+     border-radius: 12px;
+
+     border: 1px solid rgba(212, 175, 55, 0.20);
+
+     pointer-events: none;
+
+ }
+
+
+ /* =========================================================
+   GLASS LIGHT REFLECTION
+========================================================= */
+
+ .floating-custom-design-btn::before {
+
+     content: "";
+
+     position: absolute;
+
+     top: -100%;
+
+     left: -70%;
+
+     width: 40%;
+
+     height: 300%;
+
+     background:
+         linear-gradient(90deg,
+             transparent,
+             rgba(255, 255, 255, 0.85),
+             transparent);
+
+     transform: rotate(20deg);
+
+     filter: blur(1px);
+
+     pointer-events: none;
+
+     animation:
+         authGlassShine 6.5s ease-in-out infinite;
+
+ }
+
+
+ /* =========================================================
+   SHINE ANIMATION
+========================================================= */
+
+ @keyframes authGlassShine {
+
+     0% {
+
+         left: -70%;
+
+         opacity: 0;
+
+     }
+
+     20% {
+
+         opacity: 0;
+
+     }
+
+     35% {
+
+         opacity: 0.8;
+
+     }
+
+     55% {
+
+         left: 140%;
+
+         opacity: 0.9;
+
+     }
+
+     65% {
+
+         left: 140%;
+
+         opacity: 0;
+
+     }
+
+     100% {
+
+         left: 140%;
+
+         opacity: 0;
+
+     }
+
+ }
+
+
+ .floating-custom-design-btn:hover {
+     background: #8b263b;
+     transform: translateY(-3px);
+ }
+
+ .floating-custom-design-btn i {
+     font-size: 18px;
+ }
+
+ @media (max-width: 576px) {
+     .floating-custom-design-btn {
+         right: 12px;
+         bottom: 18px;
+         padding: 13px 16px;
+         font-size: 13px;
+     }
+ }
