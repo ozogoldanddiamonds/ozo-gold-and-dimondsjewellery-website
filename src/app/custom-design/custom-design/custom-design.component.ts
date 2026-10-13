@@ -73,7 +73,7 @@ export class CustomDesignComponent implements OnInit {
   // Newly selected images
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
-  showSuccessPopup = true;
+  showSuccessPopup = false;
 
   // Images already saved in the database
   existingImageUrls: string[] = [];

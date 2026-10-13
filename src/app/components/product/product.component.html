@@ -397,28 +397,28 @@
 
                 <!-- Product Name -->
                 <h2 class="product-title">
-                    {{ product?.name }}
+                    {{ product?.name | titlecase}}
                 </h2>
 
                 <!-- Category -->
                 <div class="rating-row">
 
                     <div class="rating-badge">
-                        {{ product?.productType | uppercase }}
+                        {{ product?.productType | titlecase }}
                     </div>
 
                     <span class="rating-text">
-                        {{ product?.category?.name }}
+                        {{ product?.category?.name | titlecase}}
                     </span>
 
                 </div>
 
                 <!-- Description -->
                 <p class="description">
-                    {{ product?.shortDescription }}
+                    {{ product?.shortDescription | titlecase}}
                 </p>
                 <p class="description">
-                    {{ product?.description }}
+                    {{ product?.description | titlecase}}
                 </p>
 
                 <div class="option-head">

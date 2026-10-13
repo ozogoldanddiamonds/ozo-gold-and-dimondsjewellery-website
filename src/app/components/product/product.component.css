@@ -615,12 +615,9 @@
 
     border-radius: 10px !important;
 
-    background:
-        linear-gradient(145deg,
-            #ffffff,
-            #faf7f1) !important;
+    background: #222222;
 
-    color: #403a34 !important;
+    color: #ffffff !important;
 
     font-size: 12px;
 
@@ -684,9 +681,9 @@
 
     border-color: var(--ozo-gold) !important;
 
-    background: #fffdf8 !important;
+    background: #222222 !important;
 
-    color: var(--ozo-gold-dark) !important;
+    color: #fffdf8 !important;
 
     box-shadow:
         0 8px 18px rgba(197, 154, 74, .12) !important;
@@ -703,8 +700,8 @@
 
     background:
         linear-gradient(145deg,
-            #cda75c,
-            #b88b39) !important;
+            #222222,
+        ) !important;
 
     color: #fff !important;
 

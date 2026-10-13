@@ -1727,7 +1727,16 @@
         .desk-cart {
             display: none;
         }
+
+        .mobile_user {
+            color: black;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+        }
     }
+
 
     @media (max-width: 991px) {
 
@@ -2421,4 +2430,89 @@
     .custom-design-btn i {
         font-size: 15px;
         color: var(--primary-red-dark);
+    }
+
+    @media (max-width: 991.98px) {
+
+        /* Mobile navbar menu */
+        #navbarNav.collapse.show {
+            height: auto !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        #navbarNav .navbar-nav {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 0 !important;
+            row-gap: 0 !important;
+            padding: 8px 0 12px !important;
+            margin: 0 !important;
+        }
+
+        #navbarNav .navbar-nav>li {
+            width: 100%;
+            height: auto !important;
+            min-height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* Mobile user profile only */
+        #navbarNav .mobile_user {
+            position: relative !important;
+            display: block !important;
+            width: 100% !important;
+            max-width: none !important;
+            height: 40px !important;
+            min-height: 0 !important;
+            margin: 0 !important;
+            padding: 8px 0 !important;
+            color: #000 !important;
+            text-align: center;
+            line-height: 1.4 !important;
+        }
+
+        #navbarNav .mobile_user>i,
+        #navbarNav .mobile_user>span {
+            color: #000 !important;
+        }
+
+        /* Dropdown existing behavior preserve */
+        #navbarNav .mobile_user .top-user-dropdown {
+            width: calc(100% - 24px) !important;
+            max-width: none !important;
+            margin: 8px auto 0 !important;
+            text-align: left;
+        }
+
+        .top-user {
+            position: static;
+            display: block;
+            align-items: unset;
+            max-width: none;
+            width: 100%;
+            color: #000 !important;
+            white-space: normal;
+            text-align: center;
+        }
+
+        .top-user>i,
+        .top-user>span {
+            color: #000 !important;
+        }
+
+        .top-user-dropdown {
+            position: static;
+            width: 100%;
+            max-width: none;
+            color: #000;
+            text-align: left;
+        }
+
+        .top-user-dropdown a {
+            color: #000 !important;
+        }
     }

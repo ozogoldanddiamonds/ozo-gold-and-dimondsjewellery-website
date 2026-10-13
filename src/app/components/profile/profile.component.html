@@ -1,36 +1,33 @@
 <div class="profile-page">
-
+    <!-- 
     <div class="profile-header">
         <button class="back-btn" type="button" (click)="goBack()">
             ←
         </button>
         <h1>User Profile</h1>
-    </div>
+    </div> -->
 
     <div class="profile-container">
 
         <div class="profile-card">
             <div class="profile-top">
-               <div class="profile-avatar">
+                <div class="profile-avatar">
 
-  <img
-    *ngIf="profileData?.user?.profileImage"
-    [src]="profileData.user.profileImage"
-    [alt]="profileData?.user?.name || 'User'"
-    class="profile-avatar-img"
-  />
+                    <img *ngIf="profileData?.user?.profileImage" [src]="profileData.user.profileImage"
+                        [alt]="profileData?.user?.name || 'User'" class="profile-avatar-img" />
 
-  <span *ngIf="!profileData?.user?.profileImage">
-    {{ getInitials(profileData?.user?.name) }}
-  </span>
+                    <span *ngIf="!profileData?.user?.profileImage">
+                        {{ getInitials(profileData?.user?.name) }}
+                    </span>
 
-</div>
+                </div>
 
                 <div class="profile-info">
                     <h2>{{ profileData?.user?.name || 'Guest User' }}</h2>
                     <p>{{ profileData?.user?.email || 'No email available' }}</p>
-<span>
-{{ profileData?.user?.phone || 'No mobile number' }}</span>                </div>
+                    <span>
+                        {{ profileData?.user?.phone || 'No mobile number' }}</span>
+                </div>
             </div>
 
             <div class="profile-actions">
@@ -64,7 +61,7 @@
                 <span class="menu-text">My Orders</span>
                 <span class="menu-arrow">›</span>
             </button>
-              <button class="menu-item" type="button" (click)="Schems()">
+            <button class="menu-item" type="button" (click)="Schems()">
                 <span class="menu-icon">👑</span>
                 <span class="menu-text">schems</span>
                 <span class="menu-arrow">›</span>
@@ -220,14 +217,11 @@
 
             <div class="edit-profile-footer">
                 <button type="button" class="btn-cancel" (click)="closeEditProfileModal()">Cancel</button>
-                <button
-  type="submit"
-  class="btn-save"
-  [disabled]="editProfileForm.invalid || isProfileUpdating">
+                <button type="submit" class="btn-save" [disabled]="editProfileForm.invalid || isProfileUpdating">
 
-  {{ isProfileUpdating ? 'Updating...' : 'Save Changes' }}
+                    {{ isProfileUpdating ? 'Updating...' : 'Save Changes' }}
 
-</button>
+                </button>
             </div>
         </form>
 
