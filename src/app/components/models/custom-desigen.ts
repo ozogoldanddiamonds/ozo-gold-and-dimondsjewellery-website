@@ -35,6 +35,7 @@ export type StoneType =
   | 'GEMSTONE';
 
 export type DiamondType =
+  | 'NONE'
   | 'NATURAL'
   | 'LAB_GROWN';
 

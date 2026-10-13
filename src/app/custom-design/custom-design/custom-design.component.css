@@ -621,8 +621,7 @@
  }
 
  .custom-design-page .summary-icon.success-icon {
-   color: #427453;
-   background: #e7f1e7;
+   background: #222222;
  }
 
  .custom-design-page .summary-card>div:last-child {
@@ -1277,5 +1276,209 @@
    .custom-details-modal * {
      transition: none !important;
      animation: none !important;
+   }
+ }
+
+
+ /* Premium Success Overlay */
+ .success-overlay {
+   position: fixed;
+   inset: 0;
+   z-index: 99999;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 20px;
+   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+   backdrop-filter: blur(8px);
+   -webkit-backdrop-filter: blur(8px);
+   animation: overlayFadeIn 0.3s ease;
+ }
+
+ /* Modal Card */
+ .success-modal {
+   position: relative;
+   width: 100%;
+   max-width: 440px;
+   padding: 42px 34px 30px;
+   overflow: hidden;
+   text-align: center;
+   background: linear-gradient(145deg, #fffefa, #ffffff 65%, #fbf4e7);
+   /* border: 1px solid #222222; */
+   border-radius: 24px;
+   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+   animation: modalRise 0.45s cubic-bezier(.2, .8, .2, 1);
+ }
+
+ .success-modal::before {
+   content: "";
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   height: 4px;
+   /* background: linear-gradient(90deg, #222222, #f3d990, #b78a3e); */
+ }
+
+ .success-close {
+   position: absolute;
+   top: 12px;
+   right: 16px;
+   width: 34px;
+   height: 34px;
+   border: 0;
+   border-radius: 50%;
+   background: #f7f2e8;
+   color: #6b6254;
+   font-size: 25px;
+   line-height: 1;
+   transition: 0.25s ease;
+ }
+
+ .success-close:hover {
+   background: #222222;
+   transform: rotate(90deg);
+ }
+
+ .success-icon-wrap {
+   display: flex;
+   justify-content: center;
+   margin-bottom: 22px;
+
+ }
+
+ .success-icon {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 76px;
+   height: 76px;
+   border: 1px solid #d9bd7a;
+   border-radius: 50%;
+   color: #fff;
+   background: #222222;
+   box-shadow: 0 8px 24px rgba(167, 122, 45, 0.25);
+   font-size: 30px;
+   animation: successPop 0.55s 0.1s both;
+ }
+
+ .success-eyebrow {
+   display: block;
+   margin-bottom: 10px;
+   color: #222222;
+   font-size: 10px;
+   font-weight: 700;
+   letter-spacing: 3px;
+ }
+
+ .success-modal h2 {
+   margin: 0 0 14px;
+   color: #29251e;
+   font-family: Georgia, "Times New Roman", serif;
+   font-size: clamp(26px, 5vw, 32px);
+   font-weight: 600;
+ }
+
+ .success-description {
+   max-width: 330px;
+   margin: 0 auto;
+   color: #777064;
+   font-size: 14px;
+   line-height: 1.8;
+ }
+
+ .success-divider {
+   width: 58px;
+   height: 1px;
+   margin: 25px auto 18px;
+   background: linear-gradient(90deg, transparent, #bd984f, transparent);
+ }
+
+ .success-footer {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 9px;
+   margin-bottom: 26px;
+   color: #9b7839;
+   font-family: Georgia, "Times New Roman", serif;
+   font-size: 13px;
+   font-style: italic;
+ }
+
+ .success-done-btn {
+   width: 100%;
+   padding: 14px 20px;
+   border: 1px solid #222222;
+   border-radius: 10px;
+   color: #fff;
+   background: #222222;
+   background-size: 200% 100%;
+   font-size: 14px;
+   font-weight: 600;
+   letter-spacing: 0.4px;
+   transition: background-position 0.35s ease, transform 0.25s ease,
+     box-shadow 0.25s ease;
+ }
+
+ .success-done-btn:hover {
+   background-position: 100% 0;
+   transform: translateY(-2px);
+   box-shadow: 0 8px 20px rgba(167, 122, 45, 0.25);
+ }
+
+ @keyframes overlayFadeIn {
+   from {
+     opacity: 0;
+   }
+
+   to {
+     opacity: 1;
+   }
+ }
+
+ @keyframes modalRise {
+   from {
+     opacity: 0;
+     transform: translateY(25px) scale(0.96);
+   }
+
+   to {
+     opacity: 1;
+     transform: translateY(0) scale(1);
+   }
+ }
+
+ @keyframes successPop {
+   from {
+     opacity: 0;
+     transform: scale(0.5);
+   }
+
+   to {
+     opacity: 1;
+     transform: scale(1);
+   }
+ }
+
+ @media (max-width: 480px) {
+   .success-modal {
+     padding: 38px 22px 24px;
+     border-radius: 20px;
+   }
+
+   .success-icon {
+     width: 66px;
+     height: 66px;
+     font-size: 26px;
+   }
+ }
+
+ @media (prefers-reduced-motion: reduce) {
+
+   .success-overlay,
+   .success-modal,
+   .success-icon {
+     animation: none;
    }
  }

@@ -44,7 +44,7 @@ export class CustomDesignComponent implements OnInit {
 
   stoneTypes: StoneType[] = ['NONE', 'DIAMOND', 'GEMSTONE'];
 
-  diamondTypes: DiamondType[] = ['NATURAL', 'LAB_GROWN'];
+  diamondTypes: DiamondType[] = ['NONE', 'NATURAL', 'LAB_GROWN'];
 
   contactMethods: ContactMethod[] = [
     'WHATSAPP',
@@ -73,6 +73,7 @@ export class CustomDesignComponent implements OnInit {
   // Newly selected images
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
+  showSuccessPopup = true;
 
   // Images already saved in the database
   existingImageUrls: string[] = [];
@@ -242,11 +243,18 @@ export class CustomDesignComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
+
     if (form.invalid) {
       form.control.markAllAsTouched();
+
       this.errorMessage = 'Please fill all required fields.';
+
+      this.focusFirstInvalidField(form);
+
       return;
     }
+
+
 
     if (
       this.requiresImages &&
@@ -254,39 +262,43 @@ export class CustomDesignComponent implements OnInit {
       this.existingImageUrls.length === 0
     ) {
       this.errorMessage = 'Please upload at least one reference image.';
+      this.focusField('referenceImages');
       return;
     }
 
     if (this.isGoldType && !this.formData.goldPurity) {
       this.errorMessage = 'Please select gold purity.';
+      this.focusField('goldPurity');
       return;
     }
 
-    if (this.isGoldType && !this.formData.goldColor) {
-      this.errorMessage = 'Please select gold color.';
-      return;
-    }
+    // if (this.isGoldType && !this.formData.goldColor) {
+    //   this.errorMessage = 'Please select gold color.';
+    //   this.focusField('goldColor');
+    //   return;
+    // }
 
-    if (this.isDiamond && !this.formData.diamondType) {
-      this.errorMessage = 'Please select diamond type.';
-      return;
-    }
+    // if (this.isDiamond && !this.formData.diamondType) {
+    //   this.errorMessage = 'Please select diamond type.';
+    //   this.focusField('diamondType');
+    //   return;
+    // }
 
-    if (
-      this.isGemstone &&
-      !this.formData.gemstoneType.trim()
-    ) {
-      this.errorMessage = 'Please enter gemstone type.';
-      return;
-    }
+    // if (this.isGemstone && !this.formData.gemstoneType.trim()) {
+    //   this.errorMessage = 'Please enter gemstone type.';
+    //   this.focusField('gemstoneType');
+    //   return;
+    // }
 
     if (this.formData.goldWeight < 0.1) {
       this.errorMessage = 'Gold weight must be at least 0.1 grams.';
+      this.focusField('goldWeight');
       return;
     }
 
     if (this.formData.quantity < 1) {
       this.errorMessage = 'Quantity must be at least 1.';
+      this.focusField('quantity');
       return;
     }
 
@@ -359,7 +371,7 @@ export class CustomDesignComponent implements OnInit {
 
         if (response.success && response.data) {
           const wasEditing = this.isEditMode;
-
+          this.showSuccessPopup = true;
           this.selectedRequest = response.data;
 
           this.successMessage =
@@ -557,5 +569,65 @@ export class CustomDesignComponent implements OnInit {
 
     this.isAuthOpen = false;
 
+  }
+
+
+  private focusField(fieldName: string): void {
+    setTimeout(() => {
+      const field = document.querySelector(
+        `[name="${fieldName}"], #${fieldName}`
+      ) as HTMLElement | null;
+
+      if (!field) {
+        return;
+      }
+
+      field.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+      field.focus();
+    }, 100);
+  }
+
+  private focusFirstInvalidField(form: NgForm): void {
+    const formElement = document.querySelector(
+      'form[novalidate]'
+    ) as HTMLElement | null;
+
+    if (!formElement) {
+      return;
+    }
+
+    const fields = Array.from(
+      formElement.querySelectorAll<HTMLElement>(
+        'input[name], select[name], textarea[name]'
+      )
+    );
+
+    const firstInvalidField = fields.find(field => {
+      const name = field.getAttribute('name');
+
+      if (!name) {
+        return false;
+      }
+
+      const control = form.controls[name];
+
+      return (
+        !!control &&
+        control.invalid &&
+        field.getClientRects().length > 0
+      );
+    });
+
+    if (firstInvalidField) {
+      this.focusField(firstInvalidField.getAttribute('name')!);
+    }
+  }
+
+  closeSuccessPopup(): void {
+    this.showSuccessPopup = false;
   }
 }

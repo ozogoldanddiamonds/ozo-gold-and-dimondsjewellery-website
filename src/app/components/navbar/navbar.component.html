@@ -28,7 +28,7 @@
             <!-- Logged In User -->
             <div *ngIf="isLoggedIn" class="top-user">
                 <i class="fa fa-user-circle"></i>
-                <span>Hi, {{ profileData?.user?.name }}</span>
+                <span>Hi, {{ userName || profileData?.user?.name || profileData?.name || 'User' | titlecase}}</span>
 
                 <div class="top-user-dropdown">
 

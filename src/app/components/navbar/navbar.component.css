@@ -763,9 +763,8 @@
 
     .nav-link {
         color: var(--text-dark);
-        font-size: 22px;
-        font-weight: 600;
-        text-transform: capitalize !important;
+        font-size: 18px;
+        font-weight: 700;
     }
 
     .nav-link:hover {
@@ -796,7 +795,7 @@
 
     .fa-user,
     .fa-shopping-cart {
-        color: var(--primary-red-dark);
+        color: #222222;
     }
 
     /* Right side links */

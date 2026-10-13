@@ -21,47 +21,50 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   categorySwiper!: Swiper;
 
   products: any[] = [];
+  categories: any[] = [];
+  subCategories: any[] = [];
+  subSubCategories: any[] = [];
+
   isAuthOpen = false;
   loading = false;
   categoryId = '';
+
   page = 1;
   limit = 10;
   hasMoreData = true;
-  categories: any[] = [];
+
   selectedCategory = '';
+  selectedSubCategory = '';
+  selectedSubSubCategory = '';
   selectedSort = 'latest';
   selectedProductType = '';
   minPrice: any = '';
   maxPrice: any = '';
+
   showFilter = false;
   showFilterDrawer = false;
-  pendingAddToCart = false;
-
-  wishlistId: string = '';
-  wishlistMap: { [key: string]: string } = {};
-  wishlistRefreshSub!: Subscription;
-  routeSub!: Subscription;
-
   showSortSheet = false;
-  selectedSubCategory = '';
-  selectedSubSubCategory = '';
+  pendingAddToCart = false;
+  errorMessage = '';
 
-  subCategories: any[] = [];
-  subSubCategories: any[] = [];
+  wishlistId = '';
+  wishlistMap: { [key: string]: string } = {};
+  wishlistRefreshSub?: Subscription;
+  routeSub?: Subscription;
 
   product: any = null;
   selectedVariant: any = null;
-  productId: string = '';
-  errorMessage = '';
+  productId = '';
 
   showVariantPopup = false;
   selectedProduct: any = null;
   selectedVariantId = '';
   selectedVariantSize = '';
-
   availablePurities: string[] = [];
   selectedPurity = '';
   filteredVariants: any[] = [];
+
+  private requestSequence = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,99 +72,123 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private wishlistService: WishlistService,
     private loaderService: LoadingService,
-    public router: Router, private toastr: ToastrService,
+    public router: Router,
+    private toastr: ToastrService,
     private cartService: CartService
   ) { }
 
   ngOnInit(): void {
+    this.routeSub = this.route.queryParams.subscribe(params => {
+      this.selectedCategory = params['category'] || '';
+      this.selectedSubCategory = params['subCategory'] || '';
+      this.selectedSubSubCategory = params['subSubCategory'] || '';
+      this.selectedProductType = params['productType'] || '';
+      this.minPrice = params['minPrice'] ?? '';
+      this.maxPrice = params['maxPrice'] ?? '';
+      this.selectedSort = params['sort'] || 'latest';
 
-
-
-    this.routeSub =
-      this.route.queryParams.subscribe(
-        params => {
-          this.selectedCategory = params['category'] || '';
-          this.selectedSubCategory = params['subCategory'] || '';
-          this.selectedSubSubCategory = params['subSubCategory'] || '';
-          this.page = 1;
-          this.products = [];
-          this.hasMoreData = true;
-          this.getProducts();
-        }
-      );
-
+      this.resetPagination();
+      this.getProducts();
+    });
 
     this.getAllCategories();
 
-    this.wishlistRefreshSub = this.wishlistService.wishlistRefresh$.subscribe((refresh) => {
+    this.wishlistRefreshSub = this.wishlistService.wishlistRefresh$.subscribe(refresh => {
       if (refresh) {
         this.loadWishlistStatus();
         this.wishlistService.resetWishlistRefresh();
       }
     });
   }
-  initCategorySwiper() {
+
+  ngOnDestroy(): void {
+    this.wishlistRefreshSub?.unsubscribe();
+    this.routeSub?.unsubscribe();
 
     if (this.categorySwiper) {
-
-      this.categorySwiper.destroy(
-        true,
-        true
-      );
-
+      this.categorySwiper.destroy(true, true);
     }
-
-    this.categorySwiper =
-      new Swiper('.categorySwiper', {
-
-        slidesPerView: 6,
-
-        spaceBetween: 15,
-
-        breakpoints: {
-
-          320: {
-            slidesPerView: 3.2
-          },
-
-          576: {
-            slidesPerView: 4
-          },
-
-          768: {
-            slidesPerView: 5
-          },
-
-          992: {
-            slidesPerView: 6
-          }
-
-        }
-
-      });
-
   }
-  ngOnDestroy(): void {
-    if (this.wishlistRefreshSub) {
-      this.wishlistRefreshSub.unsubscribe();
+
+  private resetPagination(): void {
+    this.page = 1;
+    this.products = [];
+    this.hasMoreData = true;
+    this.errorMessage = '';
+  }
+
+  private sortPurities(purities: string[]): string[] {
+    return [...new Set(purities.map(value => String(value || '').trim().toUpperCase()).filter(Boolean))]
+      .sort((a, b) => {
+        const valueA = Number.parseFloat(a.replace(/[^0-9.]/g, ''));
+        const valueB = Number.parseFloat(b.replace(/[^0-9.]/g, ''));
+
+        if (Number.isNaN(valueA) && Number.isNaN(valueB)) {
+          return a.localeCompare(b);
+        }
+        if (Number.isNaN(valueA)) return 1;
+        if (Number.isNaN(valueB)) return -1;
+        return valueA - valueB;
+      });
+  }
+
+  initCategorySwiper(): void {
+    if (this.categorySwiper) {
+      this.categorySwiper.destroy(true, true);
     }
 
-    if (this.routeSub) {
-      this.routeSub.unsubscribe();
-    }
+    this.categorySwiper = new Swiper('.categorySwiper', {
+      slidesPerView: 6,
+      spaceBetween: 15,
+      breakpoints: {
+        320: { slidesPerView: 3.2 },
+        576: { slidesPerView: 4 },
+        768: { slidesPerView: 5 },
+        992: { slidesPerView: 6 }
+      }
+    });
   }
 
   getVariantId(variant: any): string {
     return variant?._id || variant?.id || '';
   }
 
+  getVariantPrice(variant: any): number {
+    const value = variant?.priceDetails?.finalPrice ??
+      variant?.calculatedPrice ??
+      variant?.priceBreakup?.finalPrice ??
+      0;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
   getDefaultVariant(product: any): any {
     if (!product?.variants?.length) return null;
-    return product.variants.find((v: any) => v?.isDefault) || product.variants[0];
+    return product.variants.find((variant: any) => variant?.isDefault) || product.variants[0];
   }
 
   mapProduct(item: any): any {
+    const variants = item?.variants || [];
+
+    const sortedVariants = [...variants].sort((a: any, b: any) => {
+      const priceA = Number(
+        a?.priceDetails?.finalPrice ??
+        a?.calculatedPrice ??
+        0
+      );
+
+      const priceB = Number(
+        b?.priceDetails?.finalPrice ??
+        b?.calculatedPrice ??
+        0
+      );
+
+      return priceA - priceB;
+    });
+
     const defaultVariant = this.getDefaultVariant(item);
+
+    const cheapestVariant = sortedVariants[0] || defaultVariant;
 
     return {
       ...item,
@@ -169,357 +196,186 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       categoryName: item?.category?.name || '',
       subCategoryName: item?.subCategory?.name || '',
       selectedVariant: defaultVariant,
-      displayPrice: defaultVariant?.priceDetails?.finalPrice || 0,
-      oldPrice: defaultVariant?.priceDetails?.metalValue || 0,
-      discountPercentage: defaultVariant?.discountPercentage || 0,
+      displayPrice:
+        cheapestVariant?.priceDetails?.finalPrice ??
+        cheapestVariant?.calculatedPrice ??
+        0,
+      oldPrice: cheapestVariant?.priceDetails?.metalValue || 0,
+      discountPercentage: cheapestVariant?.discountPercentage || 0,
       isWishlisted: false,
       wishlistItemId: null
     };
   }
 
-  openVariantPopup(item: any) {
-
-    this.selectedProduct = item;
-
-    this.availablePurities = [
-
-      ...new Set<string>(
-
-        item.variants.map(
-          (v: any) =>
-            v.metalPurity
-        )
-
-      )
-
-    ];
-
-    const defaultVariant =
-      item?.selectedVariant ||
-      item?.variants?.[0];
-
-    this.selectedPurity =
-      defaultVariant?.metalPurity;
-
-    this.filterVariantsByPurity();
-
-    this.showVariantPopup = true;
-
-  }
-  selectVariant(variant: any) {
-    this.selectedVariant = variant;
-    this.selectedVariantId = variant?._id || '';
-  }
-
-  closeVariantPopup() {
-    this.showVariantPopup = false;
-    this.selectedProduct = null;
-    this.selectedVariant = null;
-    this.selectedVariantId = '';
-  }
-
-
-  getProducts(loadMore: boolean = false) {
-
-    this.loading = true;
-    this.errorMessage = '';
-
-    this.loaderService.show();
-
-
-    const query: any = {
-
-      page: this.page,
-
-      limit: this.limit,
-
-      sort: this.selectedSort,
-
-      productType: this.selectedProductType,
-
-      minPrice: this.minPrice,
-
-      maxPrice: this.maxPrice
-
-    };
-
-
-    if (this.selectedCategory) {
-
-      query.category =
-        this.selectedCategory;
-
-    }
-
-
-    if (this.selectedSubCategory) {
-
-      query.subCategory =
-        this.selectedSubCategory;
-
-    }
-
-
-    if (this.selectedSubSubCategory) {
-
-      query.subSubCategory =
-        this.selectedSubSubCategory;
-
-    }
-
-
-    console.log('FILTER QUERY', query);
-
-
-    this.productService
-      .getProductsByCategory(query)
-      .subscribe({
-
-        next: (res: any) => {
-
-
-          this.loading = false;
-
-          this.loaderService.hide();
-
-
-          const incomingProducts =
-
-            (res?.data || [])
-              .map((item: any) =>
-
-                this.mapProduct(item)
-
-              );
-
-          const allProducts = res?.data || [];
-
-
-          // =======================
-          // SUB CATEGORY LIST
-          // =======================
-
-          this.subCategories = [
-
-            ...new Map(
-
-              allProducts
-
-                .filter(
-                  (item: any) =>
-                    item.subCategory
-                )
-
-                .map(
-                  (item: any) => [
-
-                    item.subCategory._id,
-
-                    item.subCategory
-
-                  ]
-                )
-
-            ).values()
-
-          ];
-
-
-          // =======================
-          // SUB SUB CATEGORY LIST
-          // =======================
-
-          this.subSubCategories = [
-
-            ...new Map(
-
-              allProducts
-
-                .filter(
-                  (item: any) =>
-                    item.subSubCategory
-                )
-
-                .map(
-                  (item: any) => [
-
-                    item.subSubCategory._id,
-
-                    item.subSubCategory
-
-                  ]
-                )
-
-            ).values()
-
-          ];
-
-
-          console.log(
-            'SUB CATEGORIES',
-            this.subCategories
-          );
-
-
-          console.log(
-            'SUB SUB CATEGORIES',
-            this.subSubCategories
-          );
-          if (loadMore) {
-
-            this.products = [
-              ...this.products,
-              ...incomingProducts
-            ];
-
-          } else {
-
-            this.products =
-              incomingProducts;
-
-          }
-
-
-          this.hasMoreData =
-            incomingProducts.length >= this.limit;
-
-
-          if (!this.products.length) {
-
-            this.errorMessage =
-              "No products found";
-
-          }
-
-
-          this.loadWishlistStatus();
-
-
-        },
-
-
-        error: (err) => {
-
-          this.loading = false;
-
-          this.loaderService.hide();
-
-          console.log(err);
-
-        }
-
-
-      });
-
-  }
-
-  getAllCategories() {
+  getAllCategories(): void {
     this.categoriesService.getAllCategories().subscribe({
       next: (res: any) => {
         this.categories = res?.data || [];
-        setTimeout(() => {
-
-          this.initCategorySwiper();
-
-        }, 100);
+        setTimeout(() => this.initCategorySwiper(), 100);
       },
       error: (err: any) => {
-        console.log(err);
+        console.error('Failed to load categories:', err);
+      }
+    });
+  }
+
+  getProducts(loadMore: boolean = false): void {
+    if (this.loading) {
+      // Avoid overlapping requests. The latest filter request is handled by the
+      // request sequence below after the current request completes.
+    }
+
+    const requestId = ++this.requestSequence;
+    this.loading = true;
+    this.errorMessage = '';
+
+    if (!loadMore) {
+      this.loaderService.show();
+    }
+
+    const query: any = {
+      page: this.page,
+      limit: this.limit,
+      sort: this.selectedSort || 'latest'
+    };
+
+    if (this.selectedCategory) query.category = this.selectedCategory;
+    if (this.selectedSubCategory) query.subCategory = this.selectedSubCategory;
+    if (this.selectedSubSubCategory) query.subSubCategory = this.selectedSubSubCategory;
+    if (this.selectedProductType) query.productType = this.selectedProductType;
+    if (this.minPrice !== '' && this.minPrice !== null && this.minPrice !== undefined) {
+      query.minPrice = this.minPrice;
+    }
+    if (this.maxPrice !== '' && this.maxPrice !== null && this.maxPrice !== undefined) {
+      query.maxPrice = this.maxPrice;
+    }
+
+    this.productService.getProductsByCategory(query).subscribe({
+      next: (res: any) => {
+        if (requestId !== this.requestSequence) return;
+
+        this.loading = false;
+        this.loaderService.hide();
+
+        const rawProducts: any[] = Array.isArray(res?.data) ? res.data : [];
+        const incomingProducts = rawProducts.map(item => this.mapProduct(item));
+
+        // Build category child options from the returned results. If the backend
+        // returns paginated data, these options reflect the current result page.
+        const subCategoryMap = new Map<string, any>();
+        const subSubCategoryMap = new Map<string, any>();
+
+        rawProducts.forEach(item => {
+          if (item?.subCategory?._id) {
+            subCategoryMap.set(String(item.subCategory._id), item.subCategory);
+          }
+          if (item?.subSubCategory?._id) {
+            subSubCategoryMap.set(String(item.subSubCategory._id), item.subSubCategory);
+          }
+        });
+
+        this.subCategories = Array.from(subCategoryMap.values());
+        this.subSubCategories = Array.from(subSubCategoryMap.values());
+
+        this.products = loadMore
+          ? [...this.products, ...incomingProducts]
+          : incomingProducts;
+
+        // Prefer backend pagination metadata when present.
+        if (typeof res?.hasMore === 'boolean') {
+          this.hasMoreData = res.hasMore;
+        } else if (typeof res?.pagination?.hasMore === 'boolean') {
+          this.hasMoreData = res.pagination.hasMore;
+        } else {
+          this.hasMoreData = incomingProducts.length >= this.limit;
+        }
+
+        if (!this.products.length) {
+          this.errorMessage = res?.message || 'No products found';
+        }
+
+        this.loadWishlistStatus();
+      },
+      error: (err: any) => {
+        if (requestId !== this.requestSequence) return;
+
+        this.loading = false;
+        this.loaderService.hide();
+        this.errorMessage = err?.error?.message || 'Unable to load products. Please try again.';
+        console.error('Failed to load products:', err);
       }
     });
   }
 
   filterByCategory(categoryId: string): void {
-
-    console.log('CATEGORY SELECTED:', categoryId);
-
-    // ==========================================
-    // SET CATEGORY
-    // ==========================================
-
     this.selectedCategory = categoryId || '';
     this.categoryId = categoryId || '';
-
-    // Category change ayithe child filters clear
     this.selectedSubCategory = '';
     this.selectedSubSubCategory = '';
 
-    // ==========================================
-    // RESET PRODUCTS / PAGINATION
-    // ==========================================
-
-    this.page = 1;
-    this.products = [];
-    this.hasMoreData = true;
-    this.errorMessage = '';
-
-    // ==========================================
-    // UPDATE URL
-    // IMPORTANT:
-    // Old subCategory / subSubCategory kuda
-    // completely remove cheyyali.
-    // ==========================================
+    this.resetPagination();
 
     this.router.navigate([], {
       relativeTo: this.route,
-
       queryParams: {
-        category: categoryId || null,
+        category: this.selectedCategory || null,
         subCategory: null,
-        subSubCategory: null
+        subSubCategory: null,
+        productType: this.selectedProductType || null,
+        minPrice: this.minPrice || null,
+        maxPrice: this.maxPrice || null,
+        sort: this.selectedSort !== 'latest' ? this.selectedSort : null
       },
-
-      // IMPORTANT:
-      // merge use cheyyakunda replace chestham
       queryParamsHandling: ''
     });
+  }
 
-    // ==========================================
-    // LOAD PRODUCTS
-    // ==========================================
-
+  filterBySubCategory(id: string): void {
+    this.selectedSubCategory = id || '';
+    this.selectedSubSubCategory = '';
+    this.resetPagination();
     this.getProducts();
   }
 
+  filterBySubSubCategory(id: string): void {
+    this.selectedSubSubCategory = id || '';
+    this.resetPagination();
+    this.getProducts();
+  }
+
+  applyFilters(): void {
+    this.resetPagination();
+    this.getProducts();
+    this.closeOffcanvas('filterCanvas');
+  }
 
   clearFilters(): void {
-
-    console.log('CLEARING ALL FILTERS');
-
-    // ==========================================
-    // RESET ALL FILTER VALUES
-    // ==========================================
+    const currentParams = this.route.snapshot.queryParams;
+    const hadFilterParams = [
+      'category',
+      'subCategory',
+      'subSubCategory',
+      'productType',
+      'minPrice',
+      'maxPrice',
+      'sort'
+    ].some(key => !!currentParams[key]);
 
     this.selectedCategory = '';
     this.categoryId = '';
-
     this.selectedSubCategory = '';
     this.selectedSubSubCategory = '';
-
     this.selectedProductType = '';
-
     this.minPrice = '';
     this.maxPrice = '';
-
     this.selectedSort = 'latest';
 
-    // ==========================================
-    // RESET PAGINATION
-    // ==========================================
+    this.resetPagination();
 
-    this.page = 1;
-    this.products = [];
-    this.hasMoreData = true;
-    this.errorMessage = '';
-
-    // ==========================================
-    // CLEAR URL FILTERS
-    // ==========================================
-
+    // When URL filters exist, queryParams subscription reloads all products.
+    // If URL is already clear, trigger the request directly.
     this.router.navigate([], {
-
       relativeTo: this.route,
-
       queryParams: {
         category: null,
         subCategory: null,
@@ -529,24 +385,23 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         maxPrice: null,
         sort: null
       },
-
       queryParamsHandling: ''
+    }).then(() => {
+      if (!hadFilterParams) {
+        this.resetPagination();
+        this.getProducts();
+      }
     });
-
-    // ==========================================
-    // LOAD ALL PRODUCTS
-    // ==========================================
-
-    this.getProducts();
-
-    // ==========================================
-    // CLOSE MOBILE FILTER
-    // ==========================================
 
     this.closeOffcanvas('filterCanvas');
   }
 
-  toggleSort() {
+  onSortChange(): void {
+    this.resetPagination();
+    this.getProducts();
+  }
+
+  toggleSort(): void {
     if (this.selectedSort === 'latest') {
       this.selectedSort = 'lowToHigh';
     } else if (this.selectedSort === 'lowToHigh') {
@@ -555,95 +410,38 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       this.selectedSort = 'latest';
     }
 
-    this.page = 1;
-    this.products = [];
-    this.hasMoreData = true;
+    this.resetPagination();
     this.getProducts();
   }
 
-  selectSort(sort: string) {
-    this.selectedSort = sort;
-    this.page = 1;
-    this.products = [];
-    this.hasMoreData = true;
+  selectSort(sort: string): void {
+    this.selectedSort = sort || 'latest';
+    this.resetPagination();
     this.getProducts();
     this.closeOffcanvas('sortCanvas');
   }
 
-  onSortChange() {
-    this.page = 1;
-    this.products = [];
-    this.hasMoreData = true;
-    this.getProducts();
-  }
-
-  applyFilters() {
-    this.page = 1;
-    this.products = [];
-    this.hasMoreData = true;
-    this.getProducts();
-    this.closeOffcanvas('filterCanvas');
-  }
-
-  loadMoreProducts() {
-
-    if (
-      this.loading ||
-      !this.hasMoreData
-    ) return;
-
-
+  loadMoreProducts(): void {
+    if (this.loading || !this.hasMoreData) return;
     this.page++;
-
-
     this.getProducts(true);
-
-  }
-  filterBySubCategory(id: string) {
-
-
-    this.selectedSubCategory = id;
-
-
-    this.selectedSubSubCategory = '';
-
-
-    this.page = 1;
-
-    this.products = [];
-
-    this.hasMoreData = true;
-
-
-    this.getProducts();
-
-
-  }
-  filterBySubSubCategory(id: string) {
-
-
-    this.selectedSubSubCategory = id;
-
-
-    this.page = 1;
-
-    this.products = [];
-
-    this.hasMoreData = true;
-
-
-    this.getProducts();
-
-
   }
 
-  getWishlistKey(productId: string, variantId: string) {
+  getWishlistKey(productId: string, variantId: string): string {
     return `${productId}_${variantId}`;
   }
 
-  loadWishlistStatus() {
+  loadWishlistStatus(): void {
     const userId = localStorage.getItem('userId');
-    if (!userId || !this.products?.length) return;
+
+    if (!userId || !this.products?.length) {
+      this.products = this.products.map(product => ({
+        ...product,
+        isWishlisted: false,
+        wishlistItemId: null
+      }));
+      return;
+    }
 
     this.wishlistService.getWishlist(userId).subscribe({
       next: (res: any) => {
@@ -652,12 +450,12 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         this.wishlistMap = {};
 
         items.forEach((item: any) => {
-          const productId = item?.productId;
-          const variantId = item?.variantId;
+          const productId = item?.productId?._id || item?.productId;
+          const variantId = item?.variantId?._id || item?.variantId;
 
           if (productId && variantId) {
-            const key = this.getWishlistKey(productId, variantId);
-            this.wishlistMap[key] = item?.wishlistItemId;
+            this.wishlistMap[this.getWishlistKey(String(productId), String(variantId))] =
+              item?.wishlistItemId || item?._id;
           }
         });
 
@@ -675,8 +473,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         });
       },
       error: (err: any) => {
-        console.log(err);
-
+        console.error('Failed to load wishlist:', err);
         if (err?.status === 404) {
           this.wishlistId = '';
           this.wishlistMap = {};
@@ -690,24 +487,22 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleWishlist(item: any) {
+  toggleWishlist(item: any): void {
     const userId = localStorage.getItem('userId');
 
     if (!userId) {
-      this.toastr.warning(
-        'Please login first'
-      );
+      this.toastr.warning('Please login first');
       this.router.navigate(['/login']);
       return;
     }
 
     const selectedVariant = item?.selectedVariant || this.getDefaultVariant(item);
-    const variantId = typeof selectedVariant === 'string' ? selectedVariant : selectedVariant?._id;
+    const variantId = typeof selectedVariant === 'string'
+      ? selectedVariant
+      : this.getVariantId(selectedVariant);
 
-    if (!variantId) {
-      this.toastr.warning(
-        'Variant not found'
-      );
+    if (!item?._id || !variantId) {
+      this.toastr.warning('Variant not found');
       return;
     }
 
@@ -720,18 +515,15 @@ export class CategoriesComponent implements OnInit, OnDestroy {
           this.loadWishlistStatus();
         },
         error: (err: any) => {
-          console.log(err);
-          this.toastr.warning(
-            err?.error?.message ||
-            'Failed to remove wishlist'
-          );
+          console.error(err);
+          this.toastr.warning(err?.error?.message || 'Failed to remove wishlist');
         }
       });
     } else {
       const payload = {
         user: userId,
-        product: item?._id,
-        variantId: variantId
+        product: item._id,
+        variantId
       };
 
       this.wishlistService.addToWishlist(payload).subscribe({
@@ -741,23 +533,20 @@ export class CategoriesComponent implements OnInit, OnDestroy {
           this.loadWishlistStatus();
         },
         error: (err: any) => {
-          console.log(err);
+          console.error(err);
 
           if (err?.error?.message === 'Product already in wishlist') {
             item.isWishlisted = true;
             this.loadWishlistStatus();
           } else {
-            this.toastr.warning(
-              err?.error?.message ||
-              'Failed to add wishlist'
-            );
+            this.toastr.warning(err?.error?.message || 'Failed to add wishlist');
           }
         }
       });
     }
   }
 
-  loadWishlistCount() {
+  loadWishlistCount(): void {
     const userId = localStorage.getItem('userId');
     if (!userId) return;
 
@@ -765,38 +554,86 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         this.wishlistService.updateWishlistCount(res?.items?.length || 0);
       },
-      error: () => {
-        this.wishlistService.updateWishlistCount(0);
-      }
+      error: () => this.wishlistService.updateWishlistCount(0)
     });
   }
 
-  openLoginModal() {
+  openVariantPopup(item: any): void {
+    this.selectedProduct = item;
+    const variants = Array.isArray(item?.variants) ? item.variants : [];
 
-    this.isAuthOpen = true;
-    this.closeVariantPopup();
+    this.availablePurities = this.sortPurities(
+      variants.map((variant: any) => variant?.metalPurity)
+        .filter((purity: any) => purity !== null && purity !== undefined && String(purity).trim() !== '')
+    );
 
+    const defaultVariant = item?.selectedVariant || this.getDefaultVariant(item);
+    this.selectedPurity = String(defaultVariant?.metalPurity || this.availablePurities[0] || '').toUpperCase();
+
+    this.filterVariantsByPurity();
+    this.showVariantPopup = true;
   }
 
-  confirmAddToCart() {
+  filterVariantsByPurity(): void {
+    if (!this.selectedProduct) {
+      this.filteredVariants = [];
+      return;
+    }
+
+    const variants = Array.isArray(this.selectedProduct?.variants)
+      ? this.selectedProduct.variants
+      : [];
+
+    this.filteredVariants = variants.filter((variant: any) =>
+      String(variant?.metalPurity || '').trim().toUpperCase() ===
+      String(this.selectedPurity || '').trim().toUpperCase()
+    );
+
+    if (this.filteredVariants.length) {
+      const currentStillAvailable = this.filteredVariants.find(
+        (variant: any) => this.getVariantId(variant) === this.selectedVariantId
+      );
+
+      this.selectVariant(currentStillAvailable || this.filteredVariants[0]);
+    } else {
+      this.selectedVariant = null;
+      this.selectedVariantId = '';
+      this.selectedVariantSize = '';
+    }
+  }
+
+  selectPurity(purity: string): void {
+    this.selectedPurity = String(purity || '').trim().toUpperCase();
+    this.filterVariantsByPurity();
+  }
+
+  selectVariant(variant: any): void {
+    this.selectedVariant = variant;
+    this.selectedVariantId = this.getVariantId(variant);
+    this.selectedVariantSize = variant?.size || '';
+  }
+
+  closeVariantPopup(): void {
+    this.showVariantPopup = false;
+    this.selectedProduct = null;
+    this.selectedVariant = null;
+    this.selectedVariantId = '';
+    this.selectedVariantSize = '';
+    this.selectedPurity = '';
+    this.filteredVariants = [];
+  }
+
+  confirmAddToCart(): void {
     const userId = localStorage.getItem('userId');
 
     if (!userId) {
-
-      this.toastr.warning(
-        'Please login first'
-      );
-
-
+      this.toastr.warning('Please login first');
       this.openLoginModal();
-
       return;
     }
 
     if (!this.selectedProduct?._id || !this.selectedVariantId) {
-      this.toastr.warning(
-        'Please login first'
-      );
+      this.toastr.warning('Please select an available variant');
       return;
     }
 
@@ -814,37 +651,32 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.showVariantPopup = false;
         this.cartService.loadCartCount();
-        this.toastr.success(
-          'Added to cart'
-        );
+        this.toastr.success('Added to cart');
       },
       error: (err: any) => {
         this.loading = false;
-        console.log(err);
-        this.toastr.warning(
-          err?.error?.message || 'Failed to add cart'
-        );
+        console.error(err);
+        this.toastr.warning(err?.error?.message || 'Failed to add cart');
       }
     });
   }
-  closeAuthModal(isLoggedIn?: boolean) {
 
+  openLoginModal(): void {
+    this.isAuthOpen = true;
+    this.closeVariantPopup();
+  }
+
+  closeAuthModal(isLoggedIn?: boolean): void {
     this.isAuthOpen = false;
 
-    if (
-      isLoggedIn &&
-      this.pendingAddToCart
-    ) {
-
+    if (isLoggedIn && this.pendingAddToCart) {
       this.pendingAddToCart = false;
-
       this.confirmAddToCart();
-
     }
-
   }
-  viewProduct(id: string) {
-    this.router.navigate(["/product", id]);
+
+  viewProduct(id: string): void {
+    this.router.navigate(['/product', id]);
   }
 
   getDiscount(mrp: number, price: number): number {
@@ -852,46 +684,14 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     return Math.round(((mrp - price) / mrp) * 100);
   }
 
-  closeOffcanvas(id: string) {
+  closeOffcanvas(id: string): void {
     const element = document.getElementById(id);
-    if (!element) return;
+    if (!element || typeof bootstrap === 'undefined') return;
 
-    const instance = bootstrap?.Offcanvas.getInstance(element) || new bootstrap.Offcanvas(element);
+    const instance = bootstrap.Offcanvas.getInstance(element) ||
+      new bootstrap.Offcanvas(element);
     instance.hide();
   }
-  filterVariantsByPurity() {
 
-    if (!this.selectedProduct) return;
-
-    this.filteredVariants =
-      this.selectedProduct.variants.filter(
-        (v: any) =>
-          v.metalPurity ===
-          this.selectedPurity
-      );
-
-    if (this.filteredVariants.length) {
-
-      this.selectedVariant =
-        this.filteredVariants[0];
-
-      this.selectedVariantId =
-        this.filteredVariants[0]._id;
-
-      this.selectedVariantSize =
-        this.filteredVariants[0].size;
-
-    }
-
-  }
-
-  selectPurity(purity: string) {
-
-    this.selectedPurity =
-      purity;
-
-    this.filterVariantsByPurity();
-
-  }
 
 }

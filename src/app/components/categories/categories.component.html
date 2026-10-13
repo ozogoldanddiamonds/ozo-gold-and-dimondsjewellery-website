@@ -88,17 +88,6 @@
                 </div>
             </div>
 
-            <!-- <div class="filter-section">
-                <h6 class="filter-title">PRODUCT TYPE</h6>
-
-                <select class="form-select" [(ngModel)]="selectedProductType">
-                    <option value="">All</option>
-                    <option value="gold">Gold</option>
-                    <option value="diamond">Diamond</option>
-                    <option value="silver">Silver</option>
-                </select>
-            </div> -->
-
             <div class="filter-section">
                 <h6 class="filter-title">SORT BY</h6>
 
@@ -124,21 +113,6 @@
 
                     <div class="swiper-wrapper">
 
-                        <!-- All Category -->
-                        <!-- <div class="swiper-slide">
-
-                            <div class="category-card" [class.active]="selectedCategory === ''"
-                                (click)="filterByCategory('')">
-
-                                <div class="category-image">
-                                    <i class="fa fa-th-large"></i>
-                                </div>
-
-                                <span>All</span>
-
-                            </div>
-
-                        </div> -->
 
                         <div class="swiper-slide" *ngFor="let category of categories">
 

@@ -64,13 +64,18 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-diamond input-icon"></i>
 
-                <select class="form-select" name="jewelleryType" [(ngModel)]="formData.jewelleryType" required>
+                <select class="form-select" name="jewelleryType" #jewelleryType="ngModel"
+                  [(ngModel)]="formData.jewelleryType" required>
                   <option value="">Select jewellery type</option>
 
                   <option *ngFor="let type of jewelleryTypes" [value]="type">
                     {{ type.replace('_', ' ') }}
                   </option>
                 </select>
+                <div class="text-danger small mt-1"
+                  *ngIf="jewelleryType.invalid && (jewelleryType.touched || designForm.submitted)">Please select a
+                  jewellery type.</div>
+
               </div>
             </div>
 
@@ -83,11 +88,16 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-paint-brush input-icon"></i>
 
-                <select class="form-select" name="designType" [(ngModel)]="formData.designType"
+                <select class="form-select" name="designType" #designType="ngModel" [(ngModel)]="formData.designType"
                   (ngModelChange)="onDesignTypeChange()" required>
                   <option value="NEW_DESIGN">New Design</option>
                   <option value="REFERENCE_DESIGN">Reference Design</option>
                 </select>
+                <div class="text-danger small mt-1"
+                  *ngIf="designType.invalid && (designType.touched || designForm.submitted)">Please select a design
+                  type.</div>
+
+
               </div>
             </div>
 
@@ -100,7 +110,7 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-cubes input-icon"></i>
 
-                <select class="form-select" name="metalType" [(ngModel)]="formData.metalType"
+                <select class="form-select" name="metalType" #metalType="ngModel" [(ngModel)]="formData.metalType"
                   (ngModelChange)="onMetalTypeChange()" required>
                   <option value="">Select metal type</option>
 
@@ -108,6 +118,11 @@
                     {{ metal.replace('_', ' ') }}
                   </option>
                 </select>
+                <div class="text-danger small mt-1"
+                  *ngIf="metalType.invalid && (metalType.touched || designForm.submitted)">Please select a metal type.
+                </div>
+
+
               </div>
             </div>
 
@@ -120,12 +135,16 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-diamond input-icon"></i>
 
-                <select class="form-select" name="stoneType" [(ngModel)]="formData.stoneType"
+                <select class="form-select" name="stoneType" #stoneType="ngModel" [(ngModel)]="formData.stoneType"
                   (ngModelChange)="onStoneTypeChange()" required>
                   <option *ngFor="let stone of stoneTypes" [value]="stone">
                     {{ stone.replace('_', ' ') }}
                   </option>
                 </select>
+                <div class="text-danger small mt-1"
+                  *ngIf="stoneType.invalid && (stoneType.touched || designForm.submitted)">Please select a stone
+                  preference.</div>
+
               </div>
             </div>
 
@@ -138,13 +157,19 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-shield input-icon"></i>
 
-                <select class="form-select" name="goldPurity" [(ngModel)]="formData.goldPurity" required>
+                <select class="form-select" name="goldPurity" #goldPurity="ngModel" [(ngModel)]="formData.goldPurity"
+                  required>
                   <option value="">Select purity</option>
 
                   <option *ngFor="let purity of goldPurities" [value]="purity">
                     {{ purity }}
                   </option>
                 </select>
+                <div class="text-danger small mt-1"
+                  *ngIf="goldPurity.invalid && (goldPurity.touched || designForm.submitted)">Please select gold purity.
+                </div>
+
+
               </div>
             </div>
 
@@ -157,7 +182,7 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-tint input-icon"></i>
 
-                <select class="form-select" name="goldColor" [(ngModel)]="formData.goldColor" required>
+                <select class="form-select" name="goldColor" [(ngModel)]="formData.goldColor">
                   <option value="">Select color</option>
 
                   <option *ngFor="let color of goldColors" [value]="color">
@@ -176,7 +201,7 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-diamond input-icon"></i>
 
-                <select class="form-select" name="diamondType" [(ngModel)]="formData.diamondType" required>
+                <select class="form-select" name="diamondType" [(ngModel)]="formData.diamondType">
                   <option value="">Select diamond type</option>
 
                   <option *ngFor="let diamond of diamondTypes" [value]="diamond">
@@ -196,7 +221,7 @@
                 <i class="fa fa-star input-icon"></i>
 
                 <input type="text" class="form-control" name="gemstoneType" [(ngModel)]="formData.gemstoneType"
-                  placeholder="Enter gemstone type" required />
+                  placeholder="Enter gemstone type" />
               </div>
             </div>
 
@@ -209,8 +234,12 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-lock input-icon"></i>
 
-                <input type="number" class="form-control" name="goldWeight" [(ngModel)]="formData.goldWeight" min="0.1"
-                  step="0.1" placeholder="Enter weight" required />
+                <input type="number" class="form-control" name="goldWeight" #goldWeight="ngModel"
+                  [(ngModel)]="formData.goldWeight" min="0.1" step="0.1" placeholder="Enter weight" />
+                <div class="text-danger small mt-1"
+                  *ngIf="goldWeight.invalid && (goldWeight.touched || designForm.submitted)">Please enter a weight of at
+                  least 0.1 grams.</div>
+
               </div>
             </div>
 
@@ -223,8 +252,12 @@
               <div class="input-icon-wrap">
                 <i class="fa fa-cubes input-icon"></i>
 
-                <input type="number" class="form-control" name="quantity" [(ngModel)]="formData.quantity" min="1"
-                  step="1" placeholder="Enter quantity" required />
+                <input type="number" class="form-control" name="quantity" #quantity="ngModel"
+                  [(ngModel)]="formData.quantity" min="1" step="1" placeholder="Enter quantity" required />
+                <div class="text-danger small mt-1"
+                  *ngIf="quantity.invalid && (quantity.touched || designForm.submitted)">Please enter a quantity of at
+                  least 1.</div>
+
               </div>
             </div>
 
@@ -269,9 +302,15 @@
               <div class="textarea-icon-wrap">
                 <i class="fa fa-pencil input-icon"></i>
 
-                <textarea class="form-control" name="description" [(ngModel)]="formData.description" rows="3"
-                  minlength="5" maxlength="2000"
+                <textarea class="form-control" name="description" #description="ngModel"
+                  [(ngModel)]="formData.description" rows="3" minlength="5" maxlength="2000"
                   placeholder="Describe your design idea, inspiration, or specific requirements..." required></textarea>
+
+                <div class="text-danger small mt-1"
+                  *ngIf="description.invalid && (description.touched || designForm.submitted)">Please enter a design
+                  description (at least 5 characters).</div>
+
+
               </div>
             </div>
 
@@ -360,6 +399,53 @@
 
           </div>
         </form>
+
+
+        <!-- Premium Success Popup -->
+        <div class="success-overlay" *ngIf="showSuccessPopup" (click)="closeSuccessPopup()">
+          <div class="success-modal" (click)="$event.stopPropagation()">
+
+            <button type="button" class="success-close" (click)="closeSuccessPopup()" aria-label="Close popup">
+              &times;
+            </button>
+
+            <div class="success-icon-wrap">
+              <div class="success-icon">
+                <i class="fa fa-check"></i>
+              </div>
+            </div>
+
+            <span class="success-eyebrow">OZO · CUSTOM DESIGN</span>
+            <p class="brand-subtitle">
+              Every shine has a story.
+            </p>
+            <h2>{{ isEditMode ? 'Request Updated!' : 'Request Submitted!' }}</h2>
+
+            <p class="success-description">
+              {{ isEditMode
+              ? 'Your custom design request has been updated successfully.'
+              : 'Your design request has been received. Our jewellery team will review your requirements and contact you
+              soon.'
+              }}
+            </p>
+
+            <div class="success-divider"></div>
+
+            <div class="success-footer">
+              <i class="fa fa-diamond"></i>
+              <span>Crafted around your vision</span>
+
+            </div>
+
+
+            <button type="button" class="success-done-btn" (click)="closeSuccessPopup()">
+              Continue
+              <i class="fa fa-arrow-right ms-2"></i>
+            </button>
+
+          </div>
+        </div>
+
       </div>
     </div>
 

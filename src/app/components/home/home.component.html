@@ -457,7 +457,7 @@
 </section>
 
 <section class="desktop-section section-space bg-soft">
-    <div class="container-xxl">
+    <div class="container-fluid">
         <div class="section-header text-center">
             <h2>All Products</h2>
             <p>Where New Meets Beautiful</p>
@@ -472,7 +472,7 @@
 
         <div class="row g-4">
 
-            <div class="col-lg-3 col-md-6" col-6 *ngFor="let item of products" data-aos="flip-left"
+            <div class="col-lg-3 col-md-6 col-6" *ngFor="let item of products" data-aos="flip-left"
                 data-aos-easing="ease-out-cubic" data-aos-duration="2000">
 
                 <div class="product-card">
@@ -520,14 +520,23 @@
                             <span class="price">
                                 ₹{{ item?.variants?.[0]?.priceBreakup?.finalPrice }}
                             </span>
-                            <!-- making chaeges -->
+
                             <div class="making-charge">
-                                {{ item.variants?.[0]?.makingCharges }}% Making Charges
+                                Making Charges
+                                <ng-container
+                                    *ngIf="item?.variants?.[0]?.makingChargeType === 'fixed'; else percentageCharge">
+
+                                    ₹{{ item?.variants?.[0]?.makingCharges }}
+
+                                </ng-container>
+
+                                <ng-template #percentageCharge>
+                                    {{ item?.variants?.[0]?.makingCharges }}%
+                                </ng-template>
                             </div>
 
-
-
                         </div>
+
 
                     </div>
 

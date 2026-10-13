@@ -39,14 +39,12 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProducts();
-    this.getProfileSummary();
 
-    const user = localStorage.getItem('user');
-    if (user) {
-      const userData = JSON.parse(user);
-      this.userId = userData?._id;
-      this.userName = userData?.name || userData?.fullName || userData?.username || '';
-    }
+    // Load user details immediately from localStorage
+    this.loadUserFromStorage();
+
+    // Fetch latest profile details
+    this.getProfileSummary();
 
     this.loadCartCount();
 
@@ -56,6 +54,17 @@ export class NavbarComponent implements OnInit {
 
     this.authService.loginStatus$.subscribe(status => {
       this.isLoggedIn = status;
+
+      if (status) {
+        this.loadUserFromStorage();
+        this.getProfileSummary();
+        this.loadWishlistCount();
+        this.loadCartCount();
+      } else {
+        this.profileData = null;
+        this.userName = '';
+        this.userId = null;
+      }
     });
 
     this.checkLoginStatus();
@@ -67,9 +76,41 @@ export class NavbarComponent implements OnInit {
 
   }
 
+
+  loadUserFromStorage(): void {
+    const user = localStorage.getItem('user');
+    const userId = localStorage.getItem('userId');
+
+    this.userId = userId;
+
+    if (user) {
+      try {
+        const userData = JSON.parse(user);
+
+        this.userName =
+          userData?.name ||
+          userData?.fullName ||
+          userData?.username ||
+          '';
+
+        // Make the navbar name available immediately
+        this.profileData = {
+          ...this.profileData,
+          user: {
+            ...this.profileData?.user,
+            ...userData
+          }
+        };
+      } catch (error) {
+        console.error('Unable to read user data:', error);
+      }
+    }
+  }
+
   isMobileView(): boolean {
     return window.innerWidth < 992;
   }
+
   getProfileSummary(): void {
     const userId = localStorage.getItem('userId');
 
@@ -80,13 +121,23 @@ export class NavbarComponent implements OnInit {
     this.authService.getProfileSummary(userId).subscribe({
       next: (res: any) => {
         this.profileData = res?.data;
-        console.log(this.profileData, 'user data');
+
+        const user = res?.data?.user || res?.data;
+
+        this.userName =
+          user?.name ||
+          user?.fullName ||
+          user?.username ||
+          this.userName;
+
+        console.log('Profile loaded:', this.profileData);
       },
       error: (err: any) => {
         console.error('Profile summary error:', err);
       }
     });
   }
+
 
   toggleCategoryMenu(event?: Event) {
     if (event) {
@@ -212,11 +263,13 @@ export class NavbarComponent implements OnInit {
     this.isAuthOpen = true;
   }
 
-  closeAuthModal(isLoggedIn?: boolean) {
+  closeAuthModal(isLoggedIn?: boolean): void {
     this.isAuthOpen = false;
 
     if (isLoggedIn) {
+      this.loadUserFromStorage();
       this.checkLoginStatus();
+      this.getProfileSummary();
       this.loadWishlistCount();
       this.loadCartCount();
     }
