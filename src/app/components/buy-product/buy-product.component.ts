@@ -56,18 +56,35 @@ export class BuyProductComponent implements OnInit {
 
   }
 
-  updateQty(type: number) {
+  updateQty(type: number): void {
+    const stock = Number(
+      this.selectedVariant?.stock ?? this.product?.stock ?? 0
+    );
 
-    if (type === -1 && this.quantity > 1) {
+    if (stock <= 0) {
+      this.toastr.warning('Sorry, this product is out of stock.');
+      return;
+    }
+
+    if (type === -1) {
+      if (this.quantity <= 1) {
+        this.toastr.warning('Minimum quantity is 1.');
+        return;
+      }
 
       this.quantity--;
-
+      return;
     }
 
     if (type === 1) {
+      if (this.quantity >= stock) {
+        this.toastr.warning(
+          `Only ${stock} item(s) available in stock.`
+        );
+        return;
+      }
 
       this.quantity++;
-
     }
   }
   addToCart() {

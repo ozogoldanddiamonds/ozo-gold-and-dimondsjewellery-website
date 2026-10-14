@@ -13,7 +13,7 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit {
-  
+
   quantity: number = 1;
   openAcc: string | null = null;
   errorMessage = '';
@@ -44,8 +44,8 @@ export class ProductComponent implements OnInit {
   constructor(public router: Router, private route: ActivatedRoute,
     private loaderService: LoadingService, private productService: ProductService,
     private cartService: CartService, private sizeChartService: SizeChartsService,
-    private toastr: ToastrService,  private meta: Meta,
-  private title: Title
+    private toastr: ToastrService, private meta: Meta,
+    private title: Title
   ) { }
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -66,40 +66,40 @@ export class ProductComponent implements OnInit {
 
         this.loaderService.hide();
         this.product = this.normalizeProduct(res?.data);
-// =========================
-// PRODUCT SEO
-// =========================
+        // =========================
+        // PRODUCT SEO
+        // =========================
 
-if (this.product) {
+        if (this.product) {
 
-  // SEO Title
-  if (this.product.seoTitle) {
-    this.title.setTitle(this.product.seoTitle);
-  } else {
-    this.title.setTitle(
-      this.product.name
-        ? `${this.product.name} | OZO Jewelry`
-        : 'OZO Jewelry'
-    );
-  }
+          // SEO Title
+          if (this.product.seoTitle) {
+            this.title.setTitle(this.product.seoTitle);
+          } else {
+            this.title.setTitle(
+              this.product.name
+                ? `${this.product.name} | OZO Jewelry`
+                : 'OZO Jewelry'
+            );
+          }
 
-  // SEO Description
-  if (this.product.seoDescription) {
-    this.meta.updateTag({
-      name: 'description',
-      content: this.product.seoDescription
-    });
-  }
+          // SEO Description
+          if (this.product.seoDescription) {
+            this.meta.updateTag({
+              name: 'description',
+              content: this.product.seoDescription
+            });
+          }
 
-  // Meta Keywords
-  if (this.product.metaKeywords) {
-    this.meta.updateTag({
-      name: 'keywords',
-      content: this.product.metaKeywords
-    });
-  }
+          // Meta Keywords
+          if (this.product.metaKeywords) {
+            this.meta.updateTag({
+              name: 'keywords',
+              content: this.product.metaKeywords
+            });
+          }
 
-}
+        }
 
         this.subCategoryId = this.product.subCategory._id;
         this.categoryId = this.product.category._id;
@@ -108,9 +108,9 @@ if (this.product) {
 
         if (this.product?.images?.length) {
 
-            this.selectedImage = this.product.images[0];
+          this.selectedImage = this.product.images[0];
 
-  this.showVideo = false;
+          this.showVideo = false;
         }
 
         if (this.product?.variants?.length) {
@@ -152,17 +152,17 @@ if (this.product) {
   }
   selectImage(img: string): void {
 
-  this.selectedImage = img;
+    this.selectedImage = img;
 
-  // Video close
-  this.showVideo = false;
+    // Video close
+    this.showVideo = false;
 
-}
-selectVideo(): void {
+  }
+  selectVideo(): void {
 
-  this.showVideo = true;
+    this.showVideo = true;
 
-}
+  }
   selectPurity(purity: string) {
 
     this.selectedPurity = purity;
@@ -170,10 +170,9 @@ selectVideo(): void {
     this.loadSizesByPurity();
 
   }
-  selectVariant(variant: any) {
-
+  selectVariant(variant: any): void {
     this.selectedVariant = variant;
-
+    this.quantity = 1;
   }
   toggleAcc(section: string) {
     this.openAcc = this.openAcc === section ? null : section;
@@ -294,6 +293,62 @@ selectVideo(): void {
       });
 
   }
+
+
+  increaseQuantity(): void {
+    const stock = Number(this.selectedVariant?.stock ?? 0);
+
+    if (stock <= 0) {
+      this.toastr.warning('Sorry, this product is out of stock.');
+      return;
+    }
+
+    if (this.quantity >= stock) {
+      this.toastr.warning(
+        `Only ${stock} item(s) available in stock.`
+      );
+      return;
+    }
+
+    this.quantity += 1;
+  }
+
+  decreaseQuantity(): void {
+    if (this.quantity <= 1) {
+      this.toastr.warning('Minimum quantity is 1.');
+      return;
+    }
+
+    this.quantity -= 1;
+  }
+
+  onQuantityChange(value: number | string): void {
+    const stock = Number(this.selectedVariant?.stock ?? 0);
+    const enteredQuantity = Number(value);
+
+    if (stock <= 0) {
+      this.quantity = 1;
+      this.toastr.warning('Sorry, this product is out of stock.');
+      return;
+    }
+
+    if (!Number.isInteger(enteredQuantity) || enteredQuantity < 1) {
+      this.quantity = 1;
+      this.toastr.warning('Please enter a valid quantity.');
+      return;
+    }
+
+    if (enteredQuantity > stock) {
+      this.quantity = stock;
+      this.toastr.warning(
+        `Only ${stock} item(s) available in stock.`
+      );
+      return;
+    }
+
+    this.quantity = enteredQuantity;
+  }
+
   remove(item: any) {
 
     this.loaderService.show();

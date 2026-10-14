@@ -568,23 +568,20 @@
                         <strong>Quantity</strong>
 
                     </div>
+
                     <div class="qty-box">
-
-                        <button class="qty-btn" (click)="quantity = quantity > 1 ? quantity - 1 : 1">
-
+                        <button type="button" class="qty-btn" (click)="decreaseQuantity()">
                             -
-
                         </button>
 
-                        <input type="number" [(ngModel)]="quantity" min="1">
+                        <input type="number" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" min="1"
+                            [max]="selectedVariant?.stock ?? 1" step="1">
 
-                        <button class="qty-btn" (click)="quantity = quantity + 1">
-
+                        <button type="button" class="qty-btn" (click)="increaseQuantity()">
                             +
-
                         </button>
-
                     </div>
+
 
                 </div>
 

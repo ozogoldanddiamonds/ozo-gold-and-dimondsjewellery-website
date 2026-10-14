@@ -244,13 +244,13 @@
         border-radius: 18px;
 
         /* Glass effect */
-        background: rgba(255, 255, 255, 0.55);
+        /* background: rgba(255, 255, 255, 0.55); */
 
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
+        /* backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px); */
 
         /* Subtle luxury border */
-        border: 1px solid rgba(255, 255, 255, 0.8);
+        /* border: 1px solid rgba(255, 255, 255, 0.8); */
 
         /* box-shadow:
             0 8px 25px rgba(0, 0, 0, 0.08),
@@ -395,7 +395,7 @@
 
     .diamond-text {
 
-        color: #555;
+        color: #d90429;
 
         font-weight: 600;
 
@@ -2432,87 +2432,84 @@
         color: var(--primary-red-dark);
     }
 
-    @media (max-width: 991.98px) {
 
-        /* Mobile navbar menu */
-        #navbarNav.collapse.show {
-            height: auto !important;
-            min-height: 0 !important;
-            padding: 0 !important;
-            margin: 0 !important;
+    /* ==========================================
+   OZO PREMIUM WHITE GLASS NAVBAR
+========================================== */
+
+    #mainNavbar {
+        position: sticky !important;
+        top: 0 !important;
+        width: 100%;
+        z-index: 1000 !important;
+
+        /* Initial translucent white glass */
+        background: rgba(255, 255, 255, 0.72) !important;
+
+        -webkit-backdrop-filter: blur(12px) saturate(150%);
+        backdrop-filter: blur(12px) saturate(150%);
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+
+        box-shadow: 0 3px 18px rgba(30, 30, 30, 0.035);
+
+        transition:
+            background 0.35s ease,
+            backdrop-filter 0.35s ease,
+            box-shadow 0.35s ease,
+            border-color 0.35s ease;
+    }
+
+    /* ==========================================
+   ON SCROLL — ENHANCED GLASS EFFECT
+========================================== */
+
+    #mainNavbar.scrolled {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+
+        /* More transparent white */
+        background: rgba(255, 255, 255, 0.58) !important;
+
+        -webkit-backdrop-filter: blur(24px) saturate(175%);
+        backdrop-filter: blur(24px) saturate(175%);
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+
+        box-shadow:
+            0 8px 30px rgba(25, 25, 25, 0.09),
+            0 1px 0 rgba(255, 255, 255, 0.65);
+
+        /* Keep your existing scrolled animation */
+        animation: ozoNavbarFlip 0.9s cubic-bezier(.22, .61, .36, 1) both;
+    }
+
+    /* Keep brand readable over changing backgrounds */
+    #mainNavbar .navbar-brand,
+    #mainNavbar .nav-link,
+    #mainNavbar .mobile-cart-wrapper,
+    #mainNavbar .icons a i {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Avoid opaque backgrounds on the mobile menu */
+    @media (max-width: 991px) {
+        #mainNavbar .navbar-collapse {
+            background: transparent !important;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+    }
+
+    /* Fallback for browsers without backdrop-filter */
+    @supports not (backdrop-filter: blur(12px)) {
+        #mainNavbar {
+            background: rgba(255, 255, 255, 0.94) !important;
         }
 
-        #navbarNav .navbar-nav {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 0 !important;
-            row-gap: 0 !important;
-            padding: 8px 0 12px !important;
-            margin: 0 !important;
-        }
-
-        #navbarNav .navbar-nav>li {
-            width: 100%;
-            height: auto !important;
-            min-height: 0 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        /* Mobile user profile only */
-        #navbarNav .mobile_user {
-            position: relative !important;
-            display: block !important;
-            width: 100% !important;
-            max-width: none !important;
-            height: 40px !important;
-            min-height: 0 !important;
-            margin: 0 !important;
-            padding: 8px 0 !important;
-            color: #000 !important;
-            text-align: center;
-            line-height: 1.4 !important;
-        }
-
-        #navbarNav .mobile_user>i,
-        #navbarNav .mobile_user>span {
-            color: #000 !important;
-        }
-
-        /* Dropdown existing behavior preserve */
-        #navbarNav .mobile_user .top-user-dropdown {
-            width: calc(100% - 24px) !important;
-            max-width: none !important;
-            margin: 8px auto 0 !important;
-            text-align: left;
-        }
-
-        .top-user {
-            position: static;
-            display: block;
-            align-items: unset;
-            max-width: none;
-            width: 100%;
-            color: #000 !important;
-            white-space: normal;
-            text-align: center;
-        }
-
-        .top-user>i,
-        .top-user>span {
-            color: #000 !important;
-        }
-
-        .top-user-dropdown {
-            position: static;
-            width: 100%;
-            max-width: none;
-            color: #000;
-            text-align: left;
-        }
-
-        .top-user-dropdown a {
-            color: #000 !important;
+        #mainNavbar.scrolled {
+            background: rgba(255, 255, 255, 0.88) !important;
         }
     }
