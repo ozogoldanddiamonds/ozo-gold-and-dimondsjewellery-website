@@ -203,14 +203,13 @@
 
             </div>
 
-            <div class="swiper-wrapper">
+            <div class="swiper-wrapper" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
 
                 <div class="swiper-slide" *ngFor="let item of subCategoriesList">
 
                     <div class="collection-card" (click)="goToSubCategory(item._id)">
 
-                        <div class="collection-image-wrap" data-aos="fade-down" data-aos-easing="linear"
-                            data-aos-duration="1500">
+                        <div class="collection-image-wrap">
 
                             <img [src]="item.image || item.images?.[0]" [alt]="item.name">
 
@@ -421,14 +420,13 @@
 
             </div>
 
-            <div class="swiper-wrapper">
+            <div class="swiper-wrapper" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
 
                 <div class="swiper-slide" *ngFor="let item of subSubCategoriesList">
 
                     <div class="collection-card" (click)="goToSubSubCategory(item._id)">
 
-                        <div class="collection-image-wrap" data-aos="fade-right" data-aos-offset="300"
-                            data-aos-easing="ease-in-sine">
+                        <div class="collection-image-wrap">
 
                             <img [src]="item.image || item.images?.[0]" [alt]="item.name">
 

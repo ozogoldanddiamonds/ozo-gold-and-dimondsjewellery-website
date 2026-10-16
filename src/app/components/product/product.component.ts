@@ -13,7 +13,7 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit {
-
+  availableColors: string[] = [];
   quantity: number = 1;
   openAcc: string | null = null;
   errorMessage = '';
@@ -129,7 +129,7 @@ export class ProductComponent implements OnInit {
             this.purityOptions[0];
 
           this.loadSizesByPurity();
-
+          this.loadColorsByPurity();
           this.filteredVariants =
 
             this.product.variants.filter(
@@ -168,6 +168,7 @@ export class ProductComponent implements OnInit {
     this.selectedPurity = purity;
 
     this.loadSizesByPurity();
+    this.loadColorsByPurity();
 
   }
   selectVariant(variant: any): void {
@@ -616,6 +617,39 @@ export class ProductComponent implements OnInit {
   productDetails(id: string) {
     this.router.navigate(["/product", id]);
   }
+  loadColorsByPurity(): void {
+    const variantsByPurity = (this.product?.variants || [])
+      .filter(
+        (variant: any) =>
+          String(variant?.metalPurity).toLowerCase() ===
+          String(this.selectedPurity).toLowerCase()
+      );
 
+    this.availableColors = [
+      ...new Set<string>(
+        variantsByPurity
+          .map((variant: any) =>
+            String(variant?.metalColor || '').trim()
+          )
+          .filter((color: string) => color.length > 0)
+          .map((color: string) => color.toLowerCase())
+      )
+    ].map((color: string) => {
+      // Preserve a clean display format
+      return color.charAt(0).toUpperCase() + color.slice(1);
+    });
+  }
+  selectColor(color: string): void {
+    const variant = (this.product?.variants || []).find(
+      (v: any) =>
+        String(v?.metalPurity).toLowerCase() ===
+        String(this.selectedPurity).toLowerCase() &&
+        String(v?.metalColor).toLowerCase() === color.toLowerCase()
+    );
 
+    if (variant) {
+      this.selectedVariant = variant;
+      this.quantity = 1;
+    }
+  }
 }

@@ -100,56 +100,63 @@
                         {{ item.productName | titlecase}}
                     </h6>
 
+
+                    <!-- Variant details -->
                     <p class="mb-1">
-
-                        Size :
-                        {{ item.selectedVariant?.size }}
-
+                        Size: {{ item.selectedVariant?.size }}
                     </p>
 
                     <p class="mb-1">
-
                         Purity: {{ item.selectedVariant?.metalPurity }}
-
-                        |
-
-                        Color: {{ item.selectedVariant?.metalColor | titlecase }}
-
+                        | Color: {{ item.selectedVariant?.metalColor | titlecase }}
                     </p>
 
-                    <p class="fw-bold">
+                    <p class="mb-1">
+                        Unit Price:
+                        <strong>
+                            ₹{{ item.selectedVariant?.finalPrice | number:'1.2-2' }}
+                        </strong>
+                    </p>
 
-                        Price ₹{{ item.selectedVariant?.finalPrice | number:'1.0-0' }}
+                    <p class="mb-2 stock-status" [class.out-of-stock]="item.stock <= 0"
+                        [class.low-stock]="item.stock > 0 && item.stock < 5">
 
+                        <ng-container *ngIf="item.stock > 0; else outOfStockLabel">
+                            Available Stock: {{ item.stock }}
+                        </ng-container>
+
+                        <ng-template #outOfStockLabel>
+                            Out of Stock
+                        </ng-template>
                     </p>
 
                     <div class="d-flex align-items-center justify-content-between mt-2">
-
                         <div class="qty-box">
-
-                            <button (click)="decrease(item)">
+                            <button type="button" [disabled]="item.stock <= 0 || item.quantity <= 1"
+                                (click)="decrease(item)">
                                 -
                             </button>
 
-                            <input type="number" [ngModel]="item.quantity" (ngModelChange)="item.quantity = +$event">
+                            <input type="number" [value]="item.quantity" readonly />
 
-                            <button (click)="increase(item)">
+                            <button type="button" [disabled]="item.stock <= 0 || item.quantity >= item.stock"
+                                (click)="increase(item)">
                                 +
                             </button>
-
                         </div>
 
                         <div class="fw-bold">
-
-                            ₹{{
-                            (item.selectedVariant?.finalPrice || 0)
-                            * item.quantity
-                            | number:'1.0-0'
-                            }}
-
+                            Item Total:
+                            ₹{{ getItemTotal(item) | number:'1.2-2' }}
                         </div>
-
                     </div>
+
+                    <p class="text-danger small mt-2" *ngIf="item.stock > 0 && item.quantity > item.stock">
+                        Quantity exceeds available stock.
+                    </p>
+
+
+
 
                 </div>
 
@@ -167,57 +174,82 @@
 
         <div class="col-lg-4">
 
+
             <div class="summary-box">
 
-                <h5>
-                    Order Summary
-                </h5>
-
-                <div class="summary-row">
-
-                    <span>
-                        Subtotal
+                <div class="summary-heading">
+                    <div>
+                        <span class="summary-eyebrow">OZO GOLD & DIAMONDS</span>
+                        <h5>Order Summary</h5>
+                    </div>
+                    <span class="summary-items-count">
+                        {{ cartItems.length }}
+                        {{ cartItems.length === 1 ? 'Item' : 'Items' }}
                     </span>
-
-                    <span>
-                        ₹ {{ getSubtotal() | number:'1.0-0' }}
-                    </span>
-
                 </div>
 
-                <div class="summary-row">
+                <!-- Item-wise price breakdown -->
+                <div class="summary-items">
+                    <div class="summary-item" *ngFor="let item of cartItems">
 
-                    <span>
-                        Shipping
-                    </span>
+                        <div class="summary-item-info">
+                            <!-- <span class="summary-product-name">
+                                {{ item.productName | titlecase }}
+                            </span> -->
 
-                    <span>
-                        Free
-                    </span>
+                            <!-- <span class="summary-calculation">
+                                ₹{{ item.selectedVariant?.finalPrice | number:'1.2-2' }}
+                                × {{ item.quantity }} ₹{{ getItemTotal(item) | number:'1.2-2' }}
+                            </span> -->
+                        </div>
 
+                        <strong class="summary-item-total">
+
+                        </strong>
+
+                    </div>
                 </div>
 
-                <hr>
+                <div class="summary-divider"></div>
 
+                <!-- Subtotal -->
+                <!-- <div class="summary-row">
+    <span>Subtotal ({{ getTotalQuantity() }} items)</span>
+    <span>₹{{ getSubtotal() | number:'1.2-2' }}</span>
+  </div> -->
+
+                <!-- Shipping -->
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span class="free-shipping">FREE</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <!-- Final total -->
                 <div class="summary-row total">
-
-                    <span>
-                        Total
-                    </span>
-
-                    <span>
-                        ₹ {{ getSubtotal() | number:'1.0-0' }}
-                    </span>
-
+                    <span>Total Amount</span>
+                    <span>₹{{ getSubtotal() | number:'1.2-2' }}</span>
                 </div>
 
-                <button class="btn checkout-btn w-100 mt-3">
+                <p class="tax-note">
+                    <i class="fa fa-check-circle"></i>
+                    Inclusive of applicable taxes
+                </p>
 
+                <button type="button" class="btn checkout-btn w-100" [disabled]="hasOutOfStockItems()"
+                    (click)="proceedToCheckout()">
                     Proceed to Checkout
-
+                    <i class="fa fa-arrow-right"></i>
                 </button>
 
+                <div class="secure-checkout">
+                    <i class="fa fa-lock"></i>
+                    Secure checkout
+                </div>
+
             </div>
+
 
         </div>
 

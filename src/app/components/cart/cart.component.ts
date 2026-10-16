@@ -29,15 +29,20 @@ export class CartComponent implements OnInit {
   }
 
   increase(item: any) {
+    const stock = Number(item?.stock) || 0;
+    const quantity = Number(item?.quantity) || 0;
 
-    const quantity =
-      item.quantity + 1;
+    if (stock <= 0) {
+      this.toaster.error('Out of stock');
+      return;
+    }
 
-    this.updateQuantity(
-      item,
-      quantity
-    );
+    if (quantity >= stock) {
+      this.toaster.warning(`Only ${stock} item(s) available in stock`);
+      return;
+    }
 
+    this.updateQuantity(item, quantity + 1);
   }
   decrease(item: any) {
 
@@ -60,10 +65,7 @@ export class CartComponent implements OnInit {
     );
 
   }
-  updateQuantity(
-    item: any,
-    quantity: number
-  ) {
+  updateQuantity(item: any, quantity: number) {
 
     this.loaderService.show();
 
@@ -180,84 +182,100 @@ export class CartComponent implements OnInit {
   }
 
   getCartItems() {
-
-    const userId =
-      localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
 
     if (!userId) {
-
       this.cartItems = [];
-
       this.loaderService.hide();
-
       return;
-
     }
 
     this.loaderService.show();
 
-    this.cartService
-      .getCart(userId)
-      .subscribe({
+    this.cartService.getCart(userId).subscribe({
+      next: (res: any) => {
+        this.cartItems = (res?.items || []).map((item: any) => {
+          const stock = Number(item?.selectedVariant?.stock ?? 0);
+          const quantity = Number(item?.quantity ?? 1);
 
-        next: (res: any) => {
-
-          this.cartItems =
-            res?.items || [];
-
-          this.cartCount =
-            res?.cartCount ||
-            this.cartItems.length;
-
-          this.cartId =
-            res?.cartId || '';
-
-          this.cartService
-            .updateCartCount(
-              this.cartCount
-            );
-
-          this.loaderService.hide();
-
-        },
-
-        error: (err) => {
-
-          this.loaderService.hide();
-
-          this.toaster.error(
-
-            err?.error?.message ||
-
-            'Failed to load cart'
-
+          const unitPrice = Number(
+            item?.selectedVariant?.finalPrice ??
+            item?.selectedVariant?.priceBreakup?.finalPrice ??
+            0
           );
 
-        }
+          return {
+            ...item,
+            stock,
+            quantity,
+            totalPrice: Math.round(unitPrice * quantity * 100) / 100
+          };
+        });
 
-      });
+        this.cartCount = res?.cartCount ?? this.cartItems.length;
+        this.cartId = res?.cartId || '';
 
+        this.cartService.updateCartCount(this.cartCount);
+        this.loaderService.hide();
+      },
+      error: (err) => {
+        this.loaderService.hide();
+
+        this.toaster.error(
+          err?.error?.message || 'Failed to load cart'
+        );
+      }
+    });
   }
-  getSubtotal() {
+  // getSubtotal() {
 
-    return this.cartItems.reduce(
+  //   return this.cartItems.reduce(
 
-      (total, item) =>
+  //     (total, item) =>
 
-        total + item.totalPrice,
+  //       total + item.totalPrice,
 
-      0
+  //     0
 
-    );
+  //   );
 
-  }
+  // }
   product(id: string) {
-  if (!id) {
-    console.error('Product ID is missing');
-    return;
+    if (!id) {
+      console.error('Product ID is missing');
+      return;
+    }
+
+    this.router.navigate(['/product', id]);
   }
 
-  this.router.navigate(['/product', id]);
-}
+  getItemTotal(item: any): number {
+    const unitPrice = Number(item?.selectedVariant?.finalPrice) || 0;
+    const quantity = Number(item?.quantity) || 0;
 
+    return Math.round((unitPrice * quantity + Number.EPSILON) * 100) / 100;
+  }
+
+  getSubtotal(): number {
+    return this.cartItems.reduce(
+      (total, item) => total + this.getItemTotal(item),
+      0
+    );
+  }
+  hasOutOfStockItems(): boolean {
+    return this.cartItems.some((item: any) => {
+      const stock = Number(item?.stock) || 0;
+      const quantity = Number(item?.quantity) || 0;
+
+      return stock <= 0 || quantity > stock;
+    });
+  }
+
+  getTotalQuantity(): number {
+    return this.cartItems.reduce(
+      (total, item) => total + (Number(item.quantity) || 0),
+      0
+    );
+  }
+  proceedToCheckout() { }
 }

@@ -543,3 +543,62 @@
     }
 
 }
+
+/* Premium Footer Link Hover Animation */
+.footer ul li a {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+/* Animated underline */
+.footer ul li a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 1.5px;
+    background: linear-gradient(90deg,
+            #b8860b,
+            #e5c76b,
+            #b8860b);
+
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+}
+
+/* Hover effect */
+.footer ul li a:hover {
+    color: #b8860b !important;
+    transform: translateX(4px);
+}
+
+.footer ul li a:hover::after {
+    transform: scaleX(1);
+}
+
+/* Smooth reverse animation */
+.footer ul li a::after {
+    transform-origin: left;
+}
+
+/* Keyboard accessibility */
+.footer ul li a:focus-visible {
+    outline: 2px solid #b8860b;
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+
+    .footer ul li a,
+    .footer ul li a::after {
+        transition: none;
+    }
+}

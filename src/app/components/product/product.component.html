@@ -521,14 +521,13 @@
                     </div>
 
                     <div class="size-box">
+                        <button type="button" *ngFor="let color of availableColors"
+                            [class.active]="selectedVariant?.metalColor?.toLowerCase() === color.toLowerCase()"
+                            (click)="selectColor(color)">
 
-                        <button *ngFor="let variant of filteredVariants"
-                            [class.active]="selectedVariant?._id === variant._id" (click)="selectVariant(variant)">
-
-                            {{ variant?.metalColor | titlecase}}
+                            {{ color | titlecase }}
 
                         </button>
-
                     </div>
 
                 </div>

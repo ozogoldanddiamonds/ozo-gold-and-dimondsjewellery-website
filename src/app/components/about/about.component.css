@@ -17,7 +17,7 @@
     font-size: clamp(2.2rem, 5vw, 4.2rem);
     font-weight: 700;
     line-height: 1.05;
-    max-width: 10ch;
+    /* max-width: 10ch; */
     margin: 12px 0 16px;
 }
 
