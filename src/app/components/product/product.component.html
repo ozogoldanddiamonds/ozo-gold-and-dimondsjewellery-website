@@ -457,7 +457,6 @@
                 </div>
 
                 <!-- Metal Purity -->
-                <!-- Metal Purity -->
                 <div class="option-block">
 
                     <div class="option-head">
@@ -493,14 +492,17 @@
                     </div>
 
                     <div class="size-box">
-
-                        <button *ngFor="let size of sizeOptions" [class.active]="selectedSize === size"
-                            (click)="selectSize(size)">
+                        <button type="button" *ngFor="let size of sizeOptions" [class.active]="selectedSize === size"
+                            [class.out-of-stock]="getVariantBySize(size)?.stock <= 0"
+                            [disabled]="getVariantBySize(size)?.stock <= 0" (click)="selectSize(size)">
 
                             {{ size }}
 
-                        </button>
+                            <span class="stock-label" *ngIf="getVariantBySize(size)?.stock <= 0">
+                                Out of stock
+                            </span>
 
+                        </button>
                     </div>
 
                 </div>
@@ -659,7 +661,7 @@
         <div class="product-grid">
             <div class="product-card" *ngFor="let item of similarProducts">
                 <img [src]="item.images[0]" alt="{{ item.name }}" (click)="productDetails(item._id)" />
-                <h4>{{ item.name }}</h4>
+                <h4>{{ item.name | titlecase}}</h4>
 
                 <!-- ✅ Priority: calculatedPrice → priceBreakup.finalPrice → 0 -->
                 <span>

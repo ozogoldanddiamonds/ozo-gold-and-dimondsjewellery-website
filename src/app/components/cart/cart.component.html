@@ -2,33 +2,61 @@
 
     <!-- EMPTY CART -->
 
+
     <div *ngIf="cartItems.length === 0" class="empty-cart-wrapper">
 
-        <div class="text-center">
+        <div class="empty-cart-card">
 
-            <img src="../../../assets//images/empty_cart.png" alt="Empty Cart" class="empty-cart-img">
+            <!-- Decorative glow -->
+            <div class="empty-cart-glow"></div>
 
-            <h2 class="mt-4">
-                Your Cart is Empty
-            </h2>
+            <!-- Floating jewellery icon -->
+            <div class="empty-cart-visual">
+                <div class="diamond-orbit orbit-one"></div>
+                <div class="diamond-orbit orbit-two"></div>
 
-            <p class="text-muted">
+                <div class="empty-cart-icon">
+                    <img src="assets/images/diamond_png.png" alt="Loading">
+                </div>
 
-                Looks like you haven't added any jewellery yet.
+                <span class="floating-sparkle sparkle-one">✦</span>
+                <span class="floating-sparkle sparkle-two">✧</span>
+                <span class="floating-sparkle sparkle-three">✦</span>
+            </div>
 
-                Explore our collections and find something special.
+            <span class="empty-cart-eyebrow">
+                OZO GOLD & DIAMONDS
+            </span>
 
+            <h2>Your Jewellery Journey Awaits</h2>
+
+            <div class="empty-cart-divider">
+                <span></span>
+                <i class="fa fa-diamond"></i>
+                <span></span>
+            </div>
+
+            <p class="empty-cart-description">
+                Your cart is waiting for something extraordinary.
+                Discover timeless jewellery crafted to make every moment shine.
             </p>
 
-            <button class="btn checkout-btn mt-3" routerLink="/home">
+            <button type="button" class="empty-cart-cta" routerLink="/home">
 
-                Continue Shopping
+                <span>Explore Collections</span>
+                <i class="fa fa-arrow-right"></i>
 
             </button>
 
-        </div>
+            <div class="empty-cart-footer">
+                <i class="fa fa-star-o"></i>
+                <span>Every shine has a story.</span>
+                <i class="fa fa-star-o"></i>
+            </div>
 
+        </div>
     </div>
+
 
     <!-- CART DATA -->
 
@@ -60,7 +88,7 @@
 
                 <div>
 
-                    <img [src]="item.image" class="cart-img"   (click)="product(item.productId)">
+                    <img [src]="item.image" class="cart-img" (click)="product(item.productId)">
 
                 </div>
 
@@ -69,7 +97,7 @@
                 <div class="flex-grow-1">
 
                     <h6>
-                        {{ item.productName }}
+                        {{ item.productName | titlecase}}
                     </h6>
 
                     <p class="mb-1">
@@ -81,17 +109,17 @@
 
                     <p class="mb-1">
 
-                        {{ item.selectedVariant?.metalPurity }}
+                        Purity: {{ item.selectedVariant?.metalPurity }}
 
                         |
 
-                        {{ item.selectedVariant?.metalColor | titlecase }}
+                        Color: {{ item.selectedVariant?.metalColor | titlecase }}
 
                     </p>
 
                     <p class="fw-bold">
 
-                        ₹{{ item.selectedVariant?.finalPrice | number:'1.0-0' }}
+                        Price ₹{{ item.selectedVariant?.finalPrice | number:'1.0-0' }}
 
                     </p>
 

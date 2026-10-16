@@ -178,6 +178,12 @@ export class ProductComponent implements OnInit {
     this.openAcc = this.openAcc === section ? null : section;
   }
 
+  getVariantBySize(size: any): any {
+    return this.product?.variants?.find(
+      (variant: any) => variant.size === size
+    );
+  }
+
 
 
   whishlist() {
