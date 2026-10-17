@@ -162,8 +162,8 @@ export class HomeComponent implements OnInit {
       },
 
       breakpoints: {
-        320: { slidesPerView: 4 },
-        576: { slidesPerView: 4 },
+        320: { slidesPerView: 3 },
+        576: { slidesPerView: 3 },
         768: { slidesPerView: 4 },
         992: { slidesPerView: 4 }
       }

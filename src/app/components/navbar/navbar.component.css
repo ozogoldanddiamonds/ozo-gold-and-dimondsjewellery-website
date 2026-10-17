@@ -722,13 +722,15 @@
         }
 
 
-        .brand-logo {
+        .brand-logo img {
 
-            width: 55px;
-            height: 55px;
+            width: 30px;
+            height: 35px;
 
             /* min-width: 35px; */
         }
+
+
 
 
         .brand-name {
@@ -744,6 +746,9 @@
             letter-spacing: 2px;
         }
 
+        .nav-title {
+            margin-left: 20px;
+        }
     }
 
     .nav-link:hover {

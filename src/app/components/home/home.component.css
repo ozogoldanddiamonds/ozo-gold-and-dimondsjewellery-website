@@ -921,6 +921,11 @@
      .popular-title {
          font-size: 8px !important;
          text-align: center;
+         margin-top: 0px !important;
+     }
+
+     .popular-swiper-slide img {
+         height: 100px !important;
      }
 
      .description {
@@ -930,6 +935,8 @@
      .btn-gold {
          justify-content: center;
      }
+
+
 
      .parallax-section {
          min-height: 280px;
