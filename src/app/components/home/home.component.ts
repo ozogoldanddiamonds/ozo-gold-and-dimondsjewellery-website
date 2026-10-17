@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BannersService } from 'src/app/service/banners.service';
@@ -10,6 +10,8 @@ import { WishlistService } from 'src/app/service/wishlist.service';
 import Swiper from 'swiper';
 import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
 import { Meta, Title } from '@angular/platform-browser';
+import { MetaKeywordsService } from 'src/app/service/meta-keywords.service';
+import { DOCUMENT } from '@angular/common';
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 @Component({
   selector: 'app-home',
@@ -79,8 +81,11 @@ export class HomeComponent implements OnInit {
   ];
   constructor(public router: Router, private bannerService: BannersService, private toastr: ToastrService,
     private wishlistService: WishlistService, private productService: ProductService, private subcategoryservices: SubcategoryService,
-    private loaderService: LoadingService, private meta: Meta,
-    private title: Title) { }
+    private loaderService: LoadingService,
+    private seoService: MetaKeywordsService,
+    private titleService: Title,
+    private metaService: Meta,
+    @Inject(DOCUMENT) private document: Document) { }
   ngOnInit(): void {
     this.getAllBanners();
     this.getNewProducts();
@@ -88,6 +93,7 @@ export class HomeComponent implements OnInit {
     this.getfeatureProducts();
     this.loadWishlist();
     this.getSubSubCategories();
+    this.loadHomeSEO();
   }
 
   initFeaturedSwiper() {
@@ -315,43 +321,6 @@ export class HomeComponent implements OnInit {
 
           const products = response.data || [];
 
-          // =====================
-          // HOME PAGE SEO
-          // =====================
-
-          const seoProducts = products;
-
-          const keywords = seoProducts
-            .map((product: any) => product.metaKeywords)
-            .filter((keyword: string) => keyword)
-            .join(', ');
-
-          const uniqueKeywords = [...new Set(
-            keywords
-              .split(',')
-              .map((keyword: string) => keyword.trim())
-              .filter((keyword: string) => keyword)
-          )].join(', ');
-
-          const seoDescription = seoProducts
-            .map((product: any) => product.seoDescription)
-            .find((description: string) => description);
-
-          this.title.setTitle('OZO Jewelry');
-
-          if (uniqueKeywords) {
-            this.meta.updateTag({
-              name: 'keywords',
-              content: uniqueKeywords
-            });
-          }
-
-          if (seoDescription) {
-            this.meta.updateTag({
-              name: 'description',
-              content: seoDescription
-            });
-          }
 
 
           // =====================
@@ -808,6 +777,111 @@ export class HomeComponent implements OnInit {
   trackByCategory(index: number, item: any): any {
     return item._id || index;
   }
+
+  loadHomeSEO(): void {
+    this.seoService.getMetaKeywordsSEO().subscribe({
+      next: (res: any) => {
+        const seo = res?.data;
+
+        if (!res?.success || !seo || seo.isActive === false) {
+          return;
+        }
+
+        // 1. Page Title
+        this.titleService.setTitle(seo.metaTitle || 'OZO Jewellery');
+
+        // 2. Meta Description
+        if (seo.metaDescription) {
+          this.setMetaTag(
+            'name',
+            'description',
+            seo.metaDescription
+          );
+        }
+
+        // 3. Meta Keywords
+        if (Array.isArray(seo.metaKeywords)) {
+          this.setMetaTag(
+            'name',
+            'keywords',
+            seo.metaKeywords.join(', ')
+          );
+        }
+
+        // 4. Open Graph tags
+        if (seo.ogTitle) {
+          this.setMetaTag('property', 'og:title', seo.ogTitle);
+        }
+
+        if (seo.ogDescription) {
+          this.setMetaTag(
+            'property',
+            'og:description',
+            seo.ogDescription
+          );
+        }
+
+        if (seo.ogImage) {
+          this.setMetaTag('property', 'og:image', seo.ogImage);
+        }
+
+        // 5. Canonical URL
+        if (seo.canonicalUrl) {
+          let canonical = this.document.querySelector(
+            'link[rel="canonical"]'
+          ) as HTMLLinkElement | null;
+
+          if (!canonical) {
+            canonical = this.document.createElement('link');
+            canonical.rel = 'canonical';
+            this.document.head.appendChild(canonical);
+          }
+
+          canonical.href = seo.canonicalUrl;
+
+          this.setMetaTag('property', 'og:url', seo.canonicalUrl);
+        }
+
+        // Debug: verify the API data
+        console.log('SEO API DATA:', seo);
+        console.log(
+          'DESCRIPTION TAG:',
+          this.metaService.getTag('name="description"')
+        );
+        console.log(
+          'KEYWORDS TAG:',
+          this.metaService.getTag('name="keywords"')
+        );
+      },
+
+      error: (err: any) => {
+        console.error('SEO API ERROR:', err);
+      }
+    });
+  }
+
+  private setMetaTag(
+    attribute: 'name' | 'property',
+    key: string,
+    content: string
+  ): void {
+    const selector = `${attribute}="${key}"`;
+
+    const existingTag = this.metaService.getTag(selector);
+
+    if (existingTag) {
+      this.metaService.updateTag({
+        [attribute]: key,
+        content
+      });
+    } else {
+      this.metaService.addTag({
+        [attribute]: key,
+        content
+      });
+    }
+  }
+
 }
 
 
