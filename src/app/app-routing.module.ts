@@ -15,6 +15,7 @@ import { TermsAndConditionsComponent } from './components/terms-and-conditions/t
 import { UserSchemesPageComponent } from './components/user-schemes-page/user-schemes-page.component';
 import { SchemePaymentDetailsComponent } from './components/scheme-payment-details/scheme-payment-details.component';
 import { CustomDesignComponent } from './custom-design/custom-design/custom-design.component';
+import { HelpFaqComponent } from './help-faq/help-faq.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -32,7 +33,8 @@ const routes: Routes = [
   { path: 'terms-and-conditions', component: TermsAndConditionsComponent },
   { path: 'schemes-page', component: UserSchemesPageComponent },
   { path: 'scheme-payment/:id', component: SchemePaymentDetailsComponent },
-  {path:"custom-design",component:CustomDesignComponent}
+  { path: "custom-design", component: CustomDesignComponent },
+  { path: "help-faq", component: HelpFaqComponent }
 ];
 
 @NgModule({

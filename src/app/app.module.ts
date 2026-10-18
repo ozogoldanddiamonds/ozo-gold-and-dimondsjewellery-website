@@ -29,6 +29,7 @@
   import { SchemePaymentDetailsComponent } from './components/scheme-payment-details/scheme-payment-details.component';
   import { CustomDesignComponent } from './custom-design/custom-design/custom-design.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { HelpFaqComponent } from './help-faq/help-faq.component';
   @NgModule({
     declarations: [
       AppComponent,
@@ -53,7 +54,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
       TermsAndConditionsComponent,
       UserSchemesPageComponent,
       SchemePaymentDetailsComponent,
-      CustomDesignComponent
+      CustomDesignComponent,
+      HelpFaqComponent
     ],
     imports: [
       BrowserModule,

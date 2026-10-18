@@ -1,0 +1,93 @@
+<div class="faq-page">
+
+    <!-- Hero Section -->
+    <section class="faq-hero">
+        <div class="faq-hero-content">
+            <span class="faq-eyebrow">OZO CUSTOMER CARE</span>
+            <h1>Help & <span>FAQs</span></h1>
+            <p>
+                We're here to make your jewellery shopping experience
+                simple, special and seamless.
+            </p>
+
+            <div class="faq-search">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search your question..." [(ngModel)]="searchText" />
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Content -->
+    <section class="faq-content">
+
+        <div class="faq-section-heading">
+            <span class="faq-eyebrow">HOW CAN WE HELP?</span>
+            <h2>Frequently Asked <span>Questions</span></h2>
+            <p>Find quick answers to the questions we hear most often.</p>
+        </div>
+
+        <!-- Categories -->
+        <div class="faq-categories">
+            <button *ngFor="let category of categories" type="button" [class.active]="selectedCategory === category"
+                (click)="selectCategory(category)">
+                {{ category }}
+            </button>
+        </div>
+
+        <!-- Questions -->
+        <div class="faq-list">
+
+            <div class="faq-item" *ngFor="let faq of filteredFaqs; let i = index" [class.open]="openIndex === i">
+
+                <button class="faq-question" type="button" [attr.aria-expanded]="openIndex === i"
+                    (click)="toggleFaq(i)">
+
+                    <span class="faq-question-text">
+                        {{ faq.question }}
+                    </span>
+
+                    <span class="faq-toggle">
+                        <i class="bi" [ngClass]="openIndex === i
+                ? 'bi-dash-lg'
+                : 'bi-plus-lg'">
+                        </i>
+                    </span>
+                </button>
+
+                <div class="faq-answer" *ngIf="openIndex === i">
+                    <p>{{ faq.answer }}</p>
+                </div>
+
+            </div>
+
+            <div class="faq-empty" *ngIf="filteredFaqs.length === 0">
+                <i class="bi bi-search"></i>
+                <h3>No questions found</h3>
+                <p>Try another keyword or select a different category.</p>
+            </div>
+
+        </div>
+
+        <!-- Contact Support -->
+        <div class="faq-contact-card">
+            <div class="faq-contact-icon">
+                <i class="bi bi-chat-heart"></i>
+            </div>
+
+            <div class="faq-contact-text">
+                <h3>Still need assistance?</h3>
+                <p>
+                    Our team is here to help you with your jewellery
+                    shopping experience.
+                </p>
+            </div>
+
+            <a class="faq-contact-btn" routerLink="/contact">
+                Contact Us
+                <i class="bi bi-arrow-up-right"></i>
+            </a>
+        </div>
+
+    </section>
+
+</div>

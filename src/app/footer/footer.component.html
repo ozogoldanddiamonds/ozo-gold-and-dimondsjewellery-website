@@ -26,10 +26,12 @@
             <div class="col-md-3">
                 <h5 class="footer-title">ABOUT US</h5>
                 <ul>
-                    <li><a href="">Store Locations</a></li>
-                    <li><a href="">Wholesalers</a></li>
-                    <li><a href="">Map Site</a></li>
-                    <li><a href="">Contact Us</a></li>
+                    <li><a routerLink="/about">About</a></li>
+                    <li><a routerLink="/contact">Contact US</a></li>
+                    <!-- <li><a href="">Store Locations</a></li> -->
+                    <!-- <li><a href="">Wholesalers</a></li> -->
+                    <!-- <li><a href="">Map Site</a></li> -->
+                    <li><a routerLink="/schemes-page">OZO Schemes</a></li>
                 </ul>
             </div>
 
@@ -37,8 +39,8 @@
             <div class="col-md-3">
                 <h5 class="footer-title">INFORMATION</h5>
                 <ul>
-                    <li><a href="">Help & FAQs</a></li>
-                    <li><a href="">Advance Search</a></li>
+                    <li><a routerLink="/help-faq">Help & FAQs</a></li>
+                    <!-- <li><a href="">Advance Search</a></li> -->
                     <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
                     <li><a routerLink="/terms-and-conditions">Terms and Conditions</a></li>
                 </ul>
@@ -48,7 +50,7 @@
             <div class="col-md-2">
                 <h5 class="footer-title">ACCOUNT</h5>
                 <ul>
-                    <li><a routerLink="/about">About</a></li>
+
                     <li><a routerLink="/orders">Order History</a></li>
                     <li><a routerLink="/cart">Cart Page</a></li>
                     <li (click)="openAuthModal()"><a>Sign In</a></li>
