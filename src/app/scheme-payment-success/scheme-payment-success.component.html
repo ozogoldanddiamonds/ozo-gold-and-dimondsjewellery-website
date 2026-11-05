@@ -1,0 +1,58 @@
+<div class="success-page">
+
+    <div class="success-card">
+
+        <div class="success-icon">
+            <span>✓</span>
+        </div>
+
+        <h2>Payment Successful!</h2>
+
+        <p class="success-message">
+            Your scheme installment payment has been completed successfully.
+        </p>
+
+        <div class="payment-details">
+
+            <div class="detail-row">
+                <span>Scheme Name</span>
+                <strong>{{ schemeName }}</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Installment Number</span>
+                <strong>Month {{ monthNo }}</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Amount Paid</span>
+                <strong class="amount">
+                    ₹{{ amount | number:'1.2-2' }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Payment ID</span>
+                <strong class="payment-id">
+                    {{ paymentId }}
+                </strong>
+            </div>
+
+            <div class="status-row">
+                <span>Payment Status</span>
+                <strong>PAID</strong>
+            </div>
+
+        </div>
+
+        <button class="success-button" (click)="goToSchemes()">
+            View My Scheme
+        </button>
+
+        <p class="footer-text">
+            Thank you for choosing OZO Gold & Diamonds.
+        </p>
+
+    </div>
+
+</div>

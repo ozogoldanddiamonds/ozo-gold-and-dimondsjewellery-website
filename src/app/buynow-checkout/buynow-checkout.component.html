@@ -1,0 +1,453 @@
+<div class="container checkout-page py-4 py-lg-5">
+
+    <!-- HEADING -->
+    <div class="checkout-heading mb-4">
+        <span class="checkout-eyebrow">OZO GOLD &amp; DIAMONDS</span>
+        <h2>Buy Now Checkout</h2>
+        <p>Review your product and delivery details</p>
+    </div>
+
+    <div class="row g-4" *ngIf="product; else emptyCheckout">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-8">
+
+            <!-- PRODUCT DETAILS -->
+            <section class="checkout-card mb-4">
+                <h4>Selected Product</h4>
+
+                <div class="checkout-product">
+                    <img [src]="product.images?.[0] || 'assets/images/placeholder.png'"
+                        [alt]="product.name || 'Jewellery'">
+
+                    <div class="product-info">
+                        <h5>{{ product.name | titlecase }}</h5>
+
+                        <p>
+                            Size: {{ selectedVariant?.size || '-' }}
+                            · {{ selectedVariant?.metalPurity || '-' }}
+                        </p>
+
+                        <p>
+                            Metal Type: {{ selectedVariant?.metalType || '-' }}
+                        </p>
+
+                        <p>
+                            Color: {{ selectedVariant?.metalColor || '-' }}
+                        </p>
+
+                        <p>
+                            Weight: {{ selectedVariant?.netWeight || 0 }} gm
+                        </p>
+
+                        <p>Quantity: {{ quantity }}</p>
+
+                        <p>
+                            Unit Price:
+                            ₹{{ selectedVariant?.finalPrice || selectedVariant?.priceBreakup?.finalPrice || 0 |
+                            number:'1.2-2' }}
+                        </p>
+
+                        <strong>
+                            Total:
+                            ₹{{ getSubtotal() | number:'1.2-2' }}
+                        </strong>
+
+                        <p class="text-danger small mt-2"
+                            *ngIf="quantity > (selectedVariant?.stock || 0) || selectedVariant?.stock <= 0">
+                            Selected quantity is not available.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DELIVERY ADDRESS -->
+            <section class="checkout-card mb-4">
+
+                <div class="section-head">
+                    <div>
+                        <h4>Delivery Address</h4>
+                        <p>Select where you want your order delivered</p>
+                    </div>
+
+                    <button type="button" class="btn btn-success" (click)="openAddAddress()">
+                        + Add Address
+                    </button>
+                </div>
+
+                <div *ngIf="addressLoading" class="text-muted py-3">
+                    Loading addresses...
+                </div>
+
+                <!-- ADDRESS LIST -->
+                <div *ngIf="!addressLoading && addressList.length">
+
+                    <div class="address-option" *ngFor="let address of addressList"
+                        [class.active]="selectedAddress?._id === address._id" (click)="selectAddress(address)">
+
+                        <div class="address-details">
+
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <!-- <input type="radio" name="deliveryAddress"
+                                    [checked]="selectedAddress?._id === address._id" (click)="$event.stopPropagation()"
+                                    (change)="selectAddress(address)"> -->
+
+                                <h5>
+                                    {{ address.fullName | titlecase }}
+                                    <span>{{ address.phone }}</span>
+                                </h5>
+                            </div>
+
+                            <p>{{ address.addressLine1 }}</p>
+
+                            <p *ngIf="address.addressLine2">
+                                {{ address.addressLine2 }}
+                            </p>
+
+                            <p *ngIf="address.landmark">
+                                {{ address.landmark }}
+                            </p>
+
+                            <p>
+                                {{ address.city }}, {{ address.state }} -
+                                {{ address.pincode || address.postalCode }}
+                            </p>
+
+                            <p>{{ address.country }}</p>
+
+                            <span class="default-tag" *ngIf="address.isDefault">
+                                Default address
+                            </span>
+
+                            <div class="address-actions">
+
+                                <label class="set-default-option">
+                                    <input type="checkbox" [checked]="address.isDefault"
+                                        [disabled]="address.isDefault || settingDefaultAddressId === address._id"
+                                        (click)="$event.stopPropagation()" (change)="setDefaultAddress(address)">
+
+                                    <span>
+                                        {{ settingDefaultAddressId === address._id
+                                        ? 'Updating...'
+                                        : 'Set as default' }}
+                                    </span>
+                                </label>
+
+                                <button type="button" class="address-edit-btn"
+                                    (click)="editAddress(address); $event.stopPropagation()">
+                                    Edit
+                                </button>
+
+                                <button type="button" class="address-delete-btn"
+                                    [disabled]="deletingAddressId === address._id"
+                                    (click)="deleteAddress(address); $event.stopPropagation()">
+                                    {{ deletingAddressId === address._id ? 'Deleting...' : 'Delete' }}
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMPTY ADDRESS -->
+                <div class="empty-inline-box" *ngIf="!addressLoading && !addressList.length">
+
+                    <p>No delivery address found.</p>
+
+                    <button type="button" class="address" (click)="openAddAddress()">
+                        Add Address
+                    </button>
+                </div>
+
+                <p class="text-danger small mt-2" *ngIf="addressError">
+                    {{ addressError }}
+                </p>
+
+            </section>
+
+            <!-- ADDRESS ADD / EDIT MODAL -->
+            <div class="address-modal-backdrop" *ngIf="showAddressModal" (click)="closeAddAddress()">
+
+                <div class="address-modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+
+                    <div class="address-modal-header">
+                        <div>
+                            <h4>
+                                {{ isEditAddressMode ? 'Edit Delivery Address' : 'Add Delivery Address' }}
+                            </h4>
+                            <p>Enter your delivery details below.</p>
+                        </div>
+
+                        <button type="button" class="address-close-btn" (click)="closeAddAddress()">
+                            &times;
+                        </button>
+                    </div>
+
+                    <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
+
+                        <div class="address-modal-body">
+
+                            <div class="address-form-grid">
+
+                                <div class="address-form-field">
+                                    <label>Full Name *</label>
+                                    <input type="text" formControlName="fullName" placeholder="Enter full name">
+
+                                    <small class="text-danger"
+                                        *ngIf="addressForm.get('fullName')?.touched && addressForm.get('fullName')?.invalid">
+                                        Enter a valid full name.
+                                    </small>
+                                </div>
+
+                                <div class="address-form-field">
+                                    <label>Mobile Number *</label>
+                                    <input type="tel" formControlName="phone" maxlength="10"
+                                        placeholder="10-digit mobile number">
+
+                                    <small class="text-danger"
+                                        *ngIf="addressForm.get('phone')?.touched && addressForm.get('phone')?.invalid">
+                                        Enter a valid 10-digit mobile number.
+                                    </small>
+                                </div>
+
+                                <div class="address-form-field full-width">
+                                    <label>Address Line 1 *</label>
+                                    <textarea rows="2" formControlName="addressLine1"
+                                        placeholder="House number, street, area">
+                  </textarea>
+                                </div>
+
+                                <div class="address-form-field full-width">
+                                    <label>Address Line 2</label>
+                                    <input type="text" formControlName="addressLine2" placeholder="Apartment, locality">
+                                </div>
+
+                                <div class="address-form-field">
+                                    <label>Landmark</label>
+                                    <input type="text" formControlName="landmark" placeholder="Nearby landmark">
+                                </div>
+
+                                <div class="address-form-field">
+                                    <label>City *</label>
+                                    <input type="text" formControlName="city" placeholder="Enter city">
+                                </div>
+
+                                <div class="address-form-field">
+                                    <label>State *</label>
+                                    <input type="text" formControlName="state" placeholder="Enter state">
+                                </div>
+
+                                <div class="address-form-field">
+                                    <label>PIN Code *</label>
+                                    <input type="text" formControlName="pincode" maxlength="6"
+                                        placeholder="6-digit PIN code">
+                                </div>
+
+                                <div class="address-form-field full-width">
+                                    <label>Country *</label>
+                                    <input type="text" formControlName="country">
+                                </div>
+
+                            </div>
+
+                            <label class="default-address-checkbox">
+                                <input type="checkbox" formControlName="isDefault">
+                                <span>Set as default address</span>
+                            </label>
+
+                            <p class="text-danger mt-2" *ngIf="addressFormError">
+                                {{ addressFormError }}
+                            </p>
+
+                        </div>
+
+                        <div class="address-modal-footer">
+
+                            <button type="button" class="address-cancel-btn" (click)="closeAddAddress()"
+                                [disabled]="isSavingAddress">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="primary-btn" [disabled]="isSavingAddress">
+
+                                {{ isSavingAddress
+                                ? (isEditAddressMode ? 'Updating...' : 'Saving...')
+                                : (isEditAddressMode ? 'Update Address' : 'Save Address') }}
+
+                            </button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <!-- PAYMENT METHOD -->
+            <section class="checkout-card mb-4">
+
+                <h4>Payment Method</h4>
+
+                <label class="payment-option selected-payment">
+
+                    <input type="radio" name="paymentMethod" value="razorpay" [(ngModel)]="paymentMethod">
+
+                    <span>
+                        <strong>Online Payment</strong>
+                        <small>Pay securely using Razorpay</small>
+                    </span>
+
+                    <span class="payment-secure">
+                        <i class="fa fa-lock"></i>
+                        Secure
+                    </span>
+
+                </label>
+
+            </section>
+
+        </div>
+
+        <!-- RIGHT SIDE SUMMARY -->
+        <div class="col-lg-4">
+
+            <section class="checkout-card summary-card">
+
+                <h4>Order Summary</h4>
+
+                <div class="summary-row">
+                    <span>Product</span>
+                    <strong>{{ product.name | titlecase }}</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Quantity</span>
+                    <strong>{{ quantity }}</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <strong>₹{{ getSubtotal() | number:'1.2-2' }}</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <strong class="text-success">Free</strong>
+                </div>
+
+                <hr>
+
+                <div class="summary-row grand-total">
+                    <span>Total Payable</span>
+                    <strong>₹{{ getSubtotal() | number:'1.2-2' }}</strong>
+                </div>
+
+                <p class="tax-note">
+                    <i class="fa fa-lock"></i>
+                    Secure checkout
+                </p>
+
+                <button type="button" class="btn checkout-btn w-100" (click)="continueCheckout()" [disabled]="
+            isProcessingPayment ||
+            addressLoading ||
+            !selectedAddress ||
+            !product ||
+            hasOutOfStock()
+          ">
+
+                    {{ isProcessingPayment ? 'Processing...' : 'Continue to Payment' }}
+
+                    <i class="fa fa-arrow-right ms-2"></i>
+                </button>
+
+                <button type="button" class="btn btn-success w-100 mt-2" (click)="goBack()"
+                    [disabled]="isProcessingPayment">
+                    Back to Product
+                </button>
+
+            </section>
+        </div>
+
+    </div>
+
+    <!-- EMPTY CHECKOUT -->
+    <ng-template #emptyCheckout>
+        <div class="empty-inline-box text-center py-5">
+            <h4>No product selected</h4>
+            <p>Please select a product before checkout.</p>
+            <a routerLink="/home" class="btn btn-dark">
+                Explore Collections
+            </a>
+        </div>
+    </ng-template>
+
+</div>
+
+<!-- PAYMENT VERIFICATION LOADING -->
+<div class="checkout-loading" *ngIf="isVerifyingPayment">
+    <div class="checkout-loading-card">
+        <div class="spinner-border text-warning mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h5>Verifying your payment</h5>
+        <p>Please do not close this page.</p>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="delete-modal-backdrop" *ngIf="showDeleteAddressModal" (click)="closeDeleteAddressModal()">
+
+    <div class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle"
+        (click)="$event.stopPropagation()">
+
+        <div class="delete-modal-icon">
+            <i class="fa fa-trash"></i>
+        </div>
+
+        <h4 id="deleteModalTitle">
+            Are you sure?
+        </h4>
+
+        <p class="delete-modal-message">
+            Do you really want to delete this delivery address?
+            This action cannot be undone.
+        </p>
+
+        <div class="delete-address-preview" *ngIf="addressToDelete">
+
+            <strong>{{ addressToDelete.fullName }}</strong>
+
+            <span>{{ addressToDelete.phone }}</span>
+
+            <small>
+                {{ addressToDelete.addressLine1 }},
+                {{ addressToDelete.city }}
+            </small>
+
+        </div>
+
+        <div class="delete-modal-actions">
+
+            <button type="button" class="delete-cancel-btn" (click)="closeDeleteAddressModal()"
+                [disabled]="!!deletingAddressId">
+                Cancel
+            </button>
+
+            <button type="button" class="delete-confirm-btn" (click)="confirmDeleteAddress()"
+                [disabled]="!!deletingAddressId">
+
+                <ng-container *ngIf="deletingAddressId !== addressToDelete?._id">
+                    <i class="bi bi-trash3"></i>
+                    Delete Address
+                </ng-container>
+
+                <ng-container *ngIf="deletingAddressId === addressToDelete?._id">
+                    Deleting...
+                </ng-container>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

@@ -16,6 +16,10 @@ import { UserSchemesPageComponent } from './components/user-schemes-page/user-sc
 import { SchemePaymentDetailsComponent } from './components/scheme-payment-details/scheme-payment-details.component';
 import { CustomDesignComponent } from './custom-design/custom-design/custom-design.component';
 import { HelpFaqComponent } from './help-faq/help-faq.component';
+import { CartCheckoutComponent } from './cart-checkout/cart-checkout.component';
+import { BuynowCheckoutComponent } from './buynow-checkout/buynow-checkout.component';
+import { SchemePaymentSuccessComponent } from './scheme-payment-success/scheme-payment-success.component';
+import { SchemePaymentFailedComponent } from './scheme-payment-failed/scheme-payment-failed.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +28,8 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'categories', component: CategoriesComponent },
   { path: 'cart', component: CartComponent },
+  { path: 'cart-checkout', component: CartCheckoutComponent },
+  { path: 'buy-now-checkout', component: BuynowCheckoutComponent },
   { path: 'whishlist', component: WhishlistComponent },
   { path: 'product/:id', component: ProductComponent },
   { path: 'buy-product', component: BuyProductComponent },
@@ -32,6 +38,8 @@ const routes: Routes = [
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'terms-and-conditions', component: TermsAndConditionsComponent },
   { path: 'schemes-page', component: UserSchemesPageComponent },
+  { path: 'scheme-payment-success', component: SchemePaymentSuccessComponent },
+  { path: 'scheme-payment-failed', component: SchemePaymentFailedComponent },
   { path: 'scheme-payment/:id', component: SchemePaymentDetailsComponent },
   { path: "custom-design", component: CustomDesignComponent },
   { path: "help-faq", component: HelpFaqComponent }

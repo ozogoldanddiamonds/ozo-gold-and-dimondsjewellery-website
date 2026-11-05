@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environment/environment';
 
@@ -51,19 +51,20 @@ export class AddressService {
 
   }
 
-  updateAddress(
-    id: string,
-    payload: any
-  ) {
+  updateAddress(id: string, payload: any) {
+
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
 
     return this.http.put(
-
       `${environment.apiUrl}/updateaddress/${id}`,
-
-      payload
-
+      payload,
+      { headers }
     );
-
   }
 
   setDefaultAddress(id: string) {

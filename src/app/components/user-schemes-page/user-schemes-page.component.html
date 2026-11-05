@@ -38,22 +38,22 @@
             <div class="col-lg-4 col-md-6" *ngFor="let item of filteredSchemes">
 
                 <div class="scheme-card">
-
+                    <!-- 
                     <div class="popular-badge">
 
                         MOST POPULAR
 
-                    </div>
+                    </div> -->
 
                     <div class="scheme-icon">
 
-                        <i class="fa fa-diamond"></i>
+                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
 
                     </div>
 
                     <h3>
 
-                        {{item.name}}
+                        {{item.name | titlecase}}
 
                     </h3>
 

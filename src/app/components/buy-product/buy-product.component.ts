@@ -187,7 +187,7 @@ export class BuyProductComponent implements OnInit {
     this.router.navigate(["/product", id]);
   }
 
-  proceedToPayment() {
+  proceedToCheckout() {
     const userId =
       localStorage.getItem('userId');
 
@@ -201,7 +201,22 @@ export class BuyProductComponent implements OnInit {
 
       return;
     }
-    this.router.navigate(["/proceed-payment"]);
+    if (!this.selectedVariant?._id) {
+      this.toastr.warning('Please select a variant');
+      return;
+    }
+
+    if (this.quantity < 1 || this.quantity > this.selectedVariant.stock) {
+      this.toastr.warning('Selected quantity is unavailable');
+      return;
+    }
+    sessionStorage.setItem('buyNowCheckout', JSON.stringify({
+      product: this.product,
+      selectedVariant: this.selectedVariant,
+      quantity: this.quantity
+    }));
+
+    this.router.navigate(['/buy-now-checkout']);
   }
 
 

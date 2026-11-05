@@ -1,0 +1,51 @@
+<div class="failure-page">
+
+    <div class="failure-card">
+
+        <div class="failure-icon">
+            <span>✕</span>
+        </div>
+
+        <h2>Payment Failed!</h2>
+
+        <p class="failure-message">
+            {{ message }}
+        </p>
+
+        <div class="payment-details">
+
+            <div class="detail-row">
+                <span>Payment Status</span>
+                <strong class="failed-status">FAILED / CANCELLED</strong>
+            </div>
+
+            <div class="detail-row" *ngIf="paymentAttemptId">
+                <span>Payment Reference</span>
+                <strong class="payment-id">
+                    {{ paymentAttemptId }}
+                </strong>
+            </div>
+
+            <div class="detail-row" *ngIf="reason">
+                <span>Reason</span>
+                <strong>{{ reason }}</strong>
+            </div>
+
+        </div>
+
+        <button class="retry-button" (click)="retryPayment()">
+            Try Again
+        </button>
+
+        <button class="schemes-button" (click)="goToSchemes()">
+            View My Scheme
+        </button>
+
+        <p class="footer-text">
+            If money has been debited, please check your payment status
+            before attempting another payment.
+        </p>
+
+    </div>
+
+</div>

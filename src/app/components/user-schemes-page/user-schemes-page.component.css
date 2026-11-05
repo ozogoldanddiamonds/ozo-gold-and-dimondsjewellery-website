@@ -81,12 +81,10 @@
 
     width: 100%;
 
-    height: 6px;
+    height: 4px;
 
     background: linear-gradient(90deg,
-            var(--gold),
-            #f8d66c,
-            var(--gold));
+            #222222, #ffffff, #777777);
 
 }
 
@@ -170,22 +168,17 @@
 
     justify-content: center;
 
-    background: linear-gradient(145deg,
-            #fff9e8,
-            #f2d67d);
 
-    box-shadow:
-        0 12px 28px rgba(212, 175, 55, .3);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
     margin-bottom: 25px;
 
 }
 
-.scheme-icon i {
+.scheme-icon img {
 
-    font-size: 36px;
+    width: 66px;
 
-    color: var(--gold);
 
 }
 

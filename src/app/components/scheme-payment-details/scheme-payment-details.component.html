@@ -6,7 +6,7 @@
 
         <div class="page-header">
 
-            <h2>{{scheme?.schemeName}}</h2>
+            <h2>{{scheme?.schemeName | titlecase }}</h2>
 
             <span class="status active">
 
@@ -307,10 +307,9 @@
 
         <div class="text-center mt-5">
 
-            <button class="pay-now-btn" (click)="payNow()">
-
-                Pay ₹{{scheme?.monthlyAmount|number}}
-
+            <button class="pay-now-btn" (click)="payNow()"
+                [disabled]="isPaying || scheme?.remainingInstallments <= 0 || scheme?.status !== 'ACTIVE'">
+                {{ isPaying ? 'Processing...' : 'Pay ₹' + (scheme?.monthlyAmount | number) }}
             </button>
 
         </div>

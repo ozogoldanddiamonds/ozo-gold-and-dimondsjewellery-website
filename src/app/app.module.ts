@@ -30,6 +30,10 @@
   import { CustomDesignComponent } from './custom-design/custom-design/custom-design.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HelpFaqComponent } from './help-faq/help-faq.component';
+import { CartCheckoutComponent } from './cart-checkout/cart-checkout.component';
+import { BuynowCheckoutComponent } from './buynow-checkout/buynow-checkout.component';
+import { SchemePaymentSuccessComponent } from './scheme-payment-success/scheme-payment-success.component';
+import { SchemePaymentFailedComponent } from './scheme-payment-failed/scheme-payment-failed.component';
   @NgModule({
     declarations: [
       AppComponent,
@@ -55,7 +59,11 @@ import { HelpFaqComponent } from './help-faq/help-faq.component';
       UserSchemesPageComponent,
       SchemePaymentDetailsComponent,
       CustomDesignComponent,
-      HelpFaqComponent
+      HelpFaqComponent,
+      CartCheckoutComponent,
+      BuynowCheckoutComponent,
+      SchemePaymentSuccessComponent,
+      SchemePaymentFailedComponent
     ],
     imports: [
       BrowserModule,

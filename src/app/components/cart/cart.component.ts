@@ -277,5 +277,8 @@ export class CartComponent implements OnInit {
       0
     );
   }
-  proceedToCheckout() { }
+
+  proceedToCheckout(): void {
+    this.router.navigateByUrl('/cart-checkout');
+  }
 }

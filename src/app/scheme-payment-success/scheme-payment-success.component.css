@@ -1,0 +1,142 @@
+.success-page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+    background: #f8f8f8;
+}
+
+.success-card {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
+}
+
+.success-icon {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: #e6f7ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-icon span {
+    font-size: 42px;
+    font-weight: 700;
+    color: #20a45b;
+}
+
+.success-card h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.success-message {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.payment-details {
+    background: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+    padding: 18px;
+    text-align: left;
+}
+
+.detail-row,
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.detail-row:last-of-type {
+    border-bottom: none;
+}
+
+.detail-row span,
+.status-row span {
+    font-size: 13px;
+    color: #777;
+}
+
+.detail-row strong {
+    font-size: 13px;
+    color: #222;
+    text-align: right;
+    word-break: break-word;
+}
+
+.detail-row .amount {
+    color: #bd913e;
+    font-size: 17px;
+}
+
+.detail-row .payment-id {
+    max-width: 190px;
+    font-size: 11px;
+}
+
+.status-row strong {
+    color: #20a45b;
+    font-size: 13px;
+}
+
+.success-button {
+    width: 100%;
+    border: none;
+    outline: none;
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #bd913e;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.success-button:hover {
+    background: #a77b2e;
+}
+
+.footer-text {
+    font-size: 12px;
+    color: #999;
+    margin-top: 22px;
+    margin-bottom: 0;
+}
+
+@media (max-width: 480px) {
+
+    .success-card {
+        padding: 30px 18px;
+    }
+
+    .success-card h2 {
+        font-size: 23px;
+    }
+
+    .detail-row,
+    .status-row {
+        gap: 8px;
+    }
+
+}

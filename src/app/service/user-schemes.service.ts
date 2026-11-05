@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environment/environment';
@@ -83,6 +83,42 @@ export class UserSchemesService {
   getUserPayments(userId: string) {
     return this.http.get(
       `${environment.apiUrl}/get-user-payments/${userId}`
+    );
+  }
+
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
+
+  // Create Razorpay order for scheme installment
+  createSchemeRazorpayOrder(payload: {
+    subscriptionId: string;
+  }): Observable<any> {
+    return this.http.post(
+      `${environment.apiUrl}/create-scheme-razorpay-order`,
+      payload,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // Verify Razorpay payment
+  verifySchemeRazorpayPayment(payload: {
+    paymentAttemptId: string;
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+  }): Observable<any> {
+    return this.http.post(
+      `${environment.apiUrl}/verify-scheme-razorpay-payment`,
+      payload,
+      { headers: this.getAuthHeaders() }
     );
   }
 }
