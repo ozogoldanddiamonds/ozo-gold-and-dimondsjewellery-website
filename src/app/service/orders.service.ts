@@ -47,4 +47,10 @@ export class OrdersService {
       { headers: this.getAuthHeaders() }
     );
   }
+
+  getOrdersByUser(userId: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/getOrdersByUser/${userId}`
+    );
+  }
 }

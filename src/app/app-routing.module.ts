@@ -20,6 +20,8 @@ import { CartCheckoutComponent } from './cart-checkout/cart-checkout.component';
 import { BuynowCheckoutComponent } from './buynow-checkout/buynow-checkout.component';
 import { SchemePaymentSuccessComponent } from './scheme-payment-success/scheme-payment-success.component';
 import { SchemePaymentFailedComponent } from './scheme-payment-failed/scheme-payment-failed.component';
+import { UserAddressComponent } from './user-address/user-address.component';
+import { OrdersComponent } from './orders/orders.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -41,6 +43,8 @@ const routes: Routes = [
   { path: 'scheme-payment-success', component: SchemePaymentSuccessComponent },
   { path: 'scheme-payment-failed', component: SchemePaymentFailedComponent },
   { path: 'scheme-payment/:id', component: SchemePaymentDetailsComponent },
+  { path: 'address', component: UserAddressComponent },
+  { path: 'orders', component: OrdersComponent },
   { path: "custom-design", component: CustomDesignComponent },
   { path: "help-faq", component: HelpFaqComponent }
 ];

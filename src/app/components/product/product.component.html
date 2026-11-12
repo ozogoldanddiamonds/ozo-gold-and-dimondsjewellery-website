@@ -73,316 +73,127 @@
 
             </div>
             <!-- Accordion -->
-            <div class="row mt-5">
 
-                <div class="col-12">
+            <!-- PRICE BREAK-UP -->
+            <div class="price-breakup-card mt-4" *ngIf="selectedVariant?.priceBreakup as breakup">
 
-                    <div class="product-detail-panels">
+                <div class="price-breakup-header">
+                    <div>
+                        <span class="price-breakup-eyebrow">
+                            TRANSPARENT PRICING
+                        </span>
+                        <h4>Price Break-up</h4>
+                    </div>
 
-                        <!-- PRICE BREAK-UP -->
-                        <div class="price-breakup-card mt-4" *ngIf="selectedVariant?.priceBreakup as breakup">
+                    <div class="price-breakup-icon">
+                        <i class="bi bi-gem"></i>
+                    </div>
+                </div>
 
-                            <div class="price-breakup-header">
-                                <div>
-                                    <span class="price-breakup-eyebrow">TRANSPARENT PRICING</span>
-                                    <h4>Price Break-up</h4>
-                                </div>
+                <div class="price-breakup-table">
 
-                                <div class="price-breakup-icon">
-                                    <i class="bi bi-gem"></i>
-                                </div>
-                            </div>
+                    <!-- Gold Value -->
+                    <div class="price-breakup-row">
+                        <span>Gold Value</span>
 
-                            <div class="price-breakup-table">
+                        <span class="price-value">
+                            {{ breakup.metalValue
+                            | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                        </span>
+                    </div>
 
-                                <!-- Gold -->
-                                <div class="price-breakup-row">
-                                    <span>Gold</span>
-                                    <span class="price-value">
-                                        {{ (breakup.metalValue || 0) + (breakup.wastageAmount || 0)
-                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
-                                    </span>
-                                </div>
+                    <!-- Wastage -->
+                    <div class="price-breakup-row" *ngIf="breakup.wastageAmount > 0">
 
-                                <!-- Stone Charges -->
-                                <div class="price-breakup-row" *ngIf="breakup.stoneValue > 0">
+                        <span>Wastage Charges</span>
 
-                                    <span>Stone Charges</span>
+                        <span class="price-value">
+                            {{ breakup.wastageAmount
+                            | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                        </span>
+                    </div>
 
-                                    <span class="price-value">
-                                        {{ breakup.stoneValue
-                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
-                                    </span>
-                                </div>
+                    <!-- Individual Stones -->
+                    <ng-container *ngFor="let stone of breakup.stones">
 
-                                <!-- Individual stones, if provided -->
-                                <ng-container *ngFor="let stone of breakup.stones">
-
-                                    <div class="price-breakup-row" *ngIf="stone.stoneValue > 0">
-
-                                        <span>{{ stone.stoneType | titlecase }}</span>
-
-                                        <span class="price-value">
-                                            {{ stone.stoneValue
-                                            | currency:'INR':'symbol':'1.0-2':'en-IN' }}
-                                        </span>
-                                    </div>
-
-                                </ng-container>
-
-                                <!-- Making Charges -->
-                                <div class="price-breakup-row">
-                                    <span>Making Charge</span>
-
-                                    <span class="price-value">
-                                        {{ breakup.makingCharges
-                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
-                                    </span>
-                                </div>
-
-                                <!-- GST -->
-                                <div class="price-breakup-row">
-                                    <span>GST</span>
-
-                                    <span class="price-value">
-                                        {{ breakup.gstAmount
-                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
-                                    </span>
-                                </div>
-
-                                <!-- Total -->
-                                <div class="price-breakup-row price-breakup-total">
-                                    <div>
-                                        <strong>Total</strong>
-                                        <small>Inclusive of applicable charges</small>
-                                    </div>
-
-                                    <strong class="price-total-value">
-                                        {{ breakup.finalPrice
-                                        | currency:'INR':'symbol':'1.0-2':'en-IN' }}
-                                    </strong>
-                                </div>
-
-                            </div>
-
-                            <div class="price-breakup-footer">
-                                <i class="bi bi-shield-check"></i>
-                                <span>Transparent pricing for your selected variant</span>
-                            </div>
-
-                        </div>
-
-                        <!-- Specs -->
-                        <div class="acc-item" (click)="toggleAcc('specs')">
+                        <div class="price-breakup-row" *ngIf="stone.stoneValue > 0">
 
                             <span>
-                                MEASUREMENTS & SPECS
+                                {{ stone.stoneType | titlecase }}
+
+                                <small class="stone-info">
+                                    ({{ stone.stoneCategory | titlecase }},
+                                    {{ stone.quality | uppercase }})
+                                </small>
                             </span>
 
-                            <span>
-                                +
+                            <span class="price-value">
+                                {{ stone.stoneValue
+                                | currency:'INR':'symbol':'1.0-2':'en-IN' }}
                             </span>
 
                         </div>
 
-                        <div class="acc-content" *ngIf="openAcc === 'specs'">
+                    </ng-container>
 
-                            <div class="table-responsive">
+                    <!-- Fallback: Aggregate Stone Value -->
+                    <div class="price-breakup-row" *ngIf="breakup.stoneValue > 0 &&
+                    (!breakup.stones || breakup.stones.length === 0)">
 
-                                <table class="table table-hover table-bordered align-middle specs-table">
+                        <span>Stone Charges</span>
 
-                                    <tbody>
+                        <span class="price-value">
+                            {{ breakup.stoneValue
+                            | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                        </span>
+                    </div>
 
-                                        <tr>
-                                            <th>Category</th>
-                                            <td>{{ product?.category?.name | titlecase}}</td>
-                                        </tr>
+                    <!-- Making Charges -->
+                    <div class="price-breakup-row">
+                        <span>Making Charges</span>
 
-                                        <tr>
-                                            <th>Sub Category</th>
-                                            <td>{{ product?.subCategory?.name | titlecase}}</td>
-                                        </tr>
+                        <span class="price-value">
+                            {{ breakup.makingCharges
+                            | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                        </span>
+                    </div>
 
-                                        <tr>
-                                            <th>Product Type</th>
-                                            <td>{{ product?.productType | titlecase}}</td>
-                                        </tr>
+                    <!-- GST -->
+                    <div class="price-breakup-row">
+                        <span>GST</span>
 
-                                        <tr>
-                                            <th>Gender</th>
-                                            <td>{{ product?.gender | titlecase}}</td>
-                                        </tr>
+                        <span class="price-value">
+                            {{ breakup.gstAmount
+                            | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                        </span>
+                    </div>
 
-                                        <tr>
-                                            <th>Occasion</th>
-                                            <td>{{ product?.occasion | titlecase}}</td>
-                                        </tr>
+                    <!-- Total -->
+                    <div class="price-breakup-row price-breakup-total">
 
-                                        <tr>
-                                            <th>Metal Purity</th>
-                                            <td>{{ selectedVariant?.metalPurity }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Metal Color</th>
-                                            <td>{{ selectedVariant?.metalColor | titlecase}}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Gross Weight</th>
-                                            <td>{{ selectedVariant?.grossWeight }} g</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Net Weight</th>
-                                            <td>{{ selectedVariant?.netWeight }} g</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Making Charges</th>
-                                            <td>₹{{ selectedVariant?.makingCharges }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Stock</th>
-                                            <td>{{ selectedVariant?.stock }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>SKU</th>
-                                            <td>{{ selectedVariant?.sku | titlecase}}</td>
-                                        </tr>
-
-                                    </tbody>
-
-                                </table>
-
-                            </div>
-
+                        <div>
+                            <strong>Total</strong>
+                            <small>Inclusive of applicable charges</small>
                         </div>
 
-                        <!-- Specs -->
-                        <div class="acc-item" (click)="toggleAcc('stones')">
+                        <strong class="price-total-value">
+                            {{ breakup.finalPrice
+                            | currency:'INR':'symbol':'1.0-2':'en-IN' }}
+                        </strong>
 
-                            <span>
-                                STONES DETAILS
-                            </span>
-
-                            <span>
-                                +
-                            </span>
-
-                        </div>
-                        <div class="acc-content" *ngIf="openAcc === 'stones'">
-
-                            <div *ngFor="let stone of selectedVariant?.stones; let i = index" class="mb-4">
-
-                                <h6 class="mb-3">
-                                    STONES {{ i + 1 }}
-                                </h6>
-
-                                <div class="table-responsive">
-
-                                    <table class="table table-hover table-striped table-bordered">
-
-                                        <tbody>
-
-                                            <tr>
-                                                <th>Stone Type</th>
-                                                <td>{{ stone?.stoneType | titlecase}}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <th>Category</th>
-                                                <td>{{ stone?.stoneCategory | titlecase}}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <th>Quality</th>
-                                                <td>{{ stone?.quality }}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <th>Total Weight</th>
-                                                <td>{{ stone?.totalWeight }} ct</td>
-                                            </tr>
-
-                                            <tr>
-                                                <th>Quantity</th>
-                                                <td>{{ stone?.quantity }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Stone Price</th>
-                                                <td>{{stone?.stoneValue}}</td>
-                                            </tr>
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- Shipping -->
-                        <div class="acc-item" (click)="toggleAcc('shipping')">
-
-                            <span>
-                                SHIPPING & RETURNS
-                            </span>
-
-                            <span>
-                                +
-                            </span>
-
-                        </div>
-
-                        <div class="acc-content" *ngIf="openAcc === 'shipping'">
-
-                            <div class="table-responsive">
-
-                                <table class="table table-hover table-striped table-bordered">
-
-                                    <tbody>
-
-                                        <tr>
-                                            <th>Shipping</th>
-                                            <td>Free shipping across India</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Returns</th>
-                                            <td>7-day easy return available</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Insurance</th>
-                                            <td>Secure insured delivery for all jewellery products</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Hallmark</th>
-                                            <td>BIS Hallmark Certified Jewellery</td>
-                                        </tr>
-
-                                        <tr *ngIf="product?.certificationIncluded">
-                                            <th>Certification</th>
-                                            <td>Diamond Certification Included</td>
-                                        </tr>
-
-                                    </tbody>
-
-                                </table>
-
-                            </div>
-
-                        </div>
                     </div>
 
                 </div>
 
+                <div class="price-breakup-footer">
+                    <i class="bi bi-shield-check"></i>
+                    <span>
+                        Transparent pricing for your selected variant
+                    </span>
+                </div>
+
             </div>
+
         </div>
 
         <!-- RIGHT SIDE -->
@@ -602,18 +413,20 @@
                 </div>
 
                 <!-- Wishlist -->
+                <!-- Wishlist -->
                 <div class="extra-links">
 
-                    <span (click)="whishlist()">
+                    <span (click)="whishlist()" [class.text-danger]="product?.isWishlisted">
 
-                        ❤️ Add to Wishlist
+                        <i class="fa" [ngClass]="product?.isWishlisted ? 'fa-heart' : 'fa-heart-o'">
+                        </i>
+
+                        {{ product?.isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' }}
 
                     </span>
 
                     <span>
-
                         🔒 Secure Checkout
-
                     </span>
 
                 </div>
@@ -675,8 +488,6 @@
 
 </div>
 
-<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
-</app-auth-modal>
 
 
 
@@ -753,3 +564,6 @@
     </div>
 
 </div>
+
+<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-auth-modal>

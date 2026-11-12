@@ -6,6 +6,7 @@ import { LoadingService } from 'src/app/service/loading.service';
 import { ProductService } from 'src/app/service/product.service';
 import { SizeChartsService } from 'src/app/service/size-charts.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { WishlistService } from 'src/app/service/wishlist.service';
 
 @Component({
   selector: 'app-product',
@@ -13,6 +14,7 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit {
+  wishlistId: any = null;
   availableColors: string[] = [];
   quantity: number = 1;
   openAcc: string | null = null;
@@ -45,7 +47,8 @@ export class ProductComponent implements OnInit {
     private loaderService: LoadingService, private productService: ProductService,
     private cartService: CartService, private sizeChartService: SizeChartsService,
     private toastr: ToastrService, private meta: Meta,
-    private title: Title
+    private title: Title,
+    private wishlistService: WishlistService
   ) { }
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -187,9 +190,6 @@ export class ProductComponent implements OnInit {
 
 
 
-  whishlist() {
-    this.router.navigate(["/whishlist"]);
-  }
 
   normalizeProduct(product: any) {
     if (!product) return null;
@@ -652,4 +652,116 @@ export class ProductComponent implements OnInit {
       this.quantity = 1;
     }
   }
+
+  whishlist(): void {
+
+    const userId = localStorage.getItem('userId');
+
+    // Login validation
+    if (!userId) {
+
+      this.toastr.warning('Please login first');
+
+      this.openLoginModal();
+
+      return;
+    }
+
+    // Product validation
+    if (!this.product?._id) {
+      this.toastr.error('Product not found');
+      return;
+    }
+
+    // Variant validation
+    if (!this.selectedVariant?._id) {
+      this.toastr.warning('Please select a product variant');
+      return;
+    }
+
+    // REMOVE FROM WISHLIST
+    if (this.product.isWishlisted && this.product.wishlistItemId) {
+
+      this.wishlistService
+        .removeWishlistItem(
+          this.wishlistId,
+          this.product.wishlistItemId
+        )
+        .subscribe({
+
+          next: () => {
+
+            this.product.isWishlisted = false;
+            this.product.wishlistItemId = null;
+
+            this.toastr.success('Removed from wishlist');
+
+            this.wishlistService.refreshWishlist();
+
+          },
+
+          error: (error) => {
+
+            console.error('Remove Wishlist Error:', error);
+
+            this.toastr.error('Unable to remove from wishlist');
+
+          }
+
+        });
+
+    }
+
+    // ADD TO WISHLIST
+    else {
+
+      const payload = {
+
+        user: userId,
+
+        product: this.product._id,
+
+        variantId: this.selectedVariant._id
+
+      };
+
+      this.wishlistService
+        .addToWishlist(payload)
+        .subscribe({
+
+          next: (response: any) => {
+
+            this.product.isWishlisted = true;
+
+            // Capture wishlist item ID if API returns it
+            const wishlistItem =
+              response?.data?.item ||
+              response?.data?.wishlistItem ||
+              response?.data;
+
+            this.product.wishlistItemId =
+              wishlistItem?._id || null;
+
+            this.toastr.success('Added to wishlist');
+
+            this.wishlistService.refreshWishlist();
+
+          },
+
+          error: (error) => {
+
+            console.error('Add Wishlist Error:', error);
+
+            this.toastr.error(
+              error?.error?.message || 'Unable to add to wishlist'
+            );
+
+          }
+
+        });
+
+    }
+
+  }
+
 }

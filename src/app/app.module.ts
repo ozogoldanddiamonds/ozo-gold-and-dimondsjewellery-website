@@ -34,6 +34,8 @@ import { CartCheckoutComponent } from './cart-checkout/cart-checkout.component';
 import { BuynowCheckoutComponent } from './buynow-checkout/buynow-checkout.component';
 import { SchemePaymentSuccessComponent } from './scheme-payment-success/scheme-payment-success.component';
 import { SchemePaymentFailedComponent } from './scheme-payment-failed/scheme-payment-failed.component';
+import { UserAddressComponent } from './user-address/user-address.component';
+import { OrdersComponent } from './orders/orders.component';
   @NgModule({
     declarations: [
       AppComponent,
@@ -63,7 +65,9 @@ import { SchemePaymentFailedComponent } from './scheme-payment-failed/scheme-pay
       CartCheckoutComponent,
       BuynowCheckoutComponent,
       SchemePaymentSuccessComponent,
-      SchemePaymentFailedComponent
+      SchemePaymentFailedComponent,
+      UserAddressComponent,
+      OrdersComponent
     ],
     imports: [
       BrowserModule,

@@ -201,10 +201,10 @@
 
                         <!-- INFO -->
                         <div class="product-info" (click)="viewProduct(item._id)">
-                            <h6>{{ item.name }}</h6>
+                            <h6>{{ item.name | titlecase}}</h6>
 
                             <p class="category">
-                                {{ item.categoryName || 'Premium Jewellery' }}
+                                {{ item.categoryName || 'Premium Jewellery' | titlecase}}
                             </p>
 
                             <div class="price-section">
@@ -332,7 +332,7 @@
         <div class="variant-popup-header">
             <div class="popup-title-wrap">
                 <span class="popup-kicker">Choose Variant</span>
-                <h5>{{ selectedProduct?.name }}</h5>
+                <h5>{{ selectedProduct?.name | titlecase}}</h5>
             </div>
 
             <button type="button" class="popup-close" aria-label="Close popup" (click)="closeVariantPopup()">

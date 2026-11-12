@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="profile-info">
-                    <h2>{{ profileData?.user?.name || 'Guest User' }}</h2>
+                    <h2>{{ profileData?.user?.name || 'Guest User' | titlecase}}</h2>
                     <p>{{ profileData?.user?.email || 'No email available' }}</p>
                     <span>
                         {{ profileData?.user?.phone || 'No mobile number' }}</span>
@@ -63,7 +63,7 @@
             </button>
             <button class="menu-item" type="button" (click)="Schems()">
                 <span class="menu-icon">👑</span>
-                <span class="menu-text">schems</span>
+                <span class="menu-text">Schems</span>
                 <span class="menu-arrow">›</span>
             </button>
 
@@ -73,11 +73,11 @@
                 <span class="menu-arrow">›</span>
             </button>
 
-            <button class="menu-item" type="button">
+            <!-- <button class="menu-item" type="button">
                 <span class="menu-icon">💳</span>
                 <span class="menu-text">Payment Methods</span>
                 <span class="menu-arrow">›</span>
-            </button>
+            </button> -->
 
             <button class="menu-item" type="button">
                 <span class="menu-icon">🔔</span>

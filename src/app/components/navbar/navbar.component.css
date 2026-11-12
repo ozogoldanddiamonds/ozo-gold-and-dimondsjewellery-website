@@ -2315,7 +2315,6 @@
         display: flex;
         align-items: center;
         gap: 7px;
-        color: #fff;
         font-size: 13px;
         font-weight: 500;
         cursor: pointer;
@@ -2516,5 +2515,211 @@
 
         #mainNavbar.scrolled {
             background: rgba(255, 255, 255, 0.88) !important;
+        }
+    }
+
+
+
+    /* =========================================
+   OZO NAVBAR RESPONSIVE SIZING
+========================================= */
+
+    /* Large Desktop: 1600px and above */
+    @media (min-width: 1600px) {
+
+        .navbar-brand {
+            gap: 14px;
+        }
+
+        .brand-logo img {
+            width: 65px;
+            height: auto;
+        }
+
+        .brand-name {
+            font-size: 25px;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            letter-spacing: 4px;
+        }
+
+        .navbar-nav {
+            gap: 42px !important;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 20px;
+        }
+
+        .auth-glass-btn {
+            font-size: 17px;
+            padding: 10px 30px;
+        }
+    }
+
+    /* Desktop: 1400px - 1599px */
+    @media (min-width: 1400px) and (max-width: 1599px) {
+
+        .brand-logo img {
+            width: 58px;
+        }
+
+        .brand-name {
+            font-size: 21px;
+        }
+
+        .brand-subtitle {
+            font-size: 9px;
+            letter-spacing: 3px;
+        }
+
+        .navbar-nav {
+            gap: 25px !important;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 17px;
+        }
+
+        .auth-glass-btn {
+            font-size: 15px;
+            padding: 9px 23px;
+        }
+    }
+
+    /* Laptop: 1200px - 1399px */
+    @media (min-width: 1200px) and (max-width: 1399px) {
+
+        .brand-logo img {
+            width: 52px;
+        }
+
+        .brand-name {
+            font-size: 18px;
+        }
+
+        .brand-subtitle {
+            font-size: 8px;
+            letter-spacing: 2.5px;
+        }
+
+        .navbar-nav {
+            gap: 16px !important;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 15px;
+        }
+
+        .auth-glass-btn {
+            font-size: 14px;
+            padding: 8px 17px;
+        }
+    }
+
+    /* Small Laptop: 992px - 1199px */
+    @media (min-width: 992px) and (max-width: 1199px) {
+
+        .brand-logo img {
+            width: 45px;
+        }
+
+        .brand-name {
+            font-size: 15px;
+        }
+
+        .brand-subtitle {
+            font-size: 7px;
+            letter-spacing: 1.5px;
+        }
+
+        .navbar-nav {
+            gap: 10px !important;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 13px;
+        }
+
+        .auth-glass-btn {
+            font-size: 12px;
+            padding: 7px 12px;
+        }
+    }
+
+    /* Tablet: 768px - 991px */
+    @media (min-width: 768px) and (max-width: 991px) {
+
+        .brand-logo img {
+            width: 55px;
+        }
+
+        .brand-name {
+            font-size: 20px;
+        }
+
+        .brand-subtitle {
+            font-size: 9px;
+            letter-spacing: 2px;
+        }
+
+        .navbar-toggler {
+            padding: 8px;
+        }
+
+        .navbar-nav {
+            gap: 8px !important;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 15px;
+        }
+    }
+
+    /* Mobile: 576px - 767px */
+    @media (min-width: 576px) and (max-width: 767px) {
+
+        .brand-logo img {
+            width: 48px;
+        }
+
+        .brand-name {
+            font-size: 17px;
+        }
+
+        .brand-subtitle {
+            font-size: 8px;
+            letter-spacing: 1.5px;
+        }
+
+        .navbar-toggler {
+            padding: 7px;
+        }
+    }
+
+    /* Small Mobile: Below 576px */
+    @media (max-width: 575px) {
+
+        .brand-logo img {
+            width: 42px;
+        }
+
+        .brand-name {
+            font-size: 14px;
+        }
+
+        .brand-subtitle {
+            font-size: 7px;
+            letter-spacing: 1px;
+        }
+
+        .navbar-brand {
+            gap: 7px;
+        }
+
+        .navbar-toggler {
+            padding: 6px;
         }
     }

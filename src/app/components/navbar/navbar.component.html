@@ -105,7 +105,7 @@
                 <a class="nav-link" routerLink="/" (click)="closeMenu()">HOME</a>
             </li>
 
-            <li class="nav-item dropdown mega-dropdown" [class.show]="isCategoryOpen" [class.show]="isCategoryOpen"
+            <li class="nav-item dropdown mega-dropdown" [class.show]="isCategoryOpen"
                 (mouseenter)="openCategoryMenuDesktop()" (mouseleave)="closeCategoryMenuDesktop()">
 
                 <a class="nav-link dropdown-toggle" role="button" tabindex="0" (click)="toggleCategoryMenu($event)">
@@ -162,7 +162,7 @@
                 <a class="position-relative" routerLink="/cart" (click)="closeMenu()">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill"
-                        *ngIf="cartCount > 0 " +>
+                        *ngIf="cartCount > 0 ">
                         {{ cartCount }}
                     </span>
                 </a>

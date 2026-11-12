@@ -1,0 +1,344 @@
+<div class="my-orders-container" *ngIf="!isLoading && orders.length">
+
+    <div class="orders-wrapper" *ngFor="let order of orders">
+
+        <!-- ORDER HEADER -->
+        <div class="order-card-header">
+            <div class="order-id-block">
+                <span class="order-label">Order ID</span>
+                <h3 class="order-number">{{ order.orderNumber }}</h3>
+                <span class="order-date">
+                    Placed on {{ order.createdAt | date:'dd MMM yyyy, hh:mm a' }}
+                </span>
+            </div>
+
+            <div class="order-status-block">
+                <span class="order-status" [ngClass]="getOrderStatusClass(order.orderStatus)">
+                    {{ order.orderStatus }}
+                </span>
+
+                <span class="payment-chip" [ngClass]="getPaymentStatusClass(order.paymentStatus)">
+                    {{ order.paymentStatus || 'Payment Pending' }}
+                </span>
+            </div>
+        </div>
+
+        <!-- PRODUCTS PREVIEW -->
+        <div class="order-products-preview">
+
+            <div class="order-product" *ngIf="getFirstProduct(order) as item">
+                <div class="product-thumb">
+                    <img [src]="getProductImage(item)" [alt]="getProductName(item)"
+                        (error)="onProductImageError($event)" loading="lazy">
+                    <span class="item-count-badge" *ngIf="order.items.length > 1">
+                        {{ order.items.length }}
+                    </span>
+                </div>
+
+                <div class="product-summary">
+                    <h3 class="product-name">{{ getProductName(item) }}</h3>
+
+                    <p class="product-variant">
+                        {{ item.variantSnapshot?.purity || 'N/A' }}
+                        <span *ngIf="item.variantSnapshot?.metalColor"> • {{ item.variantSnapshot.metalColor }}</span>
+                        <span *ngIf="item.variantSnapshot?.metalType"> • {{ item.variantSnapshot.metalType }}</span>
+                    </p>
+
+                    <p class="product-qty">
+                        Qty: {{ getProductQuantity(item) }}
+                        <span *ngIf="order.items.length > 1">
+                            • +{{ order.items.length - 1 }} more item(s)
+                        </span>
+                    </p>
+                </div>
+
+                <div class="product-price">
+                    <span class="price-label">Item Total</span>
+                    <strong class="price-value">
+                        {{ getProductPrice(item) | currency:'INR':'symbol':'1.2-2' }}
+                    </strong>
+                </div>
+            </div>
+
+            <div class="no-product" *ngIf="!order.items?.length">
+                Product details are not available.
+            </div>
+        </div>
+
+        <!-- QUICK SUMMARY -->
+        <div class="order-summary">
+            <div class="summary-item">
+                <span>Items</span>
+                <strong>{{ getTotalItems(order) }}</strong>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-item">
+                <span>Order Total</span>
+                <strong class="summary-total">
+                    {{ order.totalAmount | currency:'INR':'symbol':'1.2-2' }}
+                </strong>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-action">
+                <button type="button" class="view-details-btn" (click)="toggleOrderDetails(order._id)">
+                    {{ isExpanded(order._id) ? 'Hide Details' : 'View Details' }}
+
+                    <i class="bi" [ngClass]="isExpanded(order._id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- EXPANDED ORDER DETAILS -->
+        <div class="order-details" *ngIf="isExpanded(order._id)">
+
+            <!-- PRODUCTS -->
+            <section class="details-card">
+                <div class="details-card-head">
+                    <h4>Purchased Products</h4>
+                    <span>{{ order.items?.length || 0 }} item(s)</span>
+                </div>
+
+                <div class="detail-product" *ngFor="let item of order.items">
+                    <div class="detail-thumb">
+                        <img [src]="getProductImage(item)" [alt]="getProductName(item)"
+                            (error)="onProductImageError($event)" loading="lazy">
+                    </div>
+
+                    <div class="detail-product-info">
+                        <h5>{{ getProductName(item) }}</h5>
+
+                        <div class="spec-grid">
+                            <div>
+                                <span>SKU</span>
+                                <strong>{{ item.variantSnapshot?.sku || 'N/A' }}</strong>
+                            </div>
+
+                            <div>
+                                <span>Metal</span>
+                                <strong>{{ item.variantSnapshot?.metalType || 'N/A' }}</strong>
+                            </div>
+
+                            <div>
+                                <span>Purity</span>
+                                <strong>{{ item.variantSnapshot?.purity || 'N/A' }}</strong>
+                            </div>
+
+                            <div>
+                                <span>Color</span>
+                                <strong>{{ item.variantSnapshot?.metalColor || 'N/A' }}</strong>
+                            </div>
+
+                            <div>
+                                <span>Size</span>
+                                <strong>{{ item.variantSnapshot?.size || 'N/A' }}</strong>
+                            </div>
+
+                            <div>
+                                <span>Quantity</span>
+                                <strong>{{ item.quantity }}</strong>
+                            </div>
+
+                            <div>
+                                <span>Gross Weight</span>
+                                <strong>{{ item.variantSnapshot?.grossWeight || 0 }} g</strong>
+                            </div>
+
+                            <div>
+                                <span>Net Weight</span>
+                                <strong>{{ item.variantSnapshot?.netWeight || 0 }} g</strong>
+                            </div>
+                        </div>
+
+                        <div class="item-price-row">
+                            <span>Item Total</span>
+                            <strong>
+                                {{ item.totalPrice | currency:'INR':'symbol':'1.2-2' }}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DELIVERY -->
+            <section class="details-card">
+                <div class="details-card-head">
+                    <h4>Delivery Address</h4>
+                </div>
+
+                <ng-container *ngIf="order.addressSnapshot as address">
+                    <p class="address-name">{{ address.fullName }}</p>
+                    <p class="address-text">{{ address.addressLine1 }}</p>
+
+                    <p class="address-text" *ngIf="address.addressLine2">
+                        {{ address.addressLine2 }}
+                    </p>
+
+                    <p class="address-text">
+                        {{ address.city }}, {{ address.state }} -
+                        {{ address.pincode || address.postalCode }}
+                    </p>
+
+                    <p class="address-text" *ngIf="address.country">
+                        {{ address.country }}
+                    </p>
+
+                    <p class="address-phone">
+                        <i class="bi bi-telephone"></i>
+                        {{ address.phone }}
+                    </p>
+                </ng-container>
+
+                <p class="empty-text" *ngIf="!order.addressSnapshot">
+                    Address details are not available.
+                </p>
+            </section>
+
+            <!-- PRICE -->
+            <section class="details-card price-card">
+                <div class="details-card-head">
+                    <h4>Price Breakup</h4>
+                </div>
+
+                <div class="price-row">
+                    <span>Subtotal</span>
+                    <strong>{{ order.subTotal | currency:'INR':'symbol':'1.2-2' }}</strong>
+                </div>
+
+                <div class="price-row" *ngIf="order.discountAmount">
+                    <span>Discount</span>
+                    <strong class="discount-value">
+                        - {{ order.discountAmount | currency:'INR':'symbol':'1.2-2' }}
+                    </strong>
+                </div>
+
+                <div class="price-row">
+                    <span>Shipping</span>
+                    <strong>
+                        {{ order.shippingCharge | currency:'INR':'symbol':'1.2-2' }}
+                    </strong>
+                </div>
+
+                <div class="price-row">
+                    <span>GST</span>
+                    <strong>{{ order.gstAmount | currency:'INR':'symbol':'1.2-2' }}</strong>
+                </div>
+
+                <div class="price-row total-row">
+                    <span>Total Amount</span>
+                    <strong>{{ order.totalAmount | currency:'INR':'symbol':'1.2-2' }}</strong>
+                </div>
+            </section>
+
+            <!-- PAYMENT -->
+            <section class="details-card">
+                <div class="details-card-head">
+                    <h4>Payment Details</h4>
+                </div>
+
+                <div class="info-grid">
+                    <div>
+                        <span>Payment Method</span>
+                        <strong>{{ order.paymentMethod || 'N/A' }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Payment Status</span>
+                        <strong>{{ order.paymentStatus || 'N/A' }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Billing Status</span>
+                        <strong>{{ order.billingStatus || 'N/A' }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Invoice Number</span>
+                        <strong>{{ order.invoiceNumber || 'N/A' }}</strong>
+                    </div>
+
+                    <div class="full-width">
+                        <span>Transaction ID</span>
+                        <strong>{{ order.razorpayPaymentId || 'N/A' }}</strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CUSTOMER -->
+            <section class="details-card">
+                <div class="details-card-head">
+                    <h4>Customer Details</h4>
+                </div>
+
+                <div class="info-grid">
+                    <div>
+                        <span>Name</span>
+                        <strong>
+                            {{ order.customerDetails?.name || order.user?.name || 'N/A' }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Phone</span>
+                        <strong>
+                            {{ order.customerDetails?.phone || order.user?.phone || 'N/A' }}
+                        </strong>
+                    </div>
+
+                    <div class="full-width">
+                        <span>Email</span>
+                        <strong>
+                            {{ order.customerDetails?.email || order.user?.email || 'N/A' }}
+                        </strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STATUS HISTORY -->
+            <section class="details-card" *ngIf="order.statusHistory?.length">
+                <div class="details-card-head">
+                    <h4>Order Timeline</h4>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item" *ngFor="let history of order.statusHistory">
+                        <span class="timeline-dot"></span>
+
+                        <div class="timeline-content">
+                            <strong>{{ history.status }}</strong>
+                            <p *ngIf="history.remarks">{{ history.remarks }}</p>
+                            <small>
+                                {{ history.updatedAt | date:'dd MMM yyyy, hh:mm a' }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAYMENT HISTORY -->
+            <section class="details-card" *ngIf="order.paymentHistory?.length">
+                <div class="details-card-head">
+                    <h4>Payment History</h4>
+                </div>
+
+                <div class="payment-history" *ngFor="let payment of order.paymentHistory">
+                    <div class="payment-history-head">
+                        <strong>{{ payment.method || 'Payment' }}</strong>
+                        <span class="payment-amount">
+                            {{ payment.amount | currency:'INR':'symbol':'1.2-2' }}
+                        </span>
+                    </div>
+
+                    <div class="payment-history-body">
+                        <p>Gateway: {{ payment.paymentGateway || 'N/A' }}</p>
+                        <p>Transaction ID: {{ payment.transactionId || 'N/A' }}</p>
+                        <p>Paid At: {{ payment.paidAt | date:'dd MMM yyyy, hh:mm a' }}</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

@@ -55,72 +55,72 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-openEditProfileModal() {
+  openEditProfileModal() {
 
-  this.editProfileForm.patchValue({
-    fullName: this.profileData?.user?.name || '',
-    mobileNumber: this.profileData?.user?.phone || '',
-    email: this.profileData?.user?.email || '',
-    gender: this.profileData?.user?.gender || '',
-    dateOfBirth: this.profileData?.user?.dateOfBirth || '',
-    anniversaryDate: this.profileData?.user?.anniversaryDate || '',
-    addressLine1: this.profileData?.user?.addressLine1 || '',
-    addressLine2: this.profileData?.user?.addressLine2 || '',
-    city: this.profileData?.user?.city || '',
-    state: this.profileData?.user?.state || '',
-    pincode: this.profileData?.user?.pincode || '',
-    country: this.profileData?.user?.country || 'India'
-  });
+    this.editProfileForm.patchValue({
+      fullName: this.profileData?.user?.name || '',
+      mobileNumber: this.profileData?.user?.phone || '',
+      email: this.profileData?.user?.email || '',
+      gender: this.profileData?.user?.gender || '',
+      dateOfBirth: this.profileData?.user?.dateOfBirth || '',
+      anniversaryDate: this.profileData?.user?.anniversaryDate || '',
+      addressLine1: this.profileData?.user?.addressLine1 || '',
+      addressLine2: this.profileData?.user?.addressLine2 || '',
+      city: this.profileData?.user?.city || '',
+      state: this.profileData?.user?.state || '',
+      pincode: this.profileData?.user?.pincode || '',
+      country: this.profileData?.user?.country || 'India'
+    });
 
-  this.isEditProfileOpen = true;
-}
+    this.isEditProfileOpen = true;
+  }
   closeEditProfileModal() {
     this.isEditProfileOpen = false;
   }
 
-updateProfile() {
+  updateProfile() {
 
-  if (this.editProfileForm.invalid) {
-    this.editProfileForm.markAllAsTouched();
-    return;
-  }
-
-  const userId = localStorage.getItem('userId');
-
-  if (!userId) {
-    alert('Please login first');
-    return;
-  }
-
-  this.isProfileUpdating = true;
-
-  const payload = this.editProfileForm.value;
-
-  console.log('Profile Update Payload:', payload);
-
-  this.authService.updateProfile(userId, payload).subscribe({
-
-    next: (res: any) => {
-
-      console.log('Profile Updated Successfully:', res);
-
-      this.isProfileUpdating = false;
-
-      this.closeEditProfileModal();
-
-      // Get latest profile data
-      this.getProfileSummary();
-    },
-
-    error: (err: any) => {
-
-      console.error('Profile Update Error:', err);
-
-      this.isProfileUpdating = false;
+    if (this.editProfileForm.invalid) {
+      this.editProfileForm.markAllAsTouched();
+      return;
     }
 
-  });
-}
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+      alert('Please login first');
+      return;
+    }
+
+    this.isProfileUpdating = true;
+
+    const payload = this.editProfileForm.value;
+
+    console.log('Profile Update Payload:', payload);
+
+    this.authService.updateProfile(userId, payload).subscribe({
+
+      next: (res: any) => {
+
+        console.log('Profile Updated Successfully:', res);
+
+        this.isProfileUpdating = false;
+
+        this.closeEditProfileModal();
+
+        // Get latest profile data
+        this.getProfileSummary();
+      },
+
+      error: (err: any) => {
+
+        console.error('Profile Update Error:', err);
+
+        this.isProfileUpdating = false;
+      }
+
+    });
+  }
   getProfileSummary(): void {
     const userId = localStorage.getItem('userId');
 
@@ -132,8 +132,8 @@ updateProfile() {
       next: (res: any) => {
         this.profileData = res?.data;
         console.log('USER DATA:', this.profileData);
-  console.log('PHONE:', this.profileData?.user?.phone);
-  console.log('IMAGE:', this.profileData?.user?.profileImage);
+        console.log('PHONE:', this.profileData?.user?.phone);
+        console.log('IMAGE:', this.profileData?.user?.profileImage);
         console.log(this.profileData, 'user data');
       },
       error: (err: any) => {
@@ -170,7 +170,7 @@ updateProfile() {
   orders(): void {
     this.router.navigate(['/orders']);
   }
-    Schems(): void {
+  Schems(): void {
     this.router.navigate(["/custom-design"]);
   }
 
