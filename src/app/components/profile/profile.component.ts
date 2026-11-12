@@ -57,27 +57,72 @@ export class ProfileComponent implements OnInit {
 
   openEditProfileModal() {
 
-    this.editProfileForm.patchValue({
-      fullName: this.profileData?.user?.name || '',
-      mobileNumber: this.profileData?.user?.phone || '',
-      email: this.profileData?.user?.email || '',
-      gender: this.profileData?.user?.gender || '',
-      dateOfBirth: this.profileData?.user?.dateOfBirth || '',
-      anniversaryDate: this.profileData?.user?.anniversaryDate || '',
-      addressLine1: this.profileData?.user?.addressLine1 || '',
-      addressLine2: this.profileData?.user?.addressLine2 || '',
-      city: this.profileData?.user?.city || '',
-      state: this.profileData?.user?.state || '',
-      pincode: this.profileData?.user?.pincode || '',
-      country: this.profileData?.user?.country || 'India'
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+      alert('Please login first');
+      return;
+    }
+
+    this.authService.getUserById(userId).subscribe({
+
+      next: (res: any) => {
+
+        if (res.success && res.data) {
+
+          const user = res.data;
+
+          console.log('User Details:', user);
+
+          // Patch API response data
+          this.editProfileForm.patchValue({
+            fullName: user.name || '',
+            mobileNumber: user.phone || '',
+            email: user.email || '',
+            gender: user.gender || '',
+
+            dateOfBirth: this.formatDateForInput(user.dateOfBirth),
+            anniversaryDate: this.formatDateForInput(user.anniversaryDate),
+
+            addressLine1: user.addressLine1 || '',
+            addressLine2: user.addressLine2 || '',
+            city: user.city || '',
+            state: user.state || '',
+            pincode: user.pincode || '',
+            country: user.country || 'India'
+          });
+
+          this.isEditProfileOpen = true;
+
+        }
+
+      },
+
+      error: (err: any) => {
+
+        console.error('Get User Details Error:', err);
+
+        alert('Unable to fetch profile details');
+
+      }
+
     });
 
-    this.isEditProfileOpen = true;
   }
+
+
   closeEditProfileModal() {
     this.isEditProfileOpen = false;
   }
+  private formatDateForInput(date: any): string {
+    if (!date) return '';
 
+    const parsedDate = new Date(date);
+
+    if (isNaN(parsedDate.getTime())) return '';
+
+    return parsedDate.toISOString().split('T')[0];
+  }
   updateProfile() {
 
     if (this.editProfileForm.invalid) {

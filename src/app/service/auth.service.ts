@@ -8,12 +8,12 @@ import { environment } from 'src/environment/environment';
 })
 export class AuthService {
   // Inside AuthService class
-private loginRequestSubject = new Subject<void>();
-loginRequest$ = this.loginRequestSubject.asObservable();
+  private loginRequestSubject = new Subject<void>();
+  loginRequest$ = this.loginRequestSubject.asObservable();
 
-requestLogin(): void {
-  this.loginRequestSubject.next();
-}
+  requestLogin(): void {
+    this.loginRequestSubject.next();
+  }
   private loginStatusSubject = new BehaviorSubject<boolean>(false);
   loginStatus$ = this.loginStatusSubject.asObservable();
 
@@ -91,9 +91,15 @@ requestLogin(): void {
 
   }
   updateProfile(userId: string, data: any): Observable<any> {
-  return this.http.put(
-    `${environment.apiUrl}/update-profile/${userId}`,
-    data
-  );
-}
+    return this.http.put(
+      `${environment.apiUrl}/updateProfile/${userId}`,
+      data
+    );
+  }
+
+  getUserById(userId: string) {
+    return this.http.get<any>(
+      `${environment.apiUrl}/getUserById/${userId}`
+    );
+  }
 }
