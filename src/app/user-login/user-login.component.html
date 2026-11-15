@@ -1,0 +1,164 @@
+<div class="auth-overlay" *ngIf="isAuthOpen" (click)="closeModal()">
+
+    <div class="auth-modal" (click)="$event.stopPropagation()">
+
+        <!-- Close Button -->
+        <button type="button" class="close-btn" (click)="closeModal()">
+            &times;
+        </button>
+
+        <!-- Left Branding Section -->
+        <div class="auth-banner">
+            <div class="brand-content">
+                <div class="brand-logo">OZO</div>
+                <span class="brand-subtitle">GOLD & DIAMOND JEWELLERY</span>
+                <small>Every shine has a story</small>
+
+                <div class="banner-message">
+                    <h2>Welcome to OZO</h2>
+                    <p>Discover elegance. Experience timeless beauty.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Form Section -->
+        <div class="auth-content">
+
+            <div class="auth-header">
+                <span class="welcome-label">WELCOME BACK</span>
+
+                <h2 *ngIf="currentStep === 'mobile'">
+                    Login / Sign Up
+                </h2>
+
+                <h2 *ngIf="currentStep === 'otp'">
+                    Verify OTP
+                </h2>
+
+                <p *ngIf="currentStep === 'mobile'">
+                    Enter your mobile number to continue.
+                </p>
+
+                <p *ngIf="currentStep === 'otp'">
+                    We've sent a 6-digit verification code to
+                    <strong>+91 {{ mobileNumber }}</strong>
+                </p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="alert-message error-message" *ngIf="errorMessage">
+                {{ errorMessage }}
+            </div>
+
+            <!-- Success Message -->
+            <div class="alert-message success-message" *ngIf="successMessage">
+                {{ successMessage }}
+            </div>
+
+            <!-- MOBILE NUMBER STEP -->
+            <form *ngIf="currentStep === 'mobile'" [formGroup]="mobileForm" (ngSubmit)="sendOtp()">
+
+                <label class="form-label">Mobile Number</label>
+
+                <div class="mobile-input-group">
+                    <span class="country-code">+91</span>
+
+                    <input type="tel" class="form-control mobile-input" formControlName="phone" maxlength="10"
+                        inputmode="numeric" placeholder="Enter 10 digit mobile number" autocomplete="tel-national">
+                </div>
+
+                <small class="field-error" *ngIf="phoneControl?.touched && phoneControl?.invalid">
+                    Please enter a valid 10-digit mobile number.
+                </small>
+
+                <button type="submit" class="auth-submit-btn" [disabled]="isLoading">
+
+                    <span *ngIf="!isLoading">Send OTP</span>
+                    <span *ngIf="isLoading">Sending OTP...</span>
+                </button>
+
+            </form>
+
+            <!-- OTP STEP -->
+            <!-- OTP STEP -->
+
+            <form *ngIf="currentStep === 'otp'" [formGroup]="otpForm" (ngSubmit)="verifyOtp()">
+
+                <div class="otp-field">
+                    <label class="otp-label" for="otp-1">
+                        Enter verification code
+                    </label>
+
+                    <div class="otp-boxes" role="group" aria-label="6 digit verification code">
+
+                        <input #otp1 id="otp-1" type="text" class="otp-box" formControlName="otp1" maxlength="1"
+                            inputmode="numeric" autocomplete="one-time-code" aria-label="Digit 1 of 6"
+                            (input)="onOtpInput($event, 0)" (keydown)="onOtpKeyDown($event, 0)"
+                            (paste)="onOtpPaste($event)">
+
+                        <input #otp2 id="otp-2" type="text" class="otp-box" formControlName="otp2" maxlength="1"
+                            inputmode="numeric" autocomplete="off" aria-label="Digit 2 of 6"
+                            (input)="onOtpInput($event, 1)" (keydown)="onOtpKeyDown($event, 1)"
+                            (paste)="onOtpPaste($event)">
+
+                        <input #otp3 id="otp-3" type="text" class="otp-box" formControlName="otp3" maxlength="1"
+                            inputmode="numeric" autocomplete="off" aria-label="Digit 3 of 6"
+                            (input)="onOtpInput($event, 2)" (keydown)="onOtpKeyDown($event, 2)"
+                            (paste)="onOtpPaste($event)">
+
+                        <span class="otp-divider" aria-hidden="true"></span>
+
+                        <input #otp4 id="otp-4" type="text" class="otp-box" formControlName="otp4" maxlength="1"
+                            inputmode="numeric" autocomplete="off" aria-label="Digit 4 of 6"
+                            (input)="onOtpInput($event, 3)" (keydown)="onOtpKeyDown($event, 3)"
+                            (paste)="onOtpPaste($event)">
+
+                        <input #otp5 id="otp-5" type="text" class="otp-box" formControlName="otp5" maxlength="1"
+                            inputmode="numeric" autocomplete="off" aria-label="Digit 5 of 6"
+                            (input)="onOtpInput($event, 4)" (keydown)="onOtpKeyDown($event, 4)"
+                            (paste)="onOtpPaste($event)">
+
+                        <input #otp6 id="otp-6" type="text" class="otp-box" formControlName="otp6" maxlength="1"
+                            inputmode="numeric" autocomplete="off" aria-label="Digit 6 of 6"
+                            (input)="onOtpInput($event, 5)" (keydown)="onOtpKeyDown($event, 5)"
+                            (paste)="onOtpPaste($event)">
+
+                    </div>
+                </div>
+
+                <div class="otp-actions">
+                    <button type="button" class="text-btn" (click)="changeMobileNumber()">
+                        Change number
+                    </button>
+
+                    <button type="button" class="text-btn resend-btn" [disabled]="resendSeconds > 0 || isLoading"
+                        (click)="resendOtp()">
+
+                        <span class="resend-icon" aria-hidden="true">↻</span>
+
+                        {{ resendSeconds > 0
+                        ? 'Resend in ' + resendSeconds + 's'
+                        : 'Resend code' }}
+                    </button>
+                </div>
+
+                <button type="submit" class="auth-submit-btn" [disabled]="isLoading">
+                    <span class="btn-label">
+                        {{ isLoading ? 'Verifying...' : 'Verify & Continue' }}
+                    </span>
+
+                    <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+
+            </form>
+
+
+            <div class="auth-footer">
+                By continuing, you agree to our
+                <a href="/terms">Terms of Service</a> and
+                <a href="/privacy-policy">Privacy Policy</a>.
+            </div>
+
+        </div>
+    </div>
+</div>

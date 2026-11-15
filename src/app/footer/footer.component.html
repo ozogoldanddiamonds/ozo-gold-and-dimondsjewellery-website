@@ -93,6 +93,5 @@
     </div>
 
 </footer>
-
-<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal()">
-</app-auth-modal>
+<app-user-login [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-user-login>

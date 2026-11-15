@@ -209,7 +209,7 @@
 
                 <button class="auth-glass-btn" (click)="openAuthModal()">
 
-                    Login / Register
+                    Login
 
                 </button>
 
@@ -224,5 +224,5 @@
         </ul>
     </div>
 </nav>
-<app-auth-modal [isAuthOpen]="isAuthOpen" (close)="closeAuthModal()">
-</app-auth-modal>
+<app-user-login [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-user-login>

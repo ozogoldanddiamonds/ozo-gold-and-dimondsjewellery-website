@@ -36,6 +36,7 @@ import { SchemePaymentSuccessComponent } from './scheme-payment-success/scheme-p
 import { SchemePaymentFailedComponent } from './scheme-payment-failed/scheme-payment-failed.component';
 import { UserAddressComponent } from './user-address/user-address.component';
 import { OrdersComponent } from './orders/orders.component';
+import { UserLoginComponent } from './user-login/user-login.component';
   @NgModule({
     declarations: [
       AppComponent,
@@ -67,7 +68,8 @@ import { OrdersComponent } from './orders/orders.component';
       SchemePaymentSuccessComponent,
       SchemePaymentFailedComponent,
       UserAddressComponent,
-      OrdersComponent
+      OrdersComponent,
+      UserLoginComponent
     ],
     imports: [
       BrowserModule,

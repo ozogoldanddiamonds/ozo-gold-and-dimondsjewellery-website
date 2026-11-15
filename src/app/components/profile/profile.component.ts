@@ -258,7 +258,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.authService.logout(userId).subscribe({
+    this.authService.logout().subscribe({
       next: () => {
         localStorage.removeItem('userId');
         localStorage.removeItem('userData');
