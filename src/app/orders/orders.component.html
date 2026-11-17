@@ -39,9 +39,11 @@
                     <h3 class="product-name">{{ getProductName(item) }}</h3>
 
                     <p class="product-variant">
-                        {{ item.variantSnapshot?.purity || 'N/A' }}
-                        <span *ngIf="item.variantSnapshot?.metalColor"> • {{ item.variantSnapshot.metalColor }}</span>
-                        <span *ngIf="item.variantSnapshot?.metalType"> • {{ item.variantSnapshot.metalType }}</span>
+                        {{ getProductMetalPurity(item) }}
+                        <span *ngIf="item.variantSnapshot?.metalColor"> • {{ item.variantSnapshot.metalColor |
+                            titlecase}}</span>
+                        <span *ngIf="item.variantSnapshot?.metalType"> • {{ item.variantSnapshot.metalType
+                            |titlecase}}</span>
                     </p>
 
                     <p class="product-qty">
@@ -123,8 +125,8 @@
                             </div>
 
                             <div>
-                                <span>Purity</span>
-                                <strong>{{ item.variantSnapshot?.purity || 'N/A' }}</strong>
+                                <span>Metal Purity</span>
+                                <strong> {{ getProductMetalPurity(item) }}</strong>
                             </div>
 
                             <div>

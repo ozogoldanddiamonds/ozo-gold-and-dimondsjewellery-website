@@ -153,19 +153,24 @@ export class ProductComponent implements OnInit {
       }
     });
   }
+
   selectImage(img: string): void {
+    if (this.isSelectedVariantOutOfStock) {
+      return;
+    }
 
     this.selectedImage = img;
-
-    // Video close
     this.showVideo = false;
-
   }
+
   selectVideo(): void {
+    if (this.isSelectedVariantOutOfStock) {
+      return;
+    }
 
     this.showVideo = true;
-
   }
+
   selectPurity(purity: string) {
 
     this.selectedPurity = purity;
@@ -184,7 +189,10 @@ export class ProductComponent implements OnInit {
 
   getVariantBySize(size: any): any {
     return this.product?.variants?.find(
-      (variant: any) => variant.size === size
+      (variant: any) =>
+        String(variant?.size) === String(size) &&
+        String(variant?.metalPurity).toUpperCase() ===
+        String(this.selectedPurity).toUpperCase()
     );
   }
 
@@ -496,7 +504,10 @@ export class ProductComponent implements OnInit {
 
   }
   addToCart() {
-
+    if (this.isSelectedVariantOutOfStock) {
+      this.toastr.warning('Selected variant is currently out of stock.');
+      return;
+    }
     const userId =
       localStorage.getItem('userId');
 
@@ -560,6 +571,10 @@ export class ProductComponent implements OnInit {
 
 
   buyProduct() {
+    if (this.isSelectedVariantOutOfStock) {
+      this.toastr.warning('Selected variant is currently out of stock.');
+      return;
+    }
     this.router.navigate(['/buy-product'], {
       state: {
         product: this.product,
@@ -654,7 +669,10 @@ export class ProductComponent implements OnInit {
   }
 
   whishlist(): void {
-
+    if (this.isSelectedVariantOutOfStock) {
+      this.toastr.warning('Selected variant is currently out of stock.');
+      return;
+    }
     const userId = localStorage.getItem('userId');
 
     // Login validation
@@ -762,6 +780,23 @@ export class ProductComponent implements OnInit {
 
     }
 
+  }
+
+  get selectedVariantStock(): number {
+    return Math.max(0, Number(this.selectedVariant?.stock ?? 0));
+  }
+
+  get isSelectedVariantOutOfStock(): boolean {
+    return !this.selectedVariant || this.selectedVariantStock <= 0;
+  }
+
+  get isProductOutOfStock(): boolean {
+    const variants = this.product?.variants || [];
+
+    return (
+      variants.length === 0 ||
+      variants.every((variant: any) => Number(variant?.stock || 0) <= 0)
+    );
   }
 
 }

@@ -5,6 +5,7 @@ import { CartService } from 'src/app/service/cart.service';
 import { WishlistService } from 'src/app/service/wishlist.service';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -23,7 +24,8 @@ export class ProfileComponent implements OnInit {
     private cartService: CartService,
     private wishlistService: WishlistService,
     private router: Router,
-    private location: Location, private fb: FormBuilder
+    private location: Location, private fb: FormBuilder,
+    private toaster: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -40,21 +42,39 @@ export class ProfileComponent implements OnInit {
 
   initEditProfileForm() {
     this.editProfileForm = this.fb.group({
-      fullName: ['', [Validators.required]],
-      mobileNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      email: ['', [Validators.required, Validators.email]],
+
+      fullName: [''],
+
+      mobileNumber: ['', [
+        Validators.pattern(/^[0-9]{10}$/)
+      ]],
+
+      email: ['', [
+        Validators.email
+      ]],
+
       gender: [''],
+
       dateOfBirth: [''],
+
       anniversaryDate: [''],
+
       addressLine1: [''],
+
       addressLine2: [''],
+
       city: [''],
+
       state: [''],
-      pincode: ['', [Validators.pattern(/^[0-9]{6}$/)]],
+
+      pincode: ['', [
+        Validators.pattern(/^[0-9]{6}$/)
+      ]],
+
       country: ['India']
+
     });
   }
-
   openEditProfileModal() {
 
     const userId = localStorage.getItem('userId');
@@ -146,15 +166,25 @@ export class ProfileComponent implements OnInit {
     this.authService.updateProfile(userId, payload).subscribe({
 
       next: (res: any) => {
-
-        console.log('Profile Updated Successfully:', res);
-
         this.isProfileUpdating = false;
 
-        this.closeEditProfileModal();
+        if (res.success) {
+          const currentUser = this.authService.getUser();
 
-        // Get latest profile data
-        this.getProfileSummary();
+          const updatedUser = {
+            ...currentUser,
+            ...payload,
+            ...(res.user || res.data || {})
+          };
+
+          this.authService.setUser(updatedUser);
+
+          this.toaster.success('Profile updated successfully');
+          this.closeEditProfileModal();
+          this.getProfileSummary();
+        } else {
+          this.toaster.error(res.message || 'Profile update failed');
+        }
       },
 
       error: (err: any) => {

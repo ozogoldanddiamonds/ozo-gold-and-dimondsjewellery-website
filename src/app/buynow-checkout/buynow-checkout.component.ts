@@ -814,10 +814,10 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
   // VERIFY PAYMENT
   // ----------------------------------
 
-  private async verifyPayment(
+  private verifyPayment(
     result: any,
     payment: any
-  ): Promise<void> {
+  ): void {
 
     const {
       razorpay_order_id,
@@ -835,7 +835,6 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
       this.toaster.warning(
         'Payment response is incomplete. Please check payment status.'
       );
-
       return;
     }
 
@@ -851,16 +850,17 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
       next: async (verification: any) => {
 
         const data = verification?.data;
+        const status = String(data?.status || '').toUpperCase();
 
         this.isVerifyingPayment = false;
         this.isProcessingPayment = false;
 
+        // SUCCESS
         if (
           verification?.success &&
-          data?.status === 'ORDER_CREATED' &&
+          status === 'ORDER_CREATED' &&
           data?.orderId
         ) {
-
           sessionStorage.removeItem('buyNowCheckout');
 
           await this.router.navigate(['/payment-success'], {
@@ -878,37 +878,48 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
           return;
         }
 
-        await this.router.navigate(['/payment-success'], {
-          replaceUrl: true,
-          state: {
-            paymentState: 'pending',
-            status: data?.status || 'PENDING',
-            paymentAttemptId: payment.paymentAttemptId,
-            paymentId: razorpay_payment_id,
-            orderId: data?.orderId || null,
-            amount: Number(payment.amount) / 100,
-            message: 'Payment is being confirmed. Please check your orders.'
-          }
-        });
+        // DEFINITE FAILURE
+        if (
+          status === 'FAILED' ||
+          status === 'PAYMENT_FAILED'
+        ) {
+          await this.router.navigate(['/payment-failure'], {
+            replaceUrl: true,
+            state: {
+              paymentState: 'failure',
+              status: data.status,
+              paymentAttemptId: payment.paymentAttemptId,
+              paymentId: razorpay_payment_id,
+              orderId: data?.orderId || null,
+              amount: Number(payment.amount) / 100,
+              message:
+                verification?.message ||
+                data?.message ||
+                'Your payment has failed. Please try again.'
+            }
+          });
+
+          return;
+        }
+
+        // PENDING / UNKNOWN STATUS
+        // Do not show a false success or failure.
+        this.toaster.warning(
+          'Payment is being confirmed. Please check your order status.'
+        );
       },
 
-      error: async (err: any) => {
+      error: (err: any) => {
 
         console.error('Payment verification failed:', err);
 
         this.isVerifyingPayment = false;
         this.isProcessingPayment = false;
 
-        await this.router.navigate(['/payment-success'], {
-          replaceUrl: true,
-          state: {
-            paymentState: 'pending',
-            paymentAttemptId: payment.paymentAttemptId,
-            paymentId: razorpay_payment_id,
-            amount: Number(payment.amount) / 100,
-            message: 'Payment status is being confirmed. Please check your orders.'
-          }
-        });
+        // Verification API error does not prove payment failure.
+        this.toaster.warning(
+          'Unable to verify payment right now. Please check your order status before retrying.'
+        );
       }
     });
 

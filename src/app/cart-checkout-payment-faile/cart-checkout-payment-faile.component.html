@@ -1,0 +1,165 @@
+<div class="payment-page">
+
+    <div class="luxury-glow glow-one"></div>
+    <div class="luxury-glow glow-two"></div>
+
+    <div class="payment-wrapper">
+
+        <!-- OZO Branding -->
+        <div class="brand">
+            <div class="brand-logo">
+                <img src="assets/images/logo.jpg" alt="OZO Jewellery">
+            </div>
+
+            <div class="brand-line"></div>
+
+            <span class="brand-subtitle">
+                Every shine has a story.
+            </span>
+        </div>
+
+        <!-- Failure Card -->
+        <div class="result-card">
+
+            <div class="top-label">
+                <span class="label-line"></span>
+                <span>PAYMENT UPDATE</span>
+                <span class="label-line"></span>
+            </div>
+
+            <!-- Failure Icon -->
+            <div class="status-area">
+
+                <div class="status-ring ring-one"></div>
+                <div class="status-ring ring-two"></div>
+
+                <div class="status-icon failure">
+                    <svg viewBox="0 0 64 64">
+                        <circle cx="32" cy="32" r="25"></circle>
+                        <path d="M22 22 L42 42 M42 22 L22 42"></path>
+                    </svg>
+                </div>
+
+            </div>
+
+            <!-- Heading -->
+            <div class="result-heading">
+
+                <span class="eyebrow">
+                    PAYMENT UNSUCCESSFUL
+                </span>
+
+                <h1>Payment Not Completed</h1>
+
+                <div class="heading-divider">
+                    <span></span>
+                    <img src="assets/images/diamond_png.png" alt="Diamond">
+                    <span></span>
+                </div>
+
+                <p class="description">
+                    {{ message }}
+                </p>
+
+                <p class="additional-description">
+                    If your account was debited, check the payment status
+                    before attempting another payment.
+                </p>
+
+            </div>
+
+            <!-- Amount -->
+            <div class="amount-section" *ngIf="payment.amount != null">
+
+                <span class="amount-label">
+                    PAYMENT AMOUNT
+                </span>
+
+                <div class="amount-value">
+                    <span class="currency">₹</span>
+                    {{ payment.amount | number:'1.2-2' }}
+                </div>
+
+                <span class="amount-caption">
+                    Payment was not confirmed
+                </span>
+
+            </div>
+
+            <!-- Payment Details -->
+            <div class="details-section" *ngIf="payment.paymentId || payment.razorpayOrderId">
+
+                <div class="details-title">
+                    PAYMENT DETAILS
+                </div>
+
+                <div class="detail-row" *ngIf="payment.razorpayOrderId">
+
+                    <div class="detail-icon">#</div>
+
+                    <div class="detail-info">
+                        <span>Razorpay Order Reference</span>
+                        <strong>{{ payment.razorpayOrderId }}</strong>
+                    </div>
+
+                </div>
+
+                <div class="detail-divider" *ngIf="payment.razorpayOrderId && payment.paymentId"></div>
+
+                <div class="detail-row" *ngIf="payment.paymentId">
+
+                    <div class="detail-icon">₹</div>
+
+                    <div class="detail-info">
+                        <span>Payment Reference</span>
+                        <strong>{{ payment.paymentId }}</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Warning Note -->
+            <div class="confirmation-note">
+
+                <span class="note-icon">!</span>
+
+                <span>
+                    If money was deducted, please check the transaction
+                    status before making another payment.
+                </span>
+
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+
+                <button class="primary-button" (click)="retryPayment()">
+                    Return to Cart
+                    <span>→</span>
+                </button>
+
+                <button class="secondary-button" (click)="goHome()">
+                    Continue Shopping
+                </button>
+
+                <p class="support-text">
+                    Need assistance? Contact OZO Customer Support.
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-line"></div>
+
+            <p>OZO GOLD & DIAMOND JEWELLERY</p>
+
+            <span>Elegance that lasts forever</span>
+        </div>
+
+    </div>
+
+</div>

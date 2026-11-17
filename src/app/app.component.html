@@ -24,11 +24,13 @@
 
 
 <!-- Fixed Custom Design Button -->
-<button type="button" class="floating-custom-design-btn" routerLink="/custom-design" aria-label="Custom Design"
+<button type="button" class="floating-custom-design-btn" (click)="customDesign()" aria-label="Custom Design"
   title="Custom Design">
 
   <img src="assets/images/diamond_png.png" alt="Loading">
   <span>Custom Design</span>
 </button>
 
+<app-user-login [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
+</app-user-login>
 <app-footer></app-footer>

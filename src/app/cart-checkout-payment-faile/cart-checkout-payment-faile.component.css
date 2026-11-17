@@ -1,0 +1,58 @@
+.additional-description {
+    color: #91897e;
+    font-size: 12px;
+    line-height: 1.8;
+    max-width: 390px;
+    margin: 12px auto 0;
+}
+
+.confirmation-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #9b6a27;
+    background: #fff8e9;
+    border-radius: 6px;
+    padding: 13px;
+    margin-top: 20px;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.note-icon {
+    flex-shrink: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.status-icon.failure {
+    background: #fff0ef;
+}
+
+.status-icon.failure circle {
+    fill: none;
+    stroke: #d94747;
+    stroke-width: 2.5;
+}
+
+.status-icon.failure path {
+    fill: none;
+    stroke: #d94747;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+}
+
+.eyebrow {
+    color: #d94747;
+}
+
+@media (max-width: 576px) {
+    .additional-description {
+        font-size: 11px;
+    }
+
+    .confirmation-note {
+        font-size: 10px;
+    }
+}

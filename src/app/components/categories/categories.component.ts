@@ -163,8 +163,26 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   getDefaultVariant(product: any): any {
-    if (!product?.variants?.length) return null;
-    return product.variants.find((variant: any) => variant?.isDefault) || product.variants[0];
+    const variants = product?.variants || [];
+
+    if (!variants.length) return null;
+
+    // First preference: Default variant with stock
+    const defaultAvailable = variants.find(
+      (variant: any) => variant?.isDefault && Number(variant?.stock) > 0
+    );
+
+    if (defaultAvailable) return defaultAvailable;
+
+    // Second preference: Any available variant
+    const availableVariant = variants.find(
+      (variant: any) => Number(variant?.stock) > 0
+    );
+
+    if (availableVariant) return availableVariant;
+
+    // If all variants are out of stock, return default or first variant
+    return variants.find((variant: any) => variant?.isDefault) || variants[0];
   }
 
   mapProduct(item: any): any {
@@ -172,23 +190,26 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
     const sortedVariants = [...variants].sort((a: any, b: any) => {
       const priceA = Number(
-        a?.priceDetails?.finalPrice ??
-        a?.calculatedPrice ??
-        0
+        a?.priceDetails?.finalPrice ?? a?.calculatedPrice ?? 0
       );
 
       const priceB = Number(
-        b?.priceDetails?.finalPrice ??
-        b?.calculatedPrice ??
-        0
+        b?.priceDetails?.finalPrice ?? b?.calculatedPrice ?? 0
       );
 
       return priceA - priceB;
     });
 
     const defaultVariant = this.getDefaultVariant(item);
-
     const cheapestVariant = sortedVariants[0] || defaultVariant;
+
+    const totalStock = variants.reduce(
+      (total: number, variant: any) =>
+        total + Math.max(0, Number(variant?.stock || 0)),
+      0
+    );
+
+    const inStock = totalStock > 0;
 
     return {
       ...item,
@@ -196,10 +217,15 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       categoryName: item?.category?.name || '',
       subCategoryName: item?.subCategory?.name || '',
       selectedVariant: defaultVariant,
+
+      totalStock,
+      inStock,
+
       displayPrice:
         cheapestVariant?.priceDetails?.finalPrice ??
         cheapestVariant?.calculatedPrice ??
         0,
+
       oldPrice: cheapestVariant?.priceDetails?.metalValue || 0,
       discountPercentage: cheapestVariant?.discountPercentage || 0,
       isWishlisted: false,
@@ -590,11 +616,19 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     );
 
     if (this.filteredVariants.length) {
-      const currentStillAvailable = this.filteredVariants.find(
-        (variant: any) => this.getVariantId(variant) === this.selectedVariantId
+
+      const availableVariant = this.filteredVariants.find(
+        (variant: any) => Number(variant?.stock) > 0
       );
 
-      this.selectVariant(currentStillAvailable || this.filteredVariants[0]);
+      const currentVariant = this.filteredVariants.find(
+        (variant: any) =>
+          this.getVariantId(variant) === this.selectedVariantId &&
+          Number(variant?.stock) > 0
+      );
+
+      this.selectVariant(currentVariant || availableVariant || this.filteredVariants[0]);
+
     } else {
       this.selectedVariant = null;
       this.selectedVariantId = '';
@@ -634,6 +668,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
     if (!this.selectedProduct?._id || !this.selectedVariantId) {
       this.toastr.warning('Please select an available variant');
+      return;
+    }
+
+    if (!this.selectedVariant || Number(this.selectedVariant.stock) <= 0) {
+      this.toastr.warning('Selected variant stock not available');
       return;
     }
 

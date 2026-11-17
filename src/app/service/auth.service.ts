@@ -27,7 +27,8 @@ export class AuthService {
   private rawHttp: HttpClient;
   private loginRequestSubject = new Subject<void>();
   loginRequest$ = this.loginRequestSubject.asObservable();
-
+  private userSubject = new BehaviorSubject<any>(this.getUser());
+  user$ = this.userSubject.asObservable();
   requestLogin(): void {
     this.loginRequestSubject.next();
   }
@@ -62,11 +63,11 @@ export class AuthService {
   //   return this.http.post(`${environment.apiUrl}/logout`, { userId });
   // }
 
-  setUser(user: any) {
+  setUser(user: any): void {
     localStorage.setItem('ozo_user', JSON.stringify(user));
+    this.userSubject.next(user);
   }
-
-  getUser() {
+  getUser(): any {
     const user = localStorage.getItem('ozo_user');
     return user ? JSON.parse(user) : null;
   }
@@ -179,9 +180,13 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(user));
     localStorage.setItem('user', JSON.stringify(user));
 
+    // Save user and notify Navbar
+    if (user) {
+      this.setUser(user);
+    }
+
     this.updateLoginStatus(true);
   }
-
   // GET ACCESS TOKEN
   getAccessToken(): string | null {
     return localStorage.getItem('token');

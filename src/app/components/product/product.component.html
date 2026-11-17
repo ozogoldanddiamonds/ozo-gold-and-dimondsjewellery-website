@@ -14,7 +14,8 @@
 
                         <!-- IMAGE THUMBNAILS -->
                         <div class="thumb-item" *ngFor="let img of product?.images"
-                            [class.active]="!showVideo && selectedImage === img" (click)="selectImage(img)">
+                            [class.active]="!showVideo && selectedImage === img" (click)="selectImage(img)"
+                            [class.disabled-thumb]="isSelectedVariantOutOfStock">
 
                             <img [src]="img" alt="Product Image" />
 
@@ -23,7 +24,7 @@
 
                         <!-- VIDEO THUMBNAIL -->
                         <div class="thumb-item video-thumb" *ngIf="product?.video" [class.active]="showVideo"
-                            (click)="selectVideo()">
+                            (click)="selectVideo()" [class.disabled-thumb]="isSelectedVariantOutOfStock">
 
                             <video [src]="product.video" muted preload="metadata"></video>
 
@@ -38,7 +39,7 @@
 
 
                     <!-- ================= MAIN MEDIA ================= -->
-                    <div class="main-image">
+                    <div class="main-image" [class.out-of-stock-media]="isSelectedVariantOutOfStock">
 
                         <!-- BADGES -->
 
@@ -382,14 +383,16 @@
                     </div>
 
                     <div class="qty-box">
-                        <button type="button" class="qty-btn" (click)="decreaseQuantity()">
+                        <button type="button" class="qty-btn" (click)="decreaseQuantity()"
+                            [disabled]="isSelectedVariantOutOfStock">
                             -
                         </button>
 
                         <input type="number" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" min="1"
-                            [max]="selectedVariant?.stock ?? 1" step="1">
+                            [max]="selectedVariant?.stock ?? 1" step="1" [disabled]="isSelectedVariantOutOfStock">
 
-                        <button type="button" class="qty-btn" (click)="increaseQuantity()">
+                        <button type="button" class="qty-btn" (click)="increaseQuantity()"
+                            [disabled]="isSelectedVariantOutOfStock">
                             +
                         </button>
                     </div>
@@ -400,29 +403,30 @@
                 <!-- Actions -->
                 <div class="action-row">
 
-                    <button class="btn add-cart-btn" (click)="addToCart()">
-                        ADD TO CART
+                    <button class="btn add-cart-btn" (click)="addToCart()" [disabled]="isSelectedVariantOutOfStock"
+                        [class.disabled-action]="isSelectedVariantOutOfStock">
+                        {{ isSelectedVariantOutOfStock ? 'OUT OF STOCK' : 'ADD TO CART' }}
                     </button>
 
-                    <button class="btn buy-now-btn" (click)="buyProduct()">
-
+                    <button type="button" class="btn buy-now-btn" [disabled]="isSelectedVariantOutOfStock"
+                        [class.disabled-action]="isSelectedVariantOutOfStock" (click)="buyProduct()">
                         BUY NOW
-
                     </button>
 
                 </div>
 
-                <!-- Wishlist -->
+
                 <!-- Wishlist -->
                 <div class="extra-links">
 
-                    <span (click)="whishlist()" [class.text-danger]="product?.isWishlisted">
+                    <span [class.disabled-wishlist]="isSelectedVariantOutOfStock"
+                        [class.text-danger]="product?.isWishlisted" (click)="whishlist()">
+                        <i class="fa" [ngClass]="product?.isWishlisted ? 'fa-heart' : 'fa-heart-o'"></i>
 
-                        <i class="fa" [ngClass]="product?.isWishlisted ? 'fa-heart' : 'fa-heart-o'">
-                        </i>
-
-                        {{ product?.isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' }}
-
+                        {{ isSelectedVariantOutOfStock
+                        ? 'Out of Stock'
+                        : (product?.isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist')
+                        }}
                     </span>
 
                     <span>

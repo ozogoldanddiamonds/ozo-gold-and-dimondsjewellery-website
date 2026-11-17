@@ -2,6 +2,7 @@
 
     <div class="container">
 
+        <!-- Section Header -->
         <div class="section-header text-center">
 
             <h2>Jewellery Saving Schemes</h2>
@@ -13,7 +14,6 @@
         </div>
 
         <!-- Search -->
-
         <div class="row justify-content-center mb-5">
 
             <div class="col-lg-5 col-md-7">
@@ -32,65 +32,56 @@
         </div>
 
         <!-- Schemes -->
-
         <div class="row g-4">
 
             <div class="col-lg-4 col-md-6" *ngFor="let item of filteredSchemes">
 
                 <div class="scheme-card">
-                    <!-- 
-                    <div class="popular-badge">
 
+                    <!-- Popular Badge -->
+                    <div class="popular-badge" *ngIf="item.isPopular">
                         MOST POPULAR
+                    </div>
 
-                    </div> -->
-
+                    <!-- Scheme Icon -->
                     <div class="scheme-icon">
 
                         <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
 
                     </div>
 
+                    <!-- Scheme Name -->
                     <h3>
-
-                        {{item.name | titlecase}}
-
+                        {{ item.name | titlecase }}
                     </h3>
 
-                    <h1>
+                    <!-- Monthly Installment Highlight -->
+                    <div class="monthly-highlight">
 
-                        ₹ {{item.amount | number}}
+                        <span>Monthly Installment</span>
 
-                    </h1>
+                        <h1>
+                            ₹ {{ item.monthlyAmount | number:'1.0-0' }}
+                        </h1>
 
+                        <p>Pay every month</p>
+
+                    </div>
+
+                    <!-- Description -->
                     <p class="scheme-desc">
-
-                        {{item.description}}
-
+                        {{ item.description | titlecase }}
                     </p>
 
+                    <!-- Scheme Information -->
                     <div class="scheme-info">
 
                         <div class="info-row">
 
-                            <span>Total Amount</span>
+                            <span>Monthly Payment</span>
 
                             <strong>
-
-                                ₹ {{item.amount | number}}
-
-                            </strong>
-
-                        </div>
-
-                        <div class="info-row">
-
-                            <span>Monthly Installment</span>
-
-                            <strong>
-
-                                ₹ {{item.monthlyAmount | number}}
-
+                                ₹ {{ item.monthlyAmount | number:'1.0-0' }}
                             </strong>
 
                         </div>
@@ -100,9 +91,7 @@
                             <span>Duration</span>
 
                             <strong>
-
-                                {{item.durationMonths}} Months
-
+                                {{ item.durationMonths }} Months
                             </strong>
 
                         </div>
@@ -112,9 +101,7 @@
                             <span>You Pay</span>
 
                             <strong>
-
-                                {{item.userPayMonths}} Months
-
+                                {{ item.userPayMonths }} Months
                             </strong>
 
                         </div>
@@ -124,15 +111,14 @@
                             <span>Company Pays</span>
 
                             <strong class="free-month">
-
-                                Last {{item.companyPayMonths}} Month FREE
-
+                                Last {{ item.companyPayMonths }} Month FREE
                             </strong>
 
                         </div>
 
                     </div>
 
+                    <!-- Scheme Benefits -->
                     <div class="scheme-benefits">
 
                         <div>
@@ -155,26 +141,20 @@
 
                             <i class="fa fa-check-circle"></i>
 
-                            Redeem Jewellery Worth
-
-                            ₹ {{item.amount | number}}
+                            Easy Monthly Savings
 
                         </div>
 
                     </div>
 
+                    <!-- Scheme Buttons -->
                     <div class="scheme-buttons">
+
                         <div class="row">
-                            <div class="col-12">
-                                <!-- <button class="btn details-btn" (click)="viewDetails(item)">
 
-                                    View Details
-
-                                </button> -->
-                            </div>
                             <div class="col-12">
+
                                 <!-- NOT JOINED -->
-
                                 <button *ngIf="!joinedSchemes.includes(item._id)" class="btn join-btn"
                                     (click)="joinScheme(item)">
 
@@ -183,7 +163,6 @@
                                 </button>
 
                                 <!-- JOINED -->
-
                                 <button *ngIf="joinedSchemes.includes(item._id)" class="btn pay-btn"
                                     (click)="payInstallment(item)">
 
@@ -194,25 +173,24 @@
                                 </button>
 
                             </div>
+
                         </div>
 
                     </div>
+
                 </div>
 
             </div>
 
         </div>
 
-        <!-- Empty -->
+        <!-- Empty State -->
+        <div class="text-center py-5" *ngIf="!loading && filteredSchemes.length === 0">
 
-        <div class="text-center py-5" *ngIf="!loading && filteredSchemes.length==0">
-
-            <img src="assets/images/no-data.png" width="180">
+            <img src="assets/images/no-data.png" width="180" alt="No schemes found">
 
             <h4 class="mt-3">
-
                 No Schemes Found
-
             </h4>
 
         </div>
@@ -220,5 +198,7 @@
     </div>
 
 </section>
+
+<!-- Login Modal -->
 <app-user-login [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
 </app-user-login>

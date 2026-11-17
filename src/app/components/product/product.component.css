@@ -2584,3 +2584,74 @@
     color: #fff !important;
     border-color: #222222 !important;
 }
+
+
+/* Main Product Out of Stock */
+.main-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.out-of-stock-media>img,
+.out-of-stock-media>video {
+    opacity: 0.45;
+    filter: grayscale(45%);
+}
+
+.product-stock-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20, 20, 20, 0.15);
+    pointer-events: none;
+}
+
+.product-stock-overlay span {
+    padding: 12px 22px;
+    background: #222;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    border-radius: 3px;
+}
+
+/* Disable image thumbnails */
+.disabled-thumb {
+    opacity: 0.45;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+/* Disabled Action Buttons */
+.disabled-action,
+.action-row button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed !important;
+    pointer-events: none;
+    filter: grayscale(50%);
+}
+
+/* Disabled Wishlist */
+.disabled-wishlist {
+    opacity: 0.45;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+/* Disabled Quantity */
+.qty-box button:disabled,
+.qty-box input:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: #f3f3f3;
+}
+
+.size-box button.out-of-stock {
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}

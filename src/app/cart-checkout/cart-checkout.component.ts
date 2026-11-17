@@ -6,7 +6,7 @@ import { AddressService } from '../service/address.service';
 import { OrdersService } from '../service/orders.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CartService } from '../service/cart.service';
-
+import { firstValueFrom } from 'rxjs';
 declare global {
   interface Window {
     Razorpay: any;
@@ -390,10 +390,12 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+
   private async verifyPayment(
     result: any,
     payment: any
   ): Promise<void> {
+
     const {
       razorpay_order_id,
       razorpay_payment_id,
@@ -406,9 +408,21 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
       !razorpay_signature
     ) {
       this.isProcessingPayment = false;
-      this.toaster.warning(
-        'Payment response is incomplete. Please check payment status before retrying.'
-      );
+      this.isVerifyingPayment = false;
+
+      // Incomplete response does not prove payment failure.
+      await this.router.navigate(['/payment-pending'], {
+        replaceUrl: true,
+        state: {
+          paymentState: 'pending',
+          paymentAttemptId: payment?.paymentAttemptId,
+          paymentId: razorpay_payment_id || null,
+          amount: Number(payment?.amount || 0) / 100,
+          message:
+            'Payment response is incomplete. Please check your payment status before retrying.'
+        }
+      });
+
       return;
     }
 
@@ -420,17 +434,30 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
       razorpay_payment_id,
       razorpay_signature
     }).subscribe({
+
       next: async (verification: any) => {
+
         const data = verification?.data;
 
         this.isVerifyingPayment = false;
         this.isProcessingPayment = false;
 
+        // 1. Payment verified and order created successfully
         if (
           verification?.success &&
           data?.status === 'ORDER_CREATED' &&
           data?.orderId
         ) {
+
+          const cartCleared =
+            await this.clearCartAfterSuccessfulOrder();
+
+          if (!cartCleared) {
+            console.error(
+              'Order created successfully, but cart items could not be removed.'
+            );
+          }
+
           await this.router.navigate(['/payment-success'], {
             replaceUrl: true,
             state: {
@@ -446,7 +473,30 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
           return;
         }
 
-        await this.router.navigate(['/payment-success'], {
+        // 2. Explicit failure only when backend confirms it
+        if (
+          data?.status === 'FAILED' ||
+          data?.status === 'PAYMENT_FAILED'
+        ) {
+
+          await this.router.navigate(['/payment-failure'], {
+            replaceUrl: true,
+            state: {
+              paymentState: 'failure',
+              paymentAttemptId: payment.paymentAttemptId,
+              paymentId: razorpay_payment_id,
+              razorpayOrderId: razorpay_order_id,
+              amount: Number(payment.amount) / 100,
+              message:
+                data?.message || 'Payment could not be completed.'
+            }
+          });
+
+          return;
+        }
+
+        // 3. Any other status is treated as pending
+        await this.router.navigate(['/payment-pending'], {
           replaceUrl: true,
           state: {
             paymentState: 'pending',
@@ -459,30 +509,37 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
               'Payment is being confirmed. Please check your orders before trying again.'
           }
         });
+
       },
+
+      // 4. Verification API error does not mean payment failed
       error: async (error: any) => {
+
         console.error('Payment verification failed:', error);
 
         this.isVerifyingPayment = false;
         this.isProcessingPayment = false;
 
-        // Verification API failure does not necessarily mean payment failed.
-        await this.router.navigate(['/payment-success'], {
+        await this.router.navigate(['/payment-pending'], {
           replaceUrl: true,
           state: {
             paymentState: 'pending',
             paymentAttemptId: payment.paymentAttemptId,
             paymentId: razorpay_payment_id,
+            razorpayOrderId: razorpay_order_id,
             amount: Number(payment.amount) / 100,
             message:
               'Payment status is being confirmed. Please check your orders before trying again.'
           }
         });
+
       }
+
     });
 
     this.subscriptions.add(verifySub);
   }
+
 
 
   // openAddAddress() {
@@ -942,6 +999,43 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
 
     });
   }
+  private async clearCartAfterSuccessfulOrder(): Promise<boolean> {
+    if (!this.cartId || !this.cartItems?.length) {
+      console.warn('Cart ID or cart items are missing');
+      return false;
+    }
 
+    try {
+      // Delete each purchased cart item using cartItemId
+      for (const item of this.cartItems) {
+        const cartItemId = item?.cartItemId;
+
+        if (!cartItemId) {
+          console.warn('Cart item ID missing:', item);
+          continue;
+        }
+
+        await firstValueFrom(
+          this.cartService.removeCartItem(
+            this.cartId,
+            cartItemId
+          )
+        );
+      }
+
+      // Clear local cart data after successful deletion
+      this.cartItems = [];
+      this.cartId = '';
+
+      // Refresh cart count in header/navbar
+      this.cartService.loadCartCount();
+
+      return true;
+
+    } catch (error) {
+      console.error('Cart clearing failed:', error);
+      return false;
+    }
+  }
 
 }

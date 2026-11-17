@@ -84,16 +84,47 @@ export class OrdersComponent implements OnInit {
     );
   }
 
-  getItemImage(item: any): string {
+  // Product Image
+  getProductImage(item: any): string {
+
     return (
-      item?.productSnapshot?.image ||
-      item?.product?.images?.[0]?.url ||
       item?.product?.images?.[0] ||
-      item?.image ||
+      item?.productSnapshot?.images?.[0] ||
+      item?.productSnapshot?.image ||
       'assets/images/product-placeholder.png'
     );
+
   }
 
+  // Product Name
+  getProductName(item: any): string {
+
+    return (
+      item?.productSnapshot?.name ||
+      item?.product?.name ||
+      'Product'
+    );
+
+  }
+
+  // Product Metal Purity
+  getProductMetalPurity(item: any): string {
+
+    // First check order snapshot
+    if (item?.variantSnapshot?.metalPurity) {
+      return item.variantSnapshot.metalPurity;
+    }
+
+    // Find matching variant from populated product
+    const variantId = String(item?.variant || '');
+
+    const variant = item?.product?.variants?.find(
+      (v: any) => String(v._id) === variantId
+    );
+
+    return variant?.metalPurity || 'N/A';
+
+  }
   getItemQuantity(item: any): number {
     return Number(item?.quantity || 1);
   }
@@ -252,21 +283,7 @@ export class OrdersComponent implements OnInit {
     return order?.items?.length ? order.items[0] : null;
   }
 
-  // Product image
-  getProductImage(item: any): string {
-    return (
-      item?.productSnapshot?.image ||
-      'assets/images/product-placeholder.png'
-    );
-  }
 
-  // Product name
-  getProductName(item: any): string {
-    return (
-      item?.productSnapshot?.name ||
-      'Product'
-    );
-  }
 
   // Product price
   getProductPrice(item: any): number {

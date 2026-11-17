@@ -22,6 +22,8 @@ import { SchemePaymentSuccessComponent } from './scheme-payment-success/scheme-p
 import { SchemePaymentFailedComponent } from './scheme-payment-failed/scheme-payment-failed.component';
 import { UserAddressComponent } from './user-address/user-address.component';
 import { OrdersComponent } from './orders/orders.component';
+import { CartCheckoutSuccessComponent } from './cart-checkout-success/cart-checkout-success.component';
+import { CartCheckoutPaymentFaileComponent } from './cart-checkout-payment-faile/cart-checkout-payment-faile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -46,7 +48,9 @@ const routes: Routes = [
   { path: 'address', component: UserAddressComponent },
   { path: 'orders', component: OrdersComponent },
   { path: "custom-design", component: CustomDesignComponent },
-  { path: "help-faq", component: HelpFaqComponent }
+  { path: "help-faq", component: HelpFaqComponent },
+  { path: 'payment-success', component: CartCheckoutSuccessComponent },
+  { path: 'payment-failure', component: CartCheckoutPaymentFaileComponent },
 ];
 
 @NgModule({
