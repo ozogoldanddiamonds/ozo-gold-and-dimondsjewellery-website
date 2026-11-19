@@ -24,6 +24,7 @@ import { UserAddressComponent } from './user-address/user-address.component';
 import { OrdersComponent } from './orders/orders.component';
 import { CartCheckoutSuccessComponent } from './cart-checkout-success/cart-checkout-success.component';
 import { CartCheckoutPaymentFaileComponent } from './cart-checkout-payment-faile/cart-checkout-payment-faile.component';
+import { DeliveryTrackingComponent } from './delivery-tracking/delivery-tracking.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -51,6 +52,7 @@ const routes: Routes = [
   { path: "help-faq", component: HelpFaqComponent },
   { path: 'payment-success', component: CartCheckoutSuccessComponent },
   { path: 'payment-failure', component: CartCheckoutPaymentFaileComponent },
+  { path: 'track-order', component: DeliveryTrackingComponent }
 ];
 
 @NgModule({

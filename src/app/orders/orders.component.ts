@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdersService } from '../service/orders.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -18,7 +19,8 @@ export class OrdersComponent implements OnInit {
 
   constructor(
     private orderService: OrdersService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -284,7 +286,13 @@ export class OrdersComponent implements OnInit {
   }
 
 
-
+  trackOrder(order: any): void {
+    this.router.navigate(['/track-order'], {
+      queryParams: {
+        orderId: order._id
+      }
+    });
+  }
   // Product price
   getProductPrice(item: any): number {
     return Number(item?.totalPrice || item?.finalPrice || item?.unitPrice || 0);

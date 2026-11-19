@@ -53,4 +53,11 @@ export class OrdersService {
       `${this.apiUrl}/getOrdersByUser/${userId}`
     );
   }
+
+
+  getCustomerShipmentTracking(orderId: string): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/orders/${orderId}/track-shipment`
+    );
+  }
 }

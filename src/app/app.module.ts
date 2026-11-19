@@ -39,6 +39,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { CartCheckoutSuccessComponent } from './cart-checkout-success/cart-checkout-success.component';
 import { CartCheckoutPaymentFaileComponent } from './cart-checkout-payment-faile/cart-checkout-payment-faile.component';
+import { DeliveryTrackingComponent } from './delivery-tracking/delivery-tracking.component';
   @NgModule({
     declarations: [
       AppComponent,
@@ -73,7 +74,8 @@ import { CartCheckoutPaymentFaileComponent } from './cart-checkout-payment-faile
       OrdersComponent,
       UserLoginComponent,
       CartCheckoutSuccessComponent,
-      CartCheckoutPaymentFaileComponent
+      CartCheckoutPaymentFaileComponent,
+      DeliveryTrackingComponent
     ],
     imports: [
       BrowserModule,

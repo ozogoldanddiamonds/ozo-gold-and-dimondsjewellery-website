@@ -84,7 +84,11 @@
             </div>
 
             <div class="summary-divider"></div>
+            <button type="button" class="btn btn-outline-primary" (click)="trackOrder(order)">
 
+                <i class="bi bi-truck me-2"></i>
+                Track Order
+            </button>
             <div class="summary-action">
                 <button type="button" class="view-details-btn" (click)="toggleOrderDetails(order._id)">
                     {{ isExpanded(order._id) ? 'Hide Details' : 'View Details' }}

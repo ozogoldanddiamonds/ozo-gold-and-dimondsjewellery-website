@@ -20,42 +20,29 @@
                     <h5>OZO Gold and DiamondsJewellery</h5>
                     <p>Every shine has a story </p>
                 </div> -->
-
-
-
                 <h1 class="heading-1" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
-                    {{ banner.title }}
+                    {{ banner.title | titlecase}}
                 </h1>
-
                 <p class="description" data-aos="fade-left" data-aos-anchor="#example-anchor" data-aos-offset="500"
                     data-aos-duration="500">
-                    {{ banner.description }}
+                    {{ banner.description | titlecase}}
                 </p>
-
                 <a routerLink="/categories" class="btn btn-gold" data-aos="fade-right" data-aos-offset="300"
                     data-aos-easing="ease-in-sine">
                     Shop Now
                 </a>
             </div>
-
         </div>
-
     </div>
 
     <!-- Prev -->
     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-
         <span class="carousel-control-prev-icon"></span>
-
     </button>
-
     <!-- Next -->
     <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-
         <span class="carousel-control-next-icon"></span>
-
     </button>
-
 </div>
 
 <section class="desktop-section section-space">
