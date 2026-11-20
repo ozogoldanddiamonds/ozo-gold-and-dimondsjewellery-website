@@ -811,3 +811,62 @@
     }
 
 }
+
+/* PIN Code Dropdown */
+.pincode-field {
+    position: relative;
+    z-index: 100;
+}
+
+.pincode-dropdown-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.pincode-dropdown-wrapper input {
+    width: 100%;
+}
+
+.pincode-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+
+    max-height: 200px;
+    overflow-y: auto;
+
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    z-index: 99999;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.pincode-option {
+    display: block;
+    padding: 11px 14px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.pincode-option:hover {
+    background: #f8f1e5;
+    color: #a47a18;
+}
+
+.pincode-no-result {
+    padding: 12px;
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+}
+
+.pincode-field small {
+    display: block;
+    margin-top: 5px;
+}

@@ -168,7 +168,8 @@
             <!-- ADDRESS ADD / EDIT MODAL -->
             <div class="address-modal-backdrop" *ngIf="showAddressModal" (click)="closeAddAddress()">
 
-                <div class="address-modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+                <div class="address-modal" (click)="$event.stopPropagation(); onAddressModalClick($event)" role="dialog"
+                    aria-modal="true" (click)="$event.stopPropagation()">
 
                     <div class="address-modal-header">
                         <div>
@@ -237,10 +238,48 @@
                                     <input type="text" formControlName="state" placeholder="Enter state">
                                 </div>
 
-                                <div class="address-form-field">
+                                <div class="address-form-field pincode-field">
+
                                     <label>PIN Code *</label>
-                                    <input type="text" formControlName="pincode" maxlength="6"
-                                        placeholder="6-digit PIN code">
+
+                                    <div class="pincode-dropdown-wrapper">
+
+                                        <input type="text" [value]="pincodeSearch" (input)="onPincodeSearch($event)"
+                                            (focus)="onPincodeFocus()" placeholder="Search or select PIN Code"
+                                            autocomplete="off" maxlength="6" />
+
+                                        <div class="pincode-dropdown" *ngIf="showPincodeDropdown">
+
+                                            <div class="pincode-option" *ngFor="let pin of filteredPincodes"
+                                                (click)="selectPincode(pin)">
+                                                {{ pin }}
+                                            </div>
+
+                                            <div class="pincode-no-result" *ngIf="filteredPincodes.length === 0">
+                                                No PIN Codes found
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <small class="text-info" *ngIf="isCheckingPincode">
+                                        Verifying PIN Code...
+                                    </small>
+
+                                    <small class="text-success" *ngIf="isPincodeVerified">
+                                        ✓ PIN Code verified successfully
+                                    </small>
+
+                                    <small class="text-danger" *ngIf="pincodeVerificationError">
+                                        {{ pincodeVerificationError }}
+                                    </small>
+
+                                    <small class="text-danger" *ngIf="addressForm.get('pincode')?.touched &&
+               addressForm.get('pincode')?.invalid">
+                                        Please select a valid PIN Code.
+                                    </small>
+
                                 </div>
 
                                 <div class="address-form-field full-width">
@@ -268,12 +307,16 @@
                                 Cancel
                             </button>
 
-                            <button type="submit" class="primary-btn" [disabled]="isSavingAddress">
-
+                            <button type="submit" class="primary-btn" [disabled]="
+        isSavingAddress ||
+        isCheckingPincode ||
+        !isPincodeVerified ||
+        addressForm.invalid
+    ">
                                 {{ isSavingAddress
                                 ? (isEditAddressMode ? 'Updating...' : 'Saving...')
-                                : (isEditAddressMode ? 'Update Address' : 'Save Address') }}
-
+                                : (isEditAddressMode ? 'Update Address' : 'Save Address')
+                                }}
                             </button>
 
                         </div>

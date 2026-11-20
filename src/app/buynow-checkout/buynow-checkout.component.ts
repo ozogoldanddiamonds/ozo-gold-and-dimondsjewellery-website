@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { AddressService } from '../service/address.service';
 import { OrdersService } from '../service/orders.service';
+import { SERVICEABLE_PINCODES } from '../sequel-service-pincodes/serviceable-pincodes';
 declare global {
   interface Window {
     Razorpay: any;
@@ -17,6 +18,21 @@ declare global {
   styleUrls: ['./buynow-checkout.component.css']
 })
 export class BuynowCheckoutComponent implements OnInit, OnDestroy {
+  // PIN Code dropdown
+  serviceablePincodes: string[] = SERVICEABLE_PINCODES;
+
+  filteredPincodes: string[] = [...SERVICEABLE_PINCODES];
+
+  pincodeSearch = '';
+
+  showPincodeDropdown = false;
+
+  // PIN Code verification
+  isCheckingPincode = false;
+
+  isPincodeVerified = false;
+
+  pincodeVerificationError = '';
   showDeleteAddressModal = false;
   addressToDelete: any = null;
   product: any = null;
@@ -218,21 +234,40 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
 
 
   editAddress(address: any): void {
+
     this.addressFormError = '';
+
     this.isEditAddressMode = true;
     this.editingAddressId = address._id;
     this.showAddressModal = true;
 
+    // Reset pincode verification
+    this.pincodeSearch = '';
+    this.filteredPincodes = [...this.serviceablePincodes];
+
+    this.showPincodeDropdown = false;
+    this.isPincodeVerified = false;
+    this.isCheckingPincode = false;
+    this.pincodeVerificationError = '';
+
     this.addressService.getAddressById(address._id).subscribe({
+
       next: (response: any) => {
+
         if (!response?.success || !response?.data) {
-          this.addressFormError = response?.message || 'Address not found.';
+          this.addressFormError =
+            response?.message || 'Address not found.';
           return;
         }
 
         const data = response.data;
 
+        const pincode = String(
+          data.pincode || data.postalCode || ''
+        );
+
         this.addressForm.patchValue({
+
           fullName: data.fullName || '',
           phone: data.phone || '',
           addressLine1: data.addressLine1 || '',
@@ -240,28 +275,61 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
           landmark: data.landmark || '',
           city: data.city || '',
           state: data.state || '',
-          pincode: data.pincode || data.postalCode || '',
+          pincode: pincode,
           country: data.country || 'India',
           isDefault: !!data.isDefault
+
         });
+
+        // Populate dropdown input
+        this.pincodeSearch = pincode;
+
+        // Verify existing pincode using Sequel API
+        if (/^\d{6}$/.test(pincode)) {
+          this.verifyPincode(pincode);
+        } else {
+          this.pincodeVerificationError =
+            'Please select a valid PIN Code.';
+        }
+
       },
+
       error: (error: any) => {
+
         console.error('Get address by ID failed:', error);
+
         this.addressFormError =
-          error?.error?.message || 'Unable to load address details.';
+          error?.error?.message ||
+          'Unable to load address details.';
+
       }
+
     });
+
   }
 
 
 
-
   openAddAddress(): void {
+
     this.isEditAddressMode = false;
     this.editingAddressId = null;
     this.addressFormError = '';
 
+    // Reset PIN Code dropdown
+    this.pincodeSearch = '';
+
+    this.filteredPincodes = [...this.serviceablePincodes];
+
+    this.showPincodeDropdown = false;
+
+    // Reset verification
+    this.isPincodeVerified = false;
+    this.isCheckingPincode = false;
+    this.pincodeVerificationError = '';
+
     this.addressForm.reset({
+
       fullName: '',
       phone: '',
       addressLine1: '',
@@ -272,9 +340,11 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
       pincode: '',
       country: 'India',
       isDefault: this.addressList.length === 0
+
     });
 
     this.showAddressModal = true;
+
   }
 
 
@@ -289,6 +359,31 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
 
 
   saveAddress(): void {
+
+    // Verification must be completed
+    if (this.isCheckingPincode) {
+      this.toaster.info(
+        'Please wait for PIN Code verification.'
+      );
+      return;
+    }
+
+    const enteredPincode = String(
+      this.addressForm.get('pincode')?.value || ''
+    );
+
+    // Ensure selected PIN matches verified PIN
+    if (
+      !this.isPincodeVerified ||
+      enteredPincode !== this.pincodeSearch ||
+      !/^\d{6}$/.test(enteredPincode)
+    ) {
+      this.toaster.warning(
+        'Please verify a serviceable PIN Code first.'
+      );
+      return;
+    }
+
     if (this.addressForm.invalid) {
       this.addressForm.markAllAsTouched();
       return;
@@ -318,52 +413,83 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
       state: formValue.state.trim(),
       pincode: formValue.pincode.trim(),
       country: formValue.country.trim(),
-      isDefault: Boolean(formValue.isDefault) || this.addressList.length === 0
+      isDefault:
+        Boolean(formValue.isDefault) ||
+        this.addressList.length === 0
     };
 
-    const request$ = this.isEditAddressMode && this.editingAddressId
-      ? this.addressService.updateAddress(this.editingAddressId, payload)
-      : this.addressService.createAddress(payload);
+    const request$ =
+      this.isEditAddressMode && this.editingAddressId
+        ? this.addressService.updateAddress(
+          this.editingAddressId,
+          payload
+        )
+        : this.addressService.createAddress(payload);
 
     request$.subscribe({
+
       next: (response: any) => {
+
         if (!response?.success || !response?.data?._id) {
+
           this.isSavingAddress = false;
+
           this.addressFormError =
             response?.message || 'Unable to save address.';
+
           return;
         }
 
         const savedAddress = response.data;
 
-        // If selected as default, update all addresses through the default API.
         if (payload.isDefault && !savedAddress.isDefault) {
-          this.addressService.setDefaultAddress(savedAddress._id).subscribe({
+
+          this.addressService.setDefaultAddress(
+            savedAddress._id
+          ).subscribe({
+
             next: () => {
               savedAddress.isDefault = true;
               this.finishAddressSave(savedAddress);
             },
+
             error: (error: any) => {
+
               console.error('Set default address failed:', error);
+
               this.finishAddressSave(savedAddress);
+
               this.toaster.warning(
                 'Address saved, but setting it as default failed.'
               );
-            }
-          });
-        } else {
-          this.finishAddressSave(savedAddress);
-        }
-      },
-      error: (error: any) => {
-        console.error('Save/update address failed:', error);
-        this.isSavingAddress = false;
-        this.addressFormError =
-          error?.error?.message || 'Failed to save address. Please try again.';
-      }
-    });
-  }
 
+            }
+
+          });
+
+        } else {
+
+          this.finishAddressSave(savedAddress);
+
+        }
+
+      },
+
+      error: (error: any) => {
+
+        console.error('Save/update address failed:', error);
+
+        this.isSavingAddress = false;
+
+        this.addressFormError =
+          error?.error?.message ||
+          'Failed to save address. Please try again.';
+
+      }
+
+    });
+
+  }
 
   private finishAddressSave(address: any): void {
 
@@ -390,7 +516,12 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
     this.isEditAddressMode = false;
     this.editingAddressId = null;
     this.addressFormError = '';
+    this.showPincodeDropdown = false;
+    this.pincodeSearch = '';
 
+    this.isPincodeVerified = false;
+    this.isCheckingPincode = false;
+    this.pincodeVerificationError = '';
     this.toaster.success(
       wasEdit
         ? 'Address updated successfully.'
@@ -925,5 +1056,129 @@ export class BuynowCheckoutComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(sub);
   }
+  onPincodeFocus(): void {
 
+    this.filteredPincodes = this.serviceablePincodes.slice(0, 50);
+
+    this.showPincodeDropdown = true;
+
+  }
+
+  onPincodeSearch(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    const value = input.value.replace(/\D/g, '').slice(0, 6);
+
+    this.pincodeSearch = value;
+
+    this.addressForm.patchValue({
+      pincode: ''
+    });
+
+    this.isPincodeVerified = false;
+
+    this.isCheckingPincode = false;
+
+    this.pincodeVerificationError = '';
+
+    this.filteredPincodes = this.serviceablePincodes
+      .filter(pin => pin.includes(value))
+      .slice(0, 50);
+
+    this.showPincodeDropdown = true;
+
+  }
+
+  selectPincode(pincode: string): void {
+
+    this.pincodeSearch = pincode;
+
+    this.showPincodeDropdown = false;
+
+    this.addressForm.patchValue({
+      pincode: pincode
+    });
+
+    this.verifyPincode(pincode);
+
+  }
+  verifyPincode(pincode: string): void {
+
+    this.isPincodeVerified = false;
+
+    this.isCheckingPincode = true;
+
+    this.pincodeVerificationError = '';
+
+    this.orderService.checkPincode(pincode).subscribe({
+
+      next: (response: any) => {
+
+        this.isCheckingPincode = false;
+
+        if (response?.success && response?.data) {
+
+          this.isPincodeVerified = true;
+
+          this.pincodeVerificationError = '';
+
+          this.addressForm.patchValue({
+
+            city: response.data.city || '',
+
+            state: response.data.state || ''
+
+          });
+
+          this.toaster.success('PIN Code verified successfully');
+
+        } else {
+
+          this.isPincodeVerified = false;
+
+          this.pincodeVerificationError =
+            response?.message || 'PIN Code is not serviceable.';
+
+          this.addressForm.patchValue({
+            city: '',
+            state: ''
+          });
+
+        }
+
+      },
+
+      error: (error: any) => {
+
+        console.error('Pincode verification failed:', error);
+
+        this.isCheckingPincode = false;
+
+        this.isPincodeVerified = false;
+
+        this.pincodeVerificationError =
+          error?.error?.message || 'Unable to verify PIN Code.';
+
+        this.addressForm.patchValue({
+          city: '',
+          state: ''
+        });
+
+      }
+
+    });
+
+  }
+  onAddressModalClick(event: MouseEvent): void {
+
+    const target = event.target as HTMLElement;
+
+    if (target.closest('.pincode-field')) {
+      return;
+    }
+
+    this.showPincodeDropdown = false;
+
+  }
 }

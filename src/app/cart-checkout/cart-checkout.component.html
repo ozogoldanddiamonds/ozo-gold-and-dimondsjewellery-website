@@ -117,7 +117,7 @@
             <div class="address-modal-backdrop" *ngIf="showAddressModal" (click)="closeAddAddress()">
 
                 <div class="address-modal" role="dialog" aria-modal="true" aria-labelledby="addressModalTitle"
-                    (click)="$event.stopPropagation()">
+                    (click)="$event.stopPropagation()" (click)="$event.stopPropagation(); onAddressModalClick($event)">
 
                     <div class="address-modal-header">
                         <div>
@@ -201,15 +201,50 @@
                                     </small>
                                 </div>
 
-                                <div class="address-form-field">
+                                <div class="address-form-field pincode-field">
+
                                     <label for="pincode">PIN Code *</label>
-                                    <input id="pincode" type="text" formControlName="pincode" maxlength="6"
-                                        placeholder="6-digit PIN code" />
+
+                                    <div class="pincode-dropdown-wrapper">
+
+                                        <input id="pincode" type="text" [value]="pincodeSearch"
+                                            (input)="onPincodeSearch($event)" (focus)="showPincodeDropdown = true"
+                                            placeholder="Search or select PIN Code" autocomplete="off" maxlength="6" />
+
+                                        <!-- Searchable Dropdown -->
+                                        <div class="pincode-dropdown" *ngIf="showPincodeDropdown">
+
+                                            <div class="pincode-option" *ngFor="let pin of filteredPincodes"
+                                                (click)="selectPincode(pin)">
+                                                {{ pin }}
+                                            </div>
+
+                                            <div class="pincode-no-result" *ngIf="filteredPincodes.length === 0">
+                                                No PIN Codes found
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Verification Status -->
+                                    <small class="text-info" *ngIf="isCheckingPincode">
+                                        Verifying PIN Code...
+                                    </small>
+
+                                    <small class="text-success" *ngIf="isPincodeVerified">
+                                        ✓ PIN Code verified successfully
+                                    </small>
+
+                                    <small class="text-danger" *ngIf="pincodeVerificationError">
+                                        {{ pincodeVerificationError }}
+                                    </small>
 
                                     <small class="text-danger" *ngIf="addressForm.get('pincode')?.touched &&
-                     addressForm.get('pincode')?.invalid">
-                                        Enter a valid 6-digit PIN code.
+               addressForm.get('pincode')?.invalid">
+                                        Please select a valid PIN Code.
                                     </small>
+
                                 </div>
 
                                 <div class="address-form-field full-width">
@@ -234,12 +269,15 @@
                                 Cancel
                             </button>
 
-                            <button type="submit" class="primary-btn" [disabled]="isSavingAddress">
+                            <button type="submit" class="primary-btn" [disabled]="isSavingAddress ||
+                                 isCheckingPincode ||
+                                      !isPincodeVerified ||
+                                                                  addressForm.invalid
+    ">
 
                                 <span *ngIf="!isSavingAddress">
                                     {{ isEditAddressMode ? 'Update Address' : 'Save Address' }}
                                 </span>
-
                                 <span *ngIf="isSavingAddress">
                                     {{ isEditAddressMode ? 'Updating...' : 'Saving...' }}
                                 </span>

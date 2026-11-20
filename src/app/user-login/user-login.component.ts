@@ -135,7 +135,6 @@ export class UserLoginComponent implements OnChanges, OnDestroy {
   // VERIFY OTP AND LOGIN
 
   verifyOtp(): void {
-
     if (this.otpForm.invalid) {
       this.otpForm.markAllAsTouched();
       return;
@@ -155,68 +154,47 @@ export class UserLoginComponent implements OnChanges, OnDestroy {
     this.isLoading = true;
 
     this.authService
-      .verifyOtp(
-        this.mobileNumber,
-        otp
-      )
+      .verifyOtp(this.mobileNumber, otp)
       .pipe(
         finalize(() => {
           this.isLoading = false;
         })
       )
       .subscribe({
-
-        // SUCCESS
         next: (res: any) => {
-
-          if (res.success) {
-
-            // console.log('OTP LOGIN RESPONSE =>', res);
-
-            // localStorage.setItem('token', res.accessToken);
-
-            // localStorage.setItem('userId', res.user._id);
-
-            // localStorage.setItem(
-            //   'user',
-            //   JSON.stringify(res.user)
-            // );
-
-            // localStorage.setItem(
-            //   'refreshToken',
-            //   res.refreshToken
-            // );
-            this.authService.setSession(
-              res.accessToken,
-              res.refreshToken,
-              res.user
-            );
-            this.toastr.success(
-              res.message || 'Login successful'
-            );
-
-            this.authService.updateLoginStatus(true);
-
-            // this.cartService.loadCartCount();
-
-            this.stopTimer();
-
-            this.close.emit(true);
+          if (!res?.success) {
+            this.toastr.error(res?.message || 'OTP verification failed');
+            return;
           }
 
+          if (!res.accessToken || !res.refreshToken) {
+            this.toastr.error('Login session could not be created');
+            return;
+          }
+
+          this.authService.setSession(
+            res.accessToken,
+            res.refreshToken,
+            res.user
+          );
+
+          this.toastr.success(res.message || 'Login successful');
+
+          this.authService.updateLoginStatus(true);
+
+          // this.cartService.loadCartCount();
+
+          this.stopTimer();
+          this.close.emit(true);
         },
 
-        // ERROR
         error: (err: any) => {
           this.toastr.error(
             err?.error?.message || 'OTP verification failed'
           );
         }
-
       });
-
   }
-
   // RESEND OTP
   resendOtp(): void {
 

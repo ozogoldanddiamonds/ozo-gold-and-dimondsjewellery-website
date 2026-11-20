@@ -7,6 +7,7 @@ import { OrdersService } from '../service/orders.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CartService } from '../service/cart.service';
 import { firstValueFrom } from 'rxjs';
+import { SERVICEABLE_PINCODES } from '../sequel-service-pincodes/serviceable-pincodes';
 declare global {
   interface Window {
     Razorpay: any;
@@ -19,6 +20,19 @@ declare global {
   styleUrls: ['./cart-checkout.component.css']
 })
 export class CartCheckoutComponent implements OnInit, OnDestroy {
+
+  // PIN Code dropdown
+  serviceablePincodes: string[] = SERVICEABLE_PINCODES;
+
+  filteredPincodes: string[] = [...SERVICEABLE_PINCODES];
+
+  pincodeSearch = '';
+  showPincodeDropdown = false;
+
+  // PIN Code verification
+  isCheckingPincode = false;
+  isPincodeVerified = false;
+  pincodeVerificationError = '';
   showDeleteAddressModal = false;
   addressToDelete: any = null;
   addressForm!: FormGroup;
@@ -67,24 +81,52 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-
+    console.log('SERVICEABLE:', this.serviceablePincodes);
+    console.log('FILTERED:', this.filteredPincodes);
     this.initForm();
     this.getAddresses();
     this.loadCart();
   }
   initForm() {
+
     this.addressForm = this.fb.group({
+
       user: [this.userId],
+
       fullName: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[6-9]\d{9}$/)
+        ]
+      ],
+
       addressLine1: ['', Validators.required],
+
       addressLine2: [''],
+
+      landmark: [''],
+
       city: ['', Validators.required],
+
       state: ['', Validators.required],
-      pincode: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+
+      pincode: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d{6}$/)
+        ]
+      ],
+
       country: ['India', Validators.required],
+
       isDefault: [false]
+
     });
+
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -542,19 +584,6 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
 
 
 
-  // openAddAddress() {
-  //   this.modalMode = 'add';
-  //   this.manageView = 'add';
-  //   this.editingAddress = null;
-  //   this.isAddressModalOpen = true;
-
-  //   this.addressForm.reset({
-  //     user: this.userId,
-  //     country: 'India',
-  //     isDefault: false
-  //   });
-  // }
-
   openManageAddress(addr: any, event: Event) {
     event.stopPropagation();
     this.modalMode = 'manage';
@@ -589,6 +618,9 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
 
 
   editAddress(address: any): void {
+    this.isPincodeVerified = false;
+    this.isCheckingPincode = false;
+    this.pincodeVerificationError = '';
     this.addressFormError = '';
     this.isEditAddressMode = true;
     this.editingAddressId = address._id;
@@ -615,6 +647,20 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
           country: data.country || 'India',
           isDefault: !!data.isDefault
         });
+        this.pincodeSearch = data.pincode || data.postalCode || '';
+
+        this.filteredPincodes = [...this.serviceablePincodes];
+
+        this.isPincodeVerified = false;
+
+        this.pincodeVerificationError = '';
+
+        this.showPincodeDropdown = false;
+
+        // Verify existing pincode before enabling Update
+        if (this.pincodeSearch) {
+          this.verifyPincode(this.pincodeSearch);
+        }
       },
       error: (error: any) => {
         console.error('Get address by ID failed:', error);
@@ -628,11 +674,24 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
 
 
   openAddAddress(): void {
+
     this.isEditAddressMode = false;
     this.editingAddressId = null;
     this.addressFormError = '';
 
+    this.pincodeSearch = '';
+    this.filteredPincodes = [...this.serviceablePincodes];
+
+    this.showPincodeDropdown = false;
+
+    this.isPincodeVerified = false;
+    this.isCheckingPincode = false;
+    this.pincodeVerificationError = '';
+
     this.addressForm.reset({
+
+      user: this.userId,
+
       fullName: '',
       phone: '',
       addressLine1: '',
@@ -643,9 +702,11 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
       pincode: '',
       country: 'India',
       isDefault: this.addressList.length === 0
+
     });
 
     this.showAddressModal = true;
+
   }
 
 
@@ -660,6 +721,21 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
 
 
   saveAddress(): void {
+
+    if (this.isCheckingPincode) {
+      this.toaster.info('Please wait for PIN Code verification.');
+      return;
+    }
+
+    if (!this.isPincodeVerified) {
+      this.toaster.warning('Please verify a serviceable PIN Code first.');
+      return;
+    }
+
+    if (this.addressForm.invalid) {
+      this.addressForm.markAllAsTouched();
+      return;
+    }
     if (this.addressForm.invalid) {
       this.addressForm.markAllAsTouched();
       return;
@@ -1038,4 +1114,117 @@ export class CartCheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  onPincodeSearch(event: Event): void {
+    this.filteredPincodes = [...this.serviceablePincodes];
+    this.showPincodeDropdown = true;
+    const input = event.target as HTMLInputElement;
+    const value = input.value.replace(/\D/g, '').slice(0, 6);
+
+    this.pincodeSearch = value;
+
+    // Previous verification is no longer valid
+    this.addressForm.patchValue({
+      pincode: ''
+    });
+
+    this.isPincodeVerified = false;
+    this.pincodeVerificationError = '';
+
+    this.filteredPincodes = this.serviceablePincodes.filter(
+      pin => pin.includes(value)
+    );
+
+    this.showPincodeDropdown = true;
+  }
+  selectPincode(pincode: string): void {
+
+    this.pincodeSearch = pincode;
+
+    this.showPincodeDropdown = false;
+
+    this.addressForm.patchValue({
+      pincode: pincode
+    });
+
+    this.verifyPincode(pincode);
+  }
+  verifyPincode(pincode: string): void {
+
+    this.isPincodeVerified = false;
+    this.isCheckingPincode = true;
+    this.pincodeVerificationError = '';
+
+    this.orderService.checkPincode(pincode).subscribe({
+
+      next: (response: any) => {
+
+        this.isCheckingPincode = false;
+
+        if (response?.success && response?.data) {
+
+          this.isPincodeVerified = true;
+
+          this.pincodeVerificationError = '';
+
+          // Automatically populate city and state
+          this.addressForm.patchValue({
+
+            city: response.data.city || '',
+
+            state: response.data.state || ''
+
+          });
+
+          this.toaster.success('PIN Code verified successfully');
+
+        } else {
+
+          this.isPincodeVerified = false;
+
+          this.pincodeVerificationError =
+            response?.message || 'PIN Code is not serviceable.';
+
+          this.addressForm.patchValue({
+            city: '',
+            state: ''
+          });
+
+        }
+
+      },
+
+      error: (error: any) => {
+
+        console.error('Pincode verification error:', error);
+
+        this.isCheckingPincode = false;
+        this.isPincodeVerified = false;
+
+        this.pincodeVerificationError =
+          error?.error?.message ||
+          'Unable to verify PIN Code. Please try again.';
+
+        this.addressForm.patchValue({
+          city: '',
+          state: ''
+        });
+
+      }
+
+    });
+
+  }
+
+  onAddressModalClick(event: MouseEvent): void {
+
+    const target = event.target as HTMLElement;
+
+    // Click inside PIN Code field: keep dropdown open
+    if (target.closest('.pincode-field')) {
+      return;
+    }
+
+    // Click anywhere else inside modal: close dropdown
+    this.showPincodeDropdown = false;
+  }
 }

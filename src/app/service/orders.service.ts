@@ -60,4 +60,11 @@ export class OrdersService {
       `${this.apiUrl}/orders/${orderId}/track-shipment`
     );
   }
+
+  checkPincode(pincode: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/check-pincode`,
+      { pincode }
+    );
+  }
 }
