@@ -1,305 +1,256 @@
 <div class="delivery-tracking-page">
-
-    <div class="container">
-
-        <!-- PAGE HEADER -->
-        <div class="tracking-page-header">
-
-
-            <h2>Track Your Order</h2>
-            <p>Follow your jewellery's journey to your doorstep.</p>
-        </div>
-
-        <!-- LOADING -->
-        <div class="tracking-loader" *ngIf="loading && !trackingData">
-            <div class="spinner-border"></div>
-            <p>Fetching your order details...</p>
-        </div>
-
-        <!-- ERROR -->
-        <div class="tracking-error" *ngIf="!loading && errorMessage && !trackingData">
-
-            <h5>Tracking Unavailable</h5>
-            <p>{{ errorMessage }}</p>
-
-            <button class="btn btn-outline-primary" (click)="getTracking()">
-                Try Again
-            </button>
-        </div>
-
-        <!-- MAIN CONTENT -->
-        <ng-container *ngIf="trackingData">
-
-            <!-- ORDER HEADER -->
-            <div class="order-header-card">
-
-                <div>
-                    <span class="info-label">ORDER NUMBER</span>
-                    <h5>{{ orderDetails.orderNumber }}</h5>
-                    <span class="order-date">
-                        Ordered on {{ orderDetails.orderDate | date:'dd MMM yyyy' }}
-                    </span>
-                </div>
-
-                <div class="order-header-right">
-                    <span class="info-label">PAYMENT STATUS</span>
-                    <span class="payment-badge">
-                        <i class="fa fa-check-circle"></i>
-                        {{ orderDetails.paymentStatus }}
-                    </span>
-                </div>
-
-            </div>
-
-            <!-- SHIPMENT SUMMARY -->
-            <div class="shipment-summary-card">
-                <!-- <div class="truck-animation">
-                    <div class="truck-road">
-                        <span class="road-line"></span>
-                        <i class="fa fa-truck moving-truck"></i>
-                    </div>
-                </div> -->
-                <div class="shipment-summary-top">
-                    <div>
-                        <span class="info-label">SHIPMENT STATUS</span>
-                        <h4>{{ getStatusLabel(currentStatus) }}</h4>
-                    </div>
-
-                    <div class="shipment-status-icon" [class.delivered]="isDelivered" [class.cancelled]="isCancelled">
-
-                        <i class="fa" [ngClass]="isDelivered
-          ? 'fa-home'
-          : isCancelled
-            ? 'fa-times-circle'
-            : 'fa-truck'">
-                        </i>
-                    </div>
-                </div>
-
-                <div class="shipment-summary-bottom">
-
-                    <div>
-                        <span class="info-label">DOCKET NUMBER</span>
-                        <strong>{{ shipmentDetails.docketNumber || '-' }}</strong>
-                    </div>
-
-                    <div>
-                        <span class="info-label">ESTIMATED DELIVERY</span>
-                        <strong>{{ shipmentDetails.estimatedDelivery || 'Awaiting confirmation' }}</strong>
-                    </div>
-
-                    <div>
-                        <span class="info-label">COURIER PARTNER</span>
-                        <strong>Sequel247</strong>
-                    </div>
-
-                </div>
-
-                <button class="external-track-btn" *ngIf="shipmentDetails.trackingLink"
-                    (click)="openExternalTracking()">
-
-                    Track on Sequel247
-
-                </button>
-
-            </div>
-
-            <!-- SHIPMENT TIMELINE -->
-            <div class="tracking-timeline-card">
-
-                <div class="section-heading">
-                    <div>
-                        <h4>Shipment Journey</h4>
-                        <p>Live shipment progress</p>
-                    </div>
-
-                    <button class="refresh-btn" (click)="getTracking()" [disabled]="loading">
-
-
-                        {{ loading ? 'Updating...' : 'Refresh' }}
-                    </button>
-                </div>
-
-                <!-- CANCELLED -->
-                <div class="cancelled-status" *ngIf="isCancelled">
-
-
-                    <div>
-                        <h5>Shipment Cancelled</h5>
-                        <p>This shipment has been cancelled.</p>
-                    </div>
-
-                </div>
-
-                <!-- DESKTOP / MOBILE TIMELINE -->
-                <div class="timeline-wrapper" *ngIf="!isCancelled">
-
-                    <div class="timeline-step" *ngFor="let step of timelineSteps; let i = index"
-                        [ngClass]="getStepState(i)">
-
-                        <div class="timeline-icon">
-                            <i [class]="step.icon"></i>
-                        </div>
-
-                        <div class="timeline-line" *ngIf="i !== timelineSteps.length - 1">
-                        </div>
-
-                        <div class="timeline-content">
-
-                            <h6>{{ step.title }}</h6>
-
-                            <span class="timeline-status" *ngIf="getStepState(i) === 'completed'">
-                                Completed
-                            </span>
-
-                            <span class="timeline-status current" *ngIf="getStepState(i) === 'current'">
-                                Current Status
-                            </span>
-
-                            <p *ngIf="getStepLocation(step.code)">
-
-                                {{ getStepLocation(step.code) }}
-                            </p>
-
-                            <small *ngIf="getStepDate(step.code)">
-                                {{ getStepDate(step.code) }}
-                            </small>
-
-                            <small class="awaiting" *ngIf="getStepState(i) === 'pending'">
-                                Awaiting update
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="last-updated" *ngIf="shipmentDetails.lastTrackedAt">
-
-                    Last updated:
-                    {{ shipmentDetails.lastTrackedAt | date:'medium' }}
-                </div>
-
-            </div>
-
-            <!-- ORDER ITEMS -->
-            <div class="order-items-card">
-
-                <div class="section-heading">
-                    <div>
-                        <h4>Ordered Products</h4>
-                        <p>{{ totalQuantity }} item(s) in this shipment</p>
-                    </div>
-                </div>
-
-                <div class="product-item" *ngFor="let item of orderDetails.items">
-
-                    <div class="product-image">
-                        <img [src]="getProductImage(item)" [alt]="item.productName">
-                    </div>
-
-                    <div class="product-info">
-
-                        <h5>{{ item.productName }}</h5>
-
-                        <div class="product-meta">
-                            <span>SKU: {{ item.sku || '-' }}</span>
-                            <span>{{ item.purity || '-' }}</span>
-                            <span>{{ item.metalColor || '-' }}</span>
-                            <span>Size: {{ item.size || '-' }}</span>
-                        </div>
-
-                        <div class="product-bottom">
-                            <span>Qty: {{ item.quantity }}</span>
-
-                            <strong>
-                                {{ item.totalPrice | currency:'INR':'symbol':'1.2-2' }}
-                            </strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- ORDER SUMMARY + ADDRESS -->
-            <div class="row g-4">
-
-                <div class="col-lg-6">
-
-                    <div class="details-card">
-
-                        <h4>Order Summary</h4>
-
-                        <div class="price-row">
-                            <span>Subtotal</span>
-                            <strong>{{ orderDetails.pricing?.subTotal | currency:'INR' }}</strong>
-                        </div>
-
-                        <div class="price-row">
-                            <span>Discount</span>
-                            <strong>
-                                - {{ orderDetails.pricing?.discountAmount | currency:'INR' }}
-                            </strong>
-                        </div>
-
-                        <div class="price-row">
-                            <span>Shipping</span>
-                            <strong>{{ orderDetails.pricing?.shippingCharge | currency:'INR' }}</strong>
-                        </div>
-
-                        <div class="price-row">
-                            <span>GST</span>
-                            <strong>{{ orderDetails.pricing?.gstAmount | currency:'INR' }}</strong>
-                        </div>
-
-                        <div class="price-row total">
-                            <span>Total Amount</span>
-                            <strong>{{ orderDetails.pricing?.totalAmount | currency:'INR' }}</strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-lg-6">
-
-                    <div class="details-card">
-
-                        <h4>Delivery Address</h4>
-
-                        <h6>{{ orderDetails.deliveryAddress?.fullName }}</h6>
-
-                        <p>
-                            {{ orderDetails.deliveryAddress?.addressLine1 }},
-                            {{ orderDetails.deliveryAddress?.addressLine2 }}
-                        </p>
-
-                        <p *ngIf="orderDetails.deliveryAddress?.landmark">
-                            {{ orderDetails.deliveryAddress?.landmark }}
-                        </p>
-
-                        <p>
-                            {{ orderDetails.deliveryAddress?.city }},
-                            {{ orderDetails.deliveryAddress?.state }}
-                            {{ orderDetails.deliveryAddress?.postalCode }}
-                        </p>
-
-                        <p>{{ orderDetails.deliveryAddress?.country }}</p>
-
-                        <p *ngIf="orderDetails.deliveryAddress?.phone">
-                            {{ orderDetails.deliveryAddress?.phone }}
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </ng-container>
-
+  <div class="container">
+    <!-- PAGE HEADER -->
+    <div class="tracking-page-header">
+      <h2>Track Your Order</h2>
+      <p>Follow your jewellery's journey to your doorstep.</p>
     </div>
+
+    <!-- LOADING -->
+    <div class="tracking-loader" *ngIf="loading && !trackingData">
+      <div class="spinner-border"></div>
+      <p>Fetching your order details...</p>
+    </div>
+
+    <!-- ERROR -->
+    <div
+      class="tracking-error"
+      *ngIf="!loading && errorMessage && !trackingData"
+    >
+      <h5>Tracking Unavailable</h5>
+      <p>{{ errorMessage }}</p>
+
+      <button class="btn btn-outline-primary" (click)="getTracking()">
+        Try Again
+      </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <ng-container *ngIf="trackingData">
+      <!-- ORDER HEADER -->
+      <div class="order-header-card">
+        <div>
+          <span class="info-label">ORDER NUMBER</span>
+          <h5>{{ orderDetails.orderNumber }}</h5>
+          <span class="order-date">
+            Ordered on {{ orderDetails.orderDate | date: "dd MMM yyyy" }}
+          </span>
+        </div>
+
+        <div class="order-header-right">
+          <span class="info-label">PAYMENT STATUS</span>
+          <span class="payment-badge">
+            <i class="fa fa-check-circle"></i>
+            {{ orderDetails.paymentStatus }}
+          </span>
+        </div>
+      </div>
+
+      <!-- SHIPMENT SUMMARY -->
+
+      <div class="shipment-summary-card">
+        <!-- Shipment Not Assigned -->
+        <div class="shipment-pending" *ngIf="!shipmentDetails?.docketNumber">
+          <div>
+            <h4><i class="fa fa-clock-o"></i> Shipment Not Assigned Yet</h4>
+            <p>
+              Your order has been placed successfully. The shipment is being
+              prepared and courier details will be updated once assigned.
+            </p>
+          </div>
+        </div>
+
+        <!-- Shipment Assigned -->
+        <ng-container *ngIf="shipmentDetails?.docketNumber">
+          <div class="shipment-summary-top">
+            <div>
+              <span class="info-label">SHIPMENT STATUS</span>
+              <h4>{{ getStatusLabel(currentStatus) }}</h4>
+            </div>
+
+            <div
+              class="shipment-status-icon"
+              [class.delivered]="isDelivered"
+              [class.cancelled]="isCancelled"
+            >
+              <i
+                class="fa"
+                [ngClass]="
+                  isDelivered
+                    ? 'fa-home'
+                    : isCancelled
+                      ? 'fa-times-circle'
+                      : 'fa-truck'
+                "
+              ></i>
+            </div>
+          </div>
+
+          <div class="shipment-summary-bottom">
+            <div>
+              <span class="info-label">DOCKET NUMBER</span>
+              <strong>{{ shipmentDetails.docketNumber }}</strong>
+            </div>
+
+            <div>
+              <span class="info-label">ESTIMATED DELIVERY</span>
+              <strong>
+                {{
+                  shipmentDetails.estimatedDelivery || "Awaiting confirmation"
+                }}
+              </strong>
+            </div>
+
+            <div>
+              <span class="info-label">COURIER PARTNER</span>
+              <strong>Sequel247</strong>
+            </div>
+          </div>
+
+          <button
+            class="external-track-btn"
+            *ngIf="shipmentDetails.trackingLink"
+            (click)="openExternalTracking()"
+          >
+            Track on Sequel247
+          </button>
+        </ng-container>
+      </div>
+
+      <!-- SHIPMENT TIMELINE -->
+      <div
+        class="tracking-timeline-card"
+        *ngIf="shipmentDetails?.docketNumber"
+      ></div>
+
+      <div
+        class="tracking-timeline-card"
+        *ngIf="!shipmentDetails?.docketNumber"
+      >
+        <div class="section-heading">
+          <div>
+            <h4>Shipment Journey</h4>
+            <p>Tracking updates will appear here</p>
+          </div>
+        </div>
+
+        <div class="shipment-pending-message">
+          <h5>
+            <i class="fa fa-hourglass-half"></i> Waiting for Shipment Assignment
+          </h5>
+          <p>
+            Your order is confirmed. Tracking information will be available once
+            the courier shipment is assigned.
+          </p>
+        </div>
+      </div>
+      <!-- ORDER ITEMS -->
+      <div class="order-items-card">
+        <div class="section-heading">
+          <div>
+            <h4>Ordered Products</h4>
+            <p>{{ totalQuantity }} item(s) in this shipment</p>
+          </div>
+        </div>
+
+        <div class="product-item" *ngFor="let item of orderDetails.items">
+          <div class="product-image">
+            <img [src]="getProductImage(item)" [alt]="item.productName" />
+          </div>
+
+          <div class="product-info">
+            <h5>{{ item.productName }}</h5>
+
+            <div class="product-meta">
+              <span>SKU: {{ item.sku || "-" }}</span>
+              <span>{{ item.purity || "-" }}</span>
+              <span>{{ item.metalColor || "-" }}</span>
+              <span>Size: {{ item.size || "-" }}</span>
+            </div>
+
+            <div class="product-bottom">
+              <span>Qty: {{ item.quantity }}</span>
+
+              <strong>
+                {{ item.totalPrice | currency: "INR" : "symbol" : "1.2-2" }}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER SUMMARY + ADDRESS -->
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="details-card">
+            <h4>Order Summary</h4>
+
+            <div class="price-row">
+              <span>Subtotal</span>
+              <strong>{{
+                orderDetails.pricing?.subTotal | currency: "INR"
+              }}</strong>
+            </div>
+
+            <div class="price-row">
+              <span>Discount</span>
+              <strong>
+                - {{ orderDetails.pricing?.discountAmount | currency: "INR" }}
+              </strong>
+            </div>
+
+            <div class="price-row">
+              <span>Shipping</span>
+              <strong>{{
+                orderDetails.pricing?.shippingCharge | currency: "INR"
+              }}</strong>
+            </div>
+
+            <div class="price-row">
+              <span>GST</span>
+              <strong>{{
+                orderDetails.pricing?.gstAmount | currency: "INR"
+              }}</strong>
+            </div>
+
+            <div class="price-row total">
+              <span>Total Amount</span>
+              <strong>{{
+                orderDetails.pricing?.totalAmount | currency: "INR"
+              }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="details-card">
+            <h4>Delivery Address</h4>
+
+            <h6>{{ orderDetails.deliveryAddress?.fullName }}</h6>
+
+            <p>
+              {{ orderDetails.deliveryAddress?.addressLine1 }},
+              {{ orderDetails.deliveryAddress?.addressLine2 }}
+            </p>
+
+            <p *ngIf="orderDetails.deliveryAddress?.landmark">
+              {{ orderDetails.deliveryAddress?.landmark }}
+            </p>
+
+            <p>
+              {{ orderDetails.deliveryAddress?.city }},
+              {{ orderDetails.deliveryAddress?.state }}
+              {{ orderDetails.deliveryAddress?.postalCode }}
+            </p>
+
+            <p>{{ orderDetails.deliveryAddress?.country }}</p>
+
+            <p *ngIf="orderDetails.deliveryAddress?.phone">
+              {{ orderDetails.deliveryAddress?.phone }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
 </div>
