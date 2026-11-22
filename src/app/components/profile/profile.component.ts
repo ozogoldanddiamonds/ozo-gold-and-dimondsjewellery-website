@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
   profileData: any;
@@ -24,34 +24,30 @@ export class ProfileComponent implements OnInit {
     private cartService: CartService,
     private wishlistService: WishlistService,
     private router: Router,
-    private location: Location, private fb: FormBuilder,
-    private toaster: ToastrService
-  ) { }
+    private location: Location,
+    private fb: FormBuilder,
+    private toaster: ToastrService,
+  ) {}
 
   ngOnInit(): void {
     this.getProfileSummary();
     this.initEditProfileForm();
-    this.cartService.cartCount$.subscribe(count => {
+    this.cartService.cartCount$.subscribe((count) => {
       this.cartCount = count;
     });
 
-    this.wishlistService.wishlistCount$.subscribe(count => {
+    this.wishlistService.wishlistCount$.subscribe((count) => {
       this.wishlistCount = count;
     });
   }
 
   initEditProfileForm() {
     this.editProfileForm = this.fb.group({
-
       fullName: [''],
 
-      mobileNumber: ['', [
-        Validators.pattern(/^[0-9]{10}$/)
-      ]],
+      mobileNumber: ['', [Validators.pattern(/^[0-9]{10}$/)]],
 
-      email: ['', [
-        Validators.email
-      ]],
+      email: ['', [Validators.email]],
 
       gender: [''],
 
@@ -67,16 +63,12 @@ export class ProfileComponent implements OnInit {
 
       state: [''],
 
-      pincode: ['', [
-        Validators.pattern(/^[0-9]{6}$/)
-      ]],
+      pincode: ['', [Validators.pattern(/^[0-9]{6}$/)]],
 
-      country: ['India']
-
+      country: ['India'],
     });
   }
   openEditProfileModal() {
-
     const userId = localStorage.getItem('userId');
 
     if (!userId) {
@@ -85,11 +77,8 @@ export class ProfileComponent implements OnInit {
     }
 
     this.authService.getUserById(userId).subscribe({
-
       next: (res: any) => {
-
         if (res.success && res.data) {
-
           const user = res.data;
 
           console.log('User Details:', user);
@@ -109,27 +98,20 @@ export class ProfileComponent implements OnInit {
             city: user.city || '',
             state: user.state || '',
             pincode: user.pincode || '',
-            country: user.country || 'India'
+            country: user.country || 'India',
           });
 
           this.isEditProfileOpen = true;
-
         }
-
       },
 
       error: (err: any) => {
-
         console.error('Get User Details Error:', err);
 
         alert('Unable to fetch profile details');
-
-      }
-
+      },
     });
-
   }
-
 
   closeEditProfileModal() {
     this.isEditProfileOpen = false;
@@ -144,7 +126,6 @@ export class ProfileComponent implements OnInit {
     return parsedDate.toISOString().split('T')[0];
   }
   updateProfile() {
-
     if (this.editProfileForm.invalid) {
       this.editProfileForm.markAllAsTouched();
       return;
@@ -164,7 +145,6 @@ export class ProfileComponent implements OnInit {
     console.log('Profile Update Payload:', payload);
 
     this.authService.updateProfile(userId, payload).subscribe({
-
       next: (res: any) => {
         this.isProfileUpdating = false;
 
@@ -174,7 +154,7 @@ export class ProfileComponent implements OnInit {
           const updatedUser = {
             ...currentUser,
             ...payload,
-            ...(res.user || res.data || {})
+            ...(res.user || res.data || {}),
           };
 
           this.authService.setUser(updatedUser);
@@ -188,12 +168,10 @@ export class ProfileComponent implements OnInit {
       },
 
       error: (err: any) => {
-
         console.error('Profile Update Error:', err);
 
         this.isProfileUpdating = false;
-      }
-
+      },
     });
   }
   getProfileSummary(): void {
@@ -213,7 +191,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Profile summary error:', err);
-      }
+      },
     });
   }
 
@@ -225,9 +203,7 @@ export class ProfileComponent implements OnInit {
       return parts[0].charAt(0).toUpperCase();
     }
 
-    return (
-      parts[0].charAt(0) + parts[1].charAt(0)
-    ).toUpperCase();
+    return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
   }
 
   goBack(): void {
@@ -246,7 +222,7 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/orders']);
   }
   Schems(): void {
-    this.router.navigate(["/custom-design"]);
+    this.router.navigate(['/schemes-page']);
   }
 
   openContactModal(): void {
@@ -301,7 +277,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Logout error:', err);
-      }
+      },
     });
   }
 }

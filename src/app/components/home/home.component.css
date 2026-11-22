@@ -62,15 +62,19 @@
  }
 
  .btn-gold {
-     background: var(--gold);
-     color: #1e1608;
-     border: none;
-     padding: 14px 28px;
-     font-weight: 700;
-     text-decoration: none;
-     border-radius: 999px;
-     box-shadow: 0 14px 28px rgba(199, 154, 67, 0.25);
-     transition: all 0.25s ease;
+    display: inline-block;
+    background: var(--gold);
+    margin-top: 380px;
+    color: #1e1608;
+    border: none;
+    padding: 14px 28px;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 999px;
+    box-shadow: 0 14px 28px rgba(199, 154, 67, 0.25);
+    transition: all 0.25s ease;
+    position: relative;
+    top: 90px;
  }
 
  .btn-gold:hover {
@@ -692,8 +696,10 @@
      }
 
      .btn-gold {
-         padding: 10px 15px;
-         font-size: 14px;
+            margin-top: 25px;
+        padding: 10px 20px;
+        font-size: 10px;
+        top: 10px;
      }
 
      .carousel-indicators {

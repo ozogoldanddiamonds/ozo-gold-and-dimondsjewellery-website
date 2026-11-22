@@ -2,21 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { JewelleryType, MetalType, GoldPurity, GoldColor, StoneType, DiamondType, ContactMethod, DesignType, CustomDesignRequest } from 'src/app/components/models/custom-desigen';
+import {
+  JewelleryType,
+  MetalType,
+  GoldPurity,
+  GoldColor,
+  StoneType,
+  DiamondType,
+  ContactMethod,
+  DesignType,
+  CustomDesignRequest,
+} from 'src/app/components/models/custom-desigen';
 import { AuthService } from 'src/app/service/auth.service';
 import { CategoriesService } from 'src/app/service/categories.service';
 import { CustomdesignService } from 'src/app/service/customdesign.service';
 import { SubcategoryService } from 'src/app/service/subcategory.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-custom-design',
   templateUrl: './custom-design.component.html',
-  styleUrls: ['./custom-design.component.css']
+  styleUrls: ['./custom-design.component.css'],
 })
 export class CustomDesignComponent implements OnInit {
-
   today: string = new Date().toISOString().split('T')[0];
   isAuthOpen = false;
   // Dropdown options
@@ -28,15 +36,10 @@ export class CustomDesignComponent implements OnInit {
     'BRACELET',
     'CHAIN',
     'PENDANT',
-    'OTHER'
+    'OTHER',
   ];
 
-  metalTypes: MetalType[] = [
-    'GOLD',
-    'GOLD_DIAMOND',
-    'SILVER',
-    'PLATINUM'
-  ];
+  metalTypes: MetalType[] = ['GOLD', 'GOLD_DIAMOND', 'SILVER', 'PLATINUM'];
 
   goldPurities: GoldPurity[] = ['18K', '22K', '24K'];
 
@@ -46,11 +49,7 @@ export class CustomDesignComponent implements OnInit {
 
   diamondTypes: DiamondType[] = ['NONE', 'NATURAL', 'LAB_GROWN'];
 
-  contactMethods: ContactMethod[] = [
-    'WHATSAPP',
-    'PHONE',
-    'EMAIL'
-  ];
+  contactMethods: ContactMethod[] = ['WHATSAPP', 'PHONE', 'EMAIL'];
 
   // Form data
   formData = {
@@ -67,7 +66,7 @@ export class CustomDesignComponent implements OnInit {
     requiredDate: '',
     quantity: 1,
     preferredContactMethod: 'WHATSAPP' as ContactMethod,
-    additionalNotes: ''
+    additionalNotes: '',
   };
 
   // Newly selected images
@@ -96,7 +95,7 @@ export class CustomDesignComponent implements OnInit {
     private customDesignService: CustomdesignService,
     private authService: AuthService,
     private toastr: ToastrService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getMyCustomDesignRequests();
@@ -185,7 +184,10 @@ export class CustomDesignComponent implements OnInit {
 
     // Validate total images, including saved images
     if (
-      this.existingImageUrls.length + this.selectedImages.length + files.length > 5
+      this.existingImageUrls.length +
+        this.selectedImages.length +
+        files.length >
+      5
     ) {
       this.errorMessage = 'Maximum 5 images are allowed in total.';
       input.value = '';
@@ -218,8 +220,7 @@ export class CustomDesignComponent implements OnInit {
     this.imagePreviews = [];
   }
   get localUserLoggedIn(): boolean {
-    return !!localStorage.getItem('userId') &&
-      !!localStorage.getItem('token');
+    return !!localStorage.getItem('userId') && !!localStorage.getItem('token');
   }
   // =========================================
   // SUBMIT OR UPDATE REQUEST
@@ -229,12 +230,8 @@ export class CustomDesignComponent implements OnInit {
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
 
-
     if (!userId) {
-
-      this.toastr.warning(
-        'Please login first'
-      );
+      this.toastr.warning('Please login first');
 
       this.openLoginModal();
 
@@ -242,7 +239,6 @@ export class CustomDesignComponent implements OnInit {
     }
     this.errorMessage = '';
     this.successMessage = '';
-
 
     if (form.invalid) {
       form.control.markAllAsTouched();
@@ -253,8 +249,6 @@ export class CustomDesignComponent implements OnInit {
 
       return;
     }
-
-
 
     if (
       this.requiresImages &&
@@ -315,7 +309,7 @@ export class CustomDesignComponent implements OnInit {
 
     payload.append(
       'preferredContactMethod',
-      this.formData.preferredContactMethod
+      this.formData.preferredContactMethod,
     );
 
     if (this.formData.goldPurity) {
@@ -331,10 +325,7 @@ export class CustomDesignComponent implements OnInit {
     }
 
     if (this.formData.gemstoneType.trim()) {
-      payload.append(
-        'gemstoneType',
-        this.formData.gemstoneType.trim()
-      );
+      payload.append('gemstoneType', this.formData.gemstoneType.trim());
     }
 
     if (this.formData.requiredDate) {
@@ -342,15 +333,12 @@ export class CustomDesignComponent implements OnInit {
     }
 
     if (this.formData.additionalNotes.trim()) {
-      payload.append(
-        'additionalNotes',
-        this.formData.additionalNotes.trim()
-      );
+      payload.append('additionalNotes', this.formData.additionalNotes.trim());
     }
 
     // Send only newly selected files.
     // Backend must preserve existing images when no new files are sent.
-    this.selectedImages.forEach(file => {
+    this.selectedImages.forEach((file) => {
       payload.append('referenceImages', file);
     });
 
@@ -360,13 +348,13 @@ export class CustomDesignComponent implements OnInit {
     const request$ =
       this.isEditMode && this.editingRequestId
         ? this.customDesignService.updateCustomDesignRequest(
-          this.editingRequestId,
-          payload
-        )
+            this.editingRequestId,
+            payload,
+          )
         : this.customDesignService.createCustomDesignRequest(payload);
 
     request$.subscribe({
-      next: response => {
+      next: (response) => {
         this.loading = false;
 
         if (response.success && response.data) {
@@ -391,7 +379,7 @@ export class CustomDesignComponent implements OnInit {
             stoneType: 'NONE',
             goldWeight: 1,
             quantity: 1,
-            preferredContactMethod: 'WHATSAPP'
+            preferredContactMethod: 'WHATSAPP',
           });
 
           this.resetFormData();
@@ -400,18 +388,16 @@ export class CustomDesignComponent implements OnInit {
           // Refresh this user's requests
           this.getMyCustomDesignRequests();
         } else {
-          this.errorMessage =
-            response.message || 'Unable to save request.';
+          this.errorMessage = response.message || 'Unable to save request.';
         }
       },
 
-      error: error => {
+      error: (error) => {
         this.loading = false;
 
         this.errorMessage =
-          error.error?.message ||
-          'Something went wrong. Please try again.';
-      }
+          error.error?.message || 'Something went wrong. Please try again.';
+      },
     });
   }
 
@@ -434,7 +420,7 @@ export class CustomDesignComponent implements OnInit {
       requiredDate: '',
       quantity: 1,
       preferredContactMethod: 'WHATSAPP',
-      additionalNotes: ''
+      additionalNotes: '',
     };
   }
 
@@ -445,23 +431,18 @@ export class CustomDesignComponent implements OnInit {
   getMyCustomDesignRequests(): void {
     this.listLoading = true;
 
-    this.customDesignService
-      .getMyCustomDesignRequests()
-      .subscribe({
-        next: response => {
-          this.listLoading = false;
-          this.myRequests = response.data || [];
-        },
+    this.customDesignService.getMyCustomDesignRequests().subscribe({
+      next: (response) => {
+        this.listLoading = false;
+        this.myRequests = response.data || [];
+      },
 
-        error: error => {
-          this.listLoading = false;
+      error: (error) => {
+        this.listLoading = false;
 
-          console.error(
-            'Unable to load custom design requests',
-            error
-          );
-        }
-      });
+        console.error('Unable to load custom design requests', error);
+      },
+    });
   }
 
   // =========================================
@@ -491,9 +472,8 @@ export class CustomDesignComponent implements OnInit {
         ? String(request.requiredDate).substring(0, 10)
         : '',
       quantity: request.quantity ?? 1,
-      preferredContactMethod:
-        request.preferredContactMethod || 'WHATSAPP',
-      additionalNotes: request.additionalNotes || ''
+      preferredContactMethod: request.preferredContactMethod || 'WHATSAPP',
+      additionalNotes: request.additionalNotes || '',
     };
 
     this.clearImages();
@@ -515,7 +495,7 @@ export class CustomDesignComponent implements OnInit {
 
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 
@@ -553,29 +533,21 @@ export class CustomDesignComponent implements OnInit {
   // TRACK REQUEST ROWS
   // =========================================
 
-  trackByRequestId(
-    index: number,
-    request: CustomDesignRequest
-  ): string {
+  trackByRequestId(index: number, request: CustomDesignRequest): string {
     return request._id;
   }
 
   openLoginModal() {
-
     this.isAuthOpen = true;
-
   }
   closeAuthModal(isLoggedIn?: boolean) {
-
     this.isAuthOpen = false;
-
   }
-
 
   private focusField(fieldName: string): void {
     setTimeout(() => {
       const field = document.querySelector(
-        `[name="${fieldName}"], #${fieldName}`
+        `[name="${fieldName}"], #${fieldName}`,
       ) as HTMLElement | null;
 
       if (!field) {
@@ -584,7 +556,7 @@ export class CustomDesignComponent implements OnInit {
 
       field.scrollIntoView({
         behavior: 'smooth',
-        block: 'center'
+        block: 'center',
       });
 
       field.focus();
@@ -593,7 +565,7 @@ export class CustomDesignComponent implements OnInit {
 
   private focusFirstInvalidField(form: NgForm): void {
     const formElement = document.querySelector(
-      'form[novalidate]'
+      'form[novalidate]',
     ) as HTMLElement | null;
 
     if (!formElement) {
@@ -602,11 +574,11 @@ export class CustomDesignComponent implements OnInit {
 
     const fields = Array.from(
       formElement.querySelectorAll<HTMLElement>(
-        'input[name], select[name], textarea[name]'
-      )
+        'input[name], select[name], textarea[name]',
+      ),
     );
 
-    const firstInvalidField = fields.find(field => {
+    const firstInvalidField = fields.find((field) => {
       const name = field.getAttribute('name');
 
       if (!name) {
@@ -615,11 +587,7 @@ export class CustomDesignComponent implements OnInit {
 
       const control = form.controls[name];
 
-      return (
-        !!control &&
-        control.invalid &&
-        field.getClientRects().length > 0
-      );
+      return !!control && control.invalid && field.getClientRects().length > 0;
     });
 
     if (firstInvalidField) {

@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'OZO_Website';
@@ -18,21 +18,23 @@ export class AppComponent implements OnInit {
 
   selectedBottomTab: string = '';
   isLoggedIn = false;
-  constructor(private router: Router, private loaderService: LoadingService, private toastr: ToastrService, private cartService: CartService) {
-    this.router.events.subscribe(event => {
+  constructor(
+    private router: Router,
+    private loaderService: LoadingService,
+    private toastr: ToastrService,
+    private cartService: CartService,
+  ) {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   }
   ngOnInit(): void {
-    this.loaderService.loading$
-      .subscribe(res => {
-        console.log('Loader status', res)
-        this.isLoading = res;
-
-      });
-
+    this.loaderService.loading$.subscribe((res) => {
+      console.log('Loader status', res);
+      this.isLoading = res;
+    });
   }
 
   // aos animations  add
@@ -40,39 +42,29 @@ export class AppComponent implements OnInit {
     AOS.init({
       duration: 1000,
       once: false,
-      offset: 100
+      offset: 100,
     });
 
     AOS.refresh();
   }
 
-
   customDesign() {
-    const userId =
-      localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
 
     if (!userId) {
-
-      this.toastr.warning(
-        'Please login first'
-      );
+      this.toastr.warning('Please login first');
 
       this.openLoginModal();
 
       return;
     }
-    this.router.navigate(["/custom-design"]);
+    this.router.navigate(['/custom-design']);
   }
-
 
   openLoginModal() {
-
     this.isAuthOpen = true;
-
   }
   closeAuthModal(isLoggedIn?: boolean) {
-
     this.isAuthOpen = false;
-
   }
 }

@@ -1,711 +1,633 @@
-<div id="heroCarousel" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel"
-    *ngIf="banners.length > 0">
+<div
+  id="heroCarousel"
+  class="carousel slide carousel-fade hero-carousel"
+  data-bs-ride="carousel"
+  *ngIf="banners.length > 0"
+>
+  <!-- Indicators -->
+  <div class="carousel-indicators">
+    <button
+      *ngFor="let banner of banners; let i = index"
+      type="button"
+      data-bs-target="#heroCarousel"
+      [attr.data-bs-slide-to]="i"
+      [class.active]="i === 0"
+    ></button>
+  </div>
 
-    <!-- Indicators -->
-    <div class="carousel-indicators">
-        <button *ngFor="let banner of banners; let i = index" type="button" data-bs-target="#heroCarousel"
-            [attr.data-bs-slide-to]="i" [class.active]="i === 0">
-        </button>
-    </div>
+  <!-- Slides -->
+  <div class="carousel-inner">
+    <div
+      *ngFor="let banner of banners; let i = index"
+      class="carousel-item"
+      [class.active]="i === 0"
+    >
+      <img [src]="banner.image" class="d-block w-100" [alt]="banner.title" />
 
-    <!-- Slides -->
-    <div class="carousel-inner">
-
-        <div *ngFor="let banner of banners; let i = index" class="carousel-item" [class.active]="i === 0">
-
-            <img [src]="banner.image" class="d-block w-100" [alt]="banner.title">
-
-            <div class="carousel-caption custom-caption">
-                <!-- <div class="hero-badge-tag" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
+      <div class="carousel-caption custom-caption">
+        <!-- <div class="hero-badge-tag" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
                     <h5>OZO Gold and DiamondsJewellery</h5>
                     <p>Every shine has a story </p>
                 </div> -->
-                <h1 class="heading-1" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
+        <!-- <h1 class="heading-1" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
                     {{ banner.title | titlecase}}
                 </h1>
                 <p class="description" data-aos="fade-left" data-aos-anchor="#example-anchor" data-aos-offset="500"
                     data-aos-duration="500">
                     {{ banner.description | titlecase}}
-                </p>
-                <a routerLink="/categories" class="btn btn-gold" data-aos="fade-right" data-aos-offset="300"
-                    data-aos-easing="ease-in-sine">
-                    Shop Now
-                </a>
-            </div>
-        </div>
+                </p> -->
+        <a
+          routerLink="/categories"
+          class="btn btn-gold"
+          data-aos="fade-right"
+          data-aos-offset="300"
+          data-aos-easing="ease-in-sine"
+        >
+          Shop Now
+        </a>
+      </div>
     </div>
+  </div>
 
-    <!-- Prev -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <!-- Next -->
-    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
+  <!-- Prev -->
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#heroCarousel"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <!-- Next -->
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#heroCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon"></span>
+  </button>
 </div>
 
 <section class="desktop-section section-space">
+  <div class="container-xxl">
+    <div class="swiper popularSwiper">
+      <div class="section-header text-center">
+        <h2>Popular Collections</h2>
 
-    <div class="container-xxl">
+        <p>Crafted to Shine, Designed to Impress</p>
 
-        <div class="swiper popularSwiper">
+        <div class="divider">
+          <span class="line"></span>
 
-            <div class="section-header text-center">
+          <span class="icons">
+            <img
+              src="../../../assets/images/diamond_png.png"
+              alt="Diamond icon"
+            />
+          </span>
 
-                <h2>Popular Collections</h2>
-
-                <p>Crafted to Shine, Designed to Impress</p>
-
-                <div class="divider">
-                    <span class="line"></span>
-
-                    <span class="icons">
-                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
-                    </span>
-
-                    <span class="line"></span>
-                </div>
-
-            </div>
-
-            <div class="swiper-wrapper">
-
-                <div class="swiper-slide" *ngFor="let item of newProducts" data-aos="fade-down" data-aos-easing="linear"
-                    data-aos-duration="1500">
-
-                    <div class="collection-card">
-
-                        <div class="collection-image-wrap popular-swiper-slide" (click)="product(item._id)">
-
-                            <img [src]="item.image || item.images?.[0]" [alt]="item.name">
-
-                        </div>
-
-                        <h5 class="popular-title">
-                            {{ item.name | titlecase}}
-                        </h5>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="swiper-button-next"></div>
-
-            <div class="swiper-button-prev"></div>
-
-            <div class="swiper-pagination"></div>
-
+          <span class="line"></span>
         </div>
+      </div>
 
+      <div class="swiper-wrapper">
+        <div
+          class="swiper-slide"
+          *ngFor="let item of newProducts"
+          data-aos="fade-down"
+          data-aos-easing="linear"
+          data-aos-duration="1500"
+        >
+          <div class="collection-card">
+            <div
+              class="collection-image-wrap popular-swiper-slide"
+              (click)="product(item._id)"
+            >
+              <img [src]="item.image || item.images?.[0]" [alt]="item.name" />
+            </div>
+
+            <h5 class="popular-title">
+              {{ item.name | titlecase }}
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-button-next"></div>
+
+      <div class="swiper-button-prev"></div>
+
+      <div class="swiper-pagination"></div>
     </div>
-
+  </div>
 </section>
 
-
-
 <section class="desktop-section section-space">
+  <div class="container-xxl">
+    <div class="swiper categorySwiper">
+      <div class="section-header text-center">
+        <h2>Shop By Category</h2>
 
-    <div class="container-xxl">
+        <p>Explore Our Collections</p>
 
-        <div class="swiper categorySwiper">
+        <div class="divider">
+          <span class="line"></span>
 
-            <div class="section-header text-center">
+          <span class="icons">
+            <img
+              src="../../../assets/images/diamond_png.png"
+              alt="Diamond icon"
+            />
+          </span>
 
-                <h2>Shop By Category</h2>
-
-                <p>Explore Our Collections</p>
-
-                <div class="divider">
-                    <span class="line"></span>
-
-                    <span class="icons">
-                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
-                    </span>
-
-                    <span class="line"></span>
-                </div>
-
-            </div>
-
-            <div class="swiper-wrapper">
-
-                <div class="swiper-slide" *ngFor="let item of categoriesList">
-
-                    <div class="collection-card" (click)="goToCategory(item._id)">
-
-                        <div class="collection-image-wrap">
-
-                            <img [src]="item.image || item.images?.[0]" [alt]="item.name" data-aos="fade-zoom-in"
-                                data-aos-easing="ease-in-back" data-aos-delay="300" data-aos-offset="0">
-
-                        </div>
-
-                        <h5 class="popular-title">
-                            {{ item.name | titlecase}}
-                        </h5>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="swiper-button-next"></div>
-
-            <div class="swiper-button-prev"></div>
-
-            <div class="swiper-pagination"></div>
-
+          <span class="line"></span>
         </div>
+      </div>
 
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" *ngFor="let item of categoriesList">
+          <div class="collection-card" (click)="goToCategory(item._id)">
+            <div class="collection-image-wrap">
+              <img
+                [src]="item.image || item.images?.[0]"
+                [alt]="item.name"
+                data-aos="fade-zoom-in"
+                data-aos-easing="ease-in-back"
+                data-aos-delay="300"
+                data-aos-offset="0"
+              />
+            </div>
+
+            <h5 class="popular-title">
+              {{ item.name | titlecase }}
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-button-next"></div>
+
+      <div class="swiper-button-prev"></div>
+
+      <div class="swiper-pagination"></div>
     </div>
-
+  </div>
 </section>
 
-
 <section class="desktop-section section-space">
+  <div class="container-xxl">
+    <div class="swiper subCategorySwiper">
+      <div class="section-header text-center">
+        <h2>Shop By Design</h2>
 
-    <div class="container-xxl">
+        <p>Find Your Favourite Style</p>
 
-        <div class="swiper subCategorySwiper">
+        <div class="divider">
+          <span class="line"></span>
 
-            <div class="section-header text-center">
+          <span class="icons">
+            <img
+              src="../../../assets/images/diamond_png.png"
+              alt="Diamond icon"
+            />
+          </span>
 
-                <h2>Shop By Design</h2>
-
-                <p>Find Your Favourite Style</p>
-
-                <div class="divider">
-                    <span class="line"></span>
-
-                    <span class="icons">
-                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
-                    </span>
-
-                    <span class="line"></span>
-                </div>
-
-            </div>
-
-            <div class="swiper-wrapper" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
-
-                <div class="swiper-slide" *ngFor="let item of subCategoriesList">
-
-                    <div class="collection-card" (click)="goToSubCategory(item._id)">
-
-                        <div class="collection-image-wrap">
-
-                            <img [src]="item.image || item.images?.[0]" [alt]="item.name">
-
-                        </div>
-
-                        <h5 class="popular-title">
-                            {{ item.name | titlecase}}
-                        </h5>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="swiper-button-next"></div>
-
-            <div class="swiper-button-prev"></div>
-
-            <div class="swiper-pagination"></div>
-
+          <span class="line"></span>
         </div>
+      </div>
 
+      <div
+        class="swiper-wrapper"
+        data-aos="fade-down"
+        data-aos-easing="linear"
+        data-aos-duration="1500"
+      >
+        <div class="swiper-slide" *ngFor="let item of subCategoriesList">
+          <div class="collection-card" (click)="goToSubCategory(item._id)">
+            <div class="collection-image-wrap">
+              <img [src]="item.image || item.images?.[0]" [alt]="item.name" />
+            </div>
+
+            <h5 class="popular-title">
+              {{ item.name | titlecase }}
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-button-next"></div>
+
+      <div class="swiper-button-prev"></div>
+
+      <div class="swiper-pagination"></div>
     </div>
-
+  </div>
 </section>
 <!-- display the images to all  -->
 
 <section class="category-section">
+  <div class="container-fluid">
+    <!-- HEADING -->
+    <div class="category-heading">
+      <span class="category-label"> EXPLORE COLLECTIONS </span>
 
-    <div class="container-fluid">
+      <h2>Shop by <span>Category</span></h2>
 
-        <!-- HEADING -->
-        <div class="category-heading">
+      <p>Explore our collection and discover something perfect for you.</p>
+    </div>
 
-            <span class="category-label">
-                EXPLORE COLLECTIONS
-            </span>
+    <!-- ALL CATEGORY GROUPS -->
 
-            <h2>
-                Shop by <span>Category</span>
-            </h2>
-
-            <p>
-                Explore our collection and discover something perfect for you.
-            </p>
-
-        </div>
-
-
-        <!-- ALL CATEGORY GROUPS -->
-
-        <div class="category-masonry" *ngFor="let group of categoryGroups; let i = index"
-            [class.reverse-layout]="i % 2 === 1">
-
-            <!-- PATTERN 1 -->
-            <ng-container *ngIf="i % 2 === 0">
-
-                <!-- LARGE -->
-                <div class="category-rings" *ngIf="group[0]">
-                    <ng-container *ngTemplateOutlet="
+    <div
+      class="category-masonry"
+      *ngFor="let group of categoryGroups; let i = index"
+      [class.reverse-layout]="i % 2 === 1"
+    >
+      <!-- PATTERN 1 -->
+      <ng-container *ngIf="i % 2 === 0">
+        <!-- LARGE -->
+        <div class="category-rings" *ngIf="group[0]">
+          <ng-container
+            *ngTemplateOutlet="
               categoryCard;
               context: {
                 item: group[0],
-                className: 'tall-card'
+                className: 'tall-card',
               }
-            "></ng-container>
-                </div>
+            "
+          ></ng-container>
+        </div>
 
-                <!-- SMALL / WIDE -->
-                <div class="category-right">
+        <!-- SMALL / WIDE -->
+        <div class="category-right">
+          <div class="row g-2">
+            <div
+              *ngFor="let item of group.slice(1, 4); let j = index"
+              [class]="j === 0 ? 'col-lg-6' : 'col-lg-3'"
+            >
+              <ng-container
+                *ngTemplateOutlet="categoryCard; context: { item: item }"
+              ></ng-container>
+            </div>
+          </div>
 
-                    <div class="row g-2">
+          <div class="row g-2 mt-0">
+            <div
+              *ngFor="let item of group.slice(4, 7); let j = index"
+              [class]="j === 1 ? 'col-lg-6' : 'col-lg-3'"
+            >
+              <ng-container
+                *ngTemplateOutlet="categoryCard; context: { item: item }"
+              ></ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-container>
 
-                        <div *ngFor="let item of group.slice(1, 4); let j = index"
-                            [class]="j === 0 ? 'col-lg-6' : 'col-lg-3'">
+      <!-- PATTERN 2 -->
 
-                            <ng-container *ngTemplateOutlet="
-                  categoryCard;
-                  context: { item: item }
-                "></ng-container>
+      <ng-container *ngIf="i % 2 === 1">
+        <div class="category-right">
+          <div class="row g-2">
+            <div class="col-lg-4" *ngFor="let item of group.slice(0, 3)">
+              <ng-container
+                *ngTemplateOutlet="categoryCard; context: { item: item }"
+              ></ng-container>
+            </div>
+          </div>
 
-                        </div>
+          <div class="row g-2 mt-0">
+            <div class="col-lg-4" *ngFor="let item of group.slice(3, 6)">
+              <ng-container
+                *ngTemplateOutlet="categoryCard; context: { item: item }"
+              ></ng-container>
+            </div>
+          </div>
+        </div>
 
-                    </div>
+        <!-- LARGE RIGHT -->
 
-
-                    <div class="row g-2 mt-0">
-
-                        <div *ngFor="let item of group.slice(4, 7); let j = index"
-                            [class]="j === 1 ? 'col-lg-6' : 'col-lg-3'">
-
-                            <ng-container *ngTemplateOutlet="
-                  categoryCard;
-                  context: { item: item }
-                "></ng-container>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </ng-container>
-
-
-            <!-- PATTERN 2 -->
-
-            <ng-container *ngIf="i % 2 === 1">
-
-                <div class="category-right">
-
-                    <div class="row g-2">
-
-                        <div class="col-lg-4" *ngFor="let item of group.slice(0, 3)">
-
-                            <ng-container *ngTemplateOutlet="
-                  categoryCard;
-                  context: { item: item }
-                "></ng-container>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="row g-2 mt-0">
-
-                        <div class="col-lg-4" *ngFor="let item of group.slice(3, 6)">
-
-                            <ng-container *ngTemplateOutlet="
-                  categoryCard;
-                  context: { item: item }
-                "></ng-container>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- LARGE RIGHT -->
-
-                <div class="category-featured-wrap" *ngIf="group[6]">
-
-                    <ng-container *ngTemplateOutlet="
+        <div class="category-featured-wrap" *ngIf="group[6]">
+          <ng-container
+            *ngTemplateOutlet="
               categoryCard;
               context: {
                 item: group[6],
-                className: 'featured-card'
+                className: 'featured-card',
               }
-            "></ng-container>
-
-                </div>
-
-            </ng-container>
-
+            "
+          ></ng-container>
         </div>
-
+      </ng-container>
     </div>
+  </div>
 
-
-    <!-- =====================================================
+  <!-- =====================================================
        REUSABLE CATEGORY CARD
   ====================================================== -->
 
-    <ng-template #categoryCard let-item="item" let-className="className">
+  <ng-template #categoryCard let-item="item" let-className="className">
+    <div
+      class="category-card"
+      [ngClass]="className"
+      (click)="goToSubCategory(item._id)"
+    >
+      <img [src]="item.image || item.images?.[0]" [alt]="item.name" />
 
-        <div class="category-card" [ngClass]="className" (click)="goToSubCategory(item._id)">
+      <div class="category-overlay"></div>
 
-            <img [src]="item.image || item.images?.[0]" [alt]="item.name" />
-
-            <div class="category-overlay"></div>
-
-            <h4>
-                {{ item.name }}
-            </h4>
-
-        </div>
-
-    </ng-template>
-
+      <h4>
+        {{ item.name }}
+      </h4>
+    </div>
+  </ng-template>
 </section>
 
-
 <section class="desktop-section section-space">
+  <div class="container-xxl">
+    <div class="swiper subSubCategorySwiper">
+      <div class="section-header text-center">
+        <h2>Collections</h2>
 
-    <div class="container-xxl">
+        <p>Handpicked Jewellery</p>
 
-        <div class="swiper subSubCategorySwiper">
+        <div class="divider">
+          <span class="line"></span>
 
-            <div class="section-header text-center">
+          <span class="icons">
+            <img
+              src="../../../assets/images/diamond_png.png"
+              alt="Diamond icon"
+            />
+          </span>
 
-                <h2>Collections</h2>
-
-                <p>Handpicked Jewellery</p>
-
-                <div class="divider">
-                    <span class="line"></span>
-
-                    <span class="icons">
-                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
-                    </span>
-
-                    <span class="line"></span>
-                </div>
-
-            </div>
-
-            <div class="swiper-wrapper" data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-sine">
-
-                <div class="swiper-slide" *ngFor="let item of subSubCategoriesList">
-
-                    <div class="collection-card" (click)="goToSubSubCategory(item._id)">
-
-                        <div class="collection-image-wrap">
-
-                            <img [src]="item.image || item.images?.[0]" [alt]="item.name">
-
-                        </div>
-
-                        <h5 class="popular-title">
-                            {{ item.name }}
-                        </h5>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="swiper-button-next"></div>
-
-            <div class="swiper-button-prev"></div>
-
-            <div class="swiper-pagination"></div>
-
+          <span class="line"></span>
         </div>
+      </div>
 
+      <div
+        class="swiper-wrapper"
+        data-aos="fade-right"
+        data-aos-offset="300"
+        data-aos-easing="ease-in-sine"
+      >
+        <div class="swiper-slide" *ngFor="let item of subSubCategoriesList">
+          <div class="collection-card" (click)="goToSubSubCategory(item._id)">
+            <div class="collection-image-wrap">
+              <img [src]="item.image || item.images?.[0]" [alt]="item.name" />
+            </div>
+
+            <h5 class="popular-title">
+              {{ item.name }}
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-button-next"></div>
+
+      <div class="swiper-button-prev"></div>
+
+      <div class="swiper-pagination"></div>
     </div>
-
+  </div>
 </section>
 
 <section class="desktop-section section-space bg-soft">
-    <div class="container-fluid">
-        <div class="section-header text-center">
-            <h2>All Products</h2>
-            <p>Where New Meets Beautiful</p>
-            <div class="divider">
-                <span class="line"></span>
-                <span class="icons">
-                    <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
-                </span>
-                <span class="line"></span>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <div class="section-header text-center">
+      <h2>All Products</h2>
+      <p>Where New Meets Beautiful</p>
+      <div class="divider">
+        <span class="line"></span>
+        <span class="icons">
+          <img
+            src="../../../assets/images/diamond_png.png"
+            alt="Diamond icon"
+          />
+        </span>
+        <span class="line"></span>
+      </div>
+    </div>
 
-        <div class="row g-4">
+    <div class="row g-4">
+      <div
+        class="col-lg-3 col-md-6 col-6"
+        *ngFor="let item of products"
+        data-aos="flip-left"
+        data-aos-easing="ease-out-cubic"
+        data-aos-duration="2000"
+      >
+        <div class="product-card">
+          <div class="product-img">
+            <img [src]="item.images?.[0] || item.image" [alt]="item.name" />
 
-            <div class="col-lg-3 col-md-6 col-6" *ngFor="let item of products" data-aos="flip-left"
-                data-aos-easing="ease-out-cubic" data-aos-duration="2000">
-
-                <div class="product-card">
-
-                    <div class="product-img">
-
-                        <img [src]="item.images?.[0] || item.image" [alt]="item.name">
-
-                        <!-- <div class="product-top-badge">
+            <!-- <div class="product-top-badge">
                             New
                         </div> -->
 
-                        <div class="hover-icons">
+            <div class="hover-icons">
+              <!-- <i class="fa fa-shopping-cart"></i> -->
 
-                            <!-- <i class="fa fa-shopping-cart"></i> -->
+              <i class="fa fa-eye" (click)="product(item._id)"> </i>
 
-                            <i class="fa fa-eye" (click)="product(item._id)">
-                            </i>
+              <i
+                class="fa"
+                [ngClass]="
+                  item.isWishlisted ? 'fa-heart text-danger' : 'fa-heart-o'
+                "
+                (click)="whishlist(item)"
+              >
+              </i>
+            </div>
+          </div>
 
-                            <i class="fa" [ngClass]="item.isWishlisted? 'fa-heart text-danger': 'fa-heart-o'"
-                                (click)="whishlist(item)">
+          <div class="product-info">
+            <div class="product-meta">
+              <span class="product-category"> OZO Jewellery </span>
 
-                            </i>
-
-                        </div>
-
-                    </div>
-
-                    <div class="product-info">
-
-                        <div class="product-meta">
-
-                            <span class="product-category">
-                                OZO Jewellery
-                            </span>
-
-                            <span class="product-name">
-                                {{ item.name | titlecase}}
-                            </span>
-
-                        </div>
-
-                        <div class="price-block">
-
-                            <span class="price">
-                                ₹{{ item?.variants?.[0]?.priceBreakup?.finalPrice }}
-                            </span>
-
-                            <div class="making-charge">
-                                Making Charges
-                                <ng-container
-                                    *ngIf="item?.variants?.[0]?.makingChargeType === 'fixed'; else percentageCharge">
-
-                                    ₹{{ item?.variants?.[0]?.makingCharges }}
-
-                                </ng-container>
-
-                                <ng-template #percentageCharge>
-                                    {{ item?.variants?.[0]?.makingCharges }}%
-                                </ng-template>
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
+              <span class="product-name">
+                {{ item.name | titlecase }}
+              </span>
             </div>
 
+            <div class="price-block">
+              <span class="price">
+                ₹{{ item?.variants?.[0]?.priceBreakup?.finalPrice }}
+              </span>
+
+              <div class="making-charge">
+                Making Charges
+                <ng-container
+                  *ngIf="
+                    item?.variants?.[0]?.makingChargeType === 'fixed';
+                    else percentageCharge
+                  "
+                >
+                  ₹{{ item?.variants?.[0]?.makingCharges }}
+                </ng-container>
+
+                <ng-template #percentageCharge>
+                  {{ item?.variants?.[0]?.makingCharges }}%
+                </ng-template>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="pagination-wrapper mt-5" *ngIf="totalPages > 1">
-
-            <ul class="pagination justify-content-center">
-
-                <li class="page-item" [class.disabled]="currentPage === 1">
-
-                    <a class="page-link" (click)="previousPage()">
-
-                        Previous
-
-                    </a>
-
-                </li>
-
-                <li class="page-item" *ngFor="let page of totalPagesArray" [class.active]="currentPage === page">
-
-                    <a class="page-link" (click)="goToPage(page)">
-
-                        {{ page }}
-
-                    </a>
-
-                </li>
-
-                <li class="page-item" [class.disabled]="currentPage === totalPages">
-
-                    <a class="page-link" (click)="nextPage()">
-
-                        Next
-
-                    </a>
-
-                </li>
-
-            </ul>
-
-        </div>
+      </div>
     </div>
+    <div class="pagination-wrapper mt-5" *ngIf="totalPages > 1">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="previousPage()"> Previous </a>
+        </li>
+
+        <li
+          class="page-item"
+          *ngFor="let page of totalPagesArray"
+          [class.active]="currentPage === page"
+        >
+          <a class="page-link" (click)="goToPage(page)">
+            {{ page }}
+          </a>
+        </li>
+
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="nextPage()"> Next </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <section class="parallax-section">
-    <div class="overlay-content text-center">
-        <span class="offer-label">Festive Luxury Offer</span>
-        <h3 class="offer-title">Elegant pieces for every special moment</h3>
-        <p class="tagline">Discover premium jewellery collections crafted with timeless design and modern elegance.</p>
-        <a routerLink="/offers" class="btn btn-gold">Shop Now</a>
-    </div>
+  <div class="overlay-content text-center">
+    <span class="offer-label">Festive Luxury Offer</span>
+    <h3 class="offer-title">Elegant pieces for every special moment</h3>
+    <p class="tagline">
+      Discover premium jewellery collections crafted with timeless design and
+      modern elegance.
+    </p>
+    <a routerLink="/offers" class="btn btn-gold">Shop Now</a>
+  </div>
 </section>
 
 <section class="desktop-section section-space">
-    <div class="container-xxl">
-        <div class="section-header text-center mb-5">
-            <h2>Latest News</h2>
-            <p>Stories, launches and styling inspiration</p>
-            <div class="divider">
-                <span class="line"></span>
-                <span class="icons">
-                    <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
-                </span>
-                <span class="line"></span>
-            </div>
-        </div>
-
-        <div class="row align-items-stretch g-4">
-            <div class="col-lg-6">
-                <div class="news-image">
-                    <img src="../../../assets/images/silver-neckless.webp" alt="Latest jewellery news" />
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="news-list-panel">
-                    <div class="news-item" *ngFor="let item of news">
-                        <div class="date-box">
-                            <span class="month">{{item.month}}</span>
-                            <span class="day">{{item.day}}</span>
-                        </div>
-
-                        <div class="news-content">
-                            <h5>{{item.title}}</h5>
-                            <p class="meta">
-                                <i class="fa fa-user"></i> {{item.author}}
-                                &nbsp; | &nbsp;
-                                <i class="fa fa-comments"></i> {{item.comments}}
-                            </p>
-                            <p class="desc">{{item.desc}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="container-xxl">
+    <div class="section-header text-center mb-5">
+      <h2>Latest News</h2>
+      <p>Stories, launches and styling inspiration</p>
+      <div class="divider">
+        <span class="line"></span>
+        <span class="icons">
+          <img
+            src="../../../assets/images/diamond_png.png"
+            alt="Diamond icon"
+          />
+        </span>
+        <span class="line"></span>
+      </div>
     </div>
+
+    <div class="row align-items-stretch g-4">
+      <div class="col-lg-6">
+        <div class="news-image">
+          <img
+            src="../../../assets/images/silver-neckless.webp"
+            alt="Latest jewellery news"
+          />
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="news-list-panel">
+          <div class="news-item" *ngFor="let item of news">
+            <div class="date-box">
+              <span class="month">{{ item.month }}</span>
+              <span class="day">{{ item.day }}</span>
+            </div>
+
+            <div class="news-content">
+              <h5>{{ item.title }}</h5>
+              <p class="meta">
+                <i class="fa fa-user"></i> {{ item.author }}
+                &nbsp; | &nbsp;
+                <i class="fa fa-comments"></i> {{ item.comments }}
+              </p>
+              <p class="desc">{{ item.desc }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="desktop-section section-space bg-soft">
-    <div class="container-xxl">
-        <div class="swiper featuredSwiper">
-            <div class="section-header text-center">
-                <h2>Featured Products</h2>
-                <p>Crafted to Shine, Designed to Impress</p>
-                <div class="divider">
-                    <span class="line"></span>
-                    <span class="icons">
-                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
-                    </span>
-                    <span class="line"></span>
+  <div class="container-xxl">
+    <div class="swiper featuredSwiper">
+      <div class="section-header text-center">
+        <h2>Featured Products</h2>
+        <p>Crafted to Shine, Designed to Impress</p>
+        <div class="divider">
+          <span class="line"></span>
+          <span class="icons">
+            <img
+              src="../../../assets/images/diamond_png.png"
+              alt="Diamond icon"
+            />
+          </span>
+          <span class="line"></span>
+        </div>
+      </div>
+
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" *ngFor="let item of featureProducts">
+          <div class="feature-collection-card">
+            <div class="product-card">
+              <div class="product-img">
+                <img [src]="item.images?.[0] || item.image" [alt]="item.name" />
+
+                <div class="hover-icons">
+                  <!-- <i class="fa fa-shopping-cart"></i> -->
+
+                  <i class="fa fa-eye" (click)="product(item._id)"> </i>
+
+                  <i class="fa fa-heart"></i>
                 </div>
-            </div>
+              </div>
 
-            <div class="swiper-wrapper">
+              <div class="product-info">
+                <div class="product-meta">
+                  <span class="product-category"> Featured Pick </span>
 
-                <div class="swiper-slide" *ngFor="let item of featureProducts">
+                  <span class="product-name">
+                    {{ item.name }}
+                  </span>
+                </div>
 
-                    <div class="feature-collection-card">
+                <div class="price-block">
+                  <span class="price">
+                    ₹{{ item?.variants?.[0]?.priceDetails?.finalPrice }}
+                  </span>
 
-                        <div class="product-card">
-
-                            <div class="product-img">
-
-                                <img [src]="item.images?.[0] || item.image" [alt]="item.name">
-
-                                <div class="hover-icons">
-
-                                    <!-- <i class="fa fa-shopping-cart"></i> -->
-
-                                    <i class="fa fa-eye" (click)="product(item._id)">
-                                    </i>
-
-                                    <i class="fa fa-heart"></i>
-
-                                </div>
-
-                            </div>
-
-                            <div class="product-info">
-
-                                <div class="product-meta">
-
-                                    <span class="product-category">
-                                        Featured Pick
-                                    </span>
-
-                                    <span class="product-name">
-                                        {{ item.name }}
-                                    </span>
-
-                                </div>
-
-                                <div class="price-block">
-
-                                    <span class="price">
-                                        ₹{{ item?.variants?.[0]?.priceDetails?.finalPrice }}
-                                    </span>
-
-                                    <!-- <small class="old-price" *ngIf="item.oldPrice">
+                  <!-- <small class="old-price" *ngIf="item.oldPrice">
 
                                         ₹{{ item.oldPrice }}
 
                                     </small> -->
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
                 </div>
-
+              </div>
             </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
+          </div>
         </div>
+      </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
     </div>
+  </div>
 </section>
 
 <app-user-login [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
