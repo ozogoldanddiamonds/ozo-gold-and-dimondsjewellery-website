@@ -1,228 +1,239 @@
 <!-- 🔝 Top Header Bar -->
 <div class="top-header d-none d-lg-block" id="topHeader">
-    <div class="container d-flex justify-content-between align-items-center">
-
-        <!-- Left Side -->
-        <div class="top-left">
-            <span>
-                <i class="fa fa-phone"></i> +91 7036020999
-            </span>
-            <span>
-                <i class="fa fa-phone"></i> +91 7036171999
-            </span>
-            <span class="ms-3">
-                <i class="fa fa-envelope"></i> info@ozogoldanddiamonds.com
-            </span>
-        </div>
-
-        <!-- Right Side -->
-        <div class="top-right d-flex align-items-center gap-3">
-
-            <a routerLink="/offers" class="top-link">
-                <i class="fa fa-tag"></i> Offers
-            </a>
-            <!-- Social Icons -->
-            <a href="#" class="social-icon"><i class="fa fa-facebook"></i></a>
-            <a href="#" class="social-icon"><i class="fa fa-instagram"></i></a>
-            <a href="#" class="social-icon"><i class="fa fa-twitter"></i></a>
-            <!-- Logged In User -->
-            <div *ngIf="isLoggedIn" class="top-user">
-                <i class="fa fa-user-circle"></i>
-                <span>Hi, {{ userName || profileData?.user?.name || profileData?.name || 'User' | titlecase}}</span>
-
-                <div class="top-user-dropdown">
-
-                    <a routerLink="/profile">
-                        <i class="fa fa-user"></i>
-                        My Profile
-                    </a>
-
-                    <a routerLink="/orders">
-                        <i class="fa fa-shopping-bag"></i>
-                        My Orders
-                    </a>
-
-                    <a routerLink="/whishlist">
-                        <i class="fa fa-heart"></i>
-                        Wishlist
-                    </a>
-
-                    <a (click)="logout()">
-                        <i class="fa fa-sign-out"></i>
-                        Logout
-                    </a>
-
-                </div>
-            </div>
-
-        </div>
-
+  <div class="container d-flex justify-content-between align-items-center">
+    <!-- Left Side -->
+    <div class="top-left">
+      <span> <i class="fa fa-phone"></i> +91 7036020999 </span>
+      <span> <i class="fa fa-phone"></i> +91 7036171999 </span>
+      <span class="ms-3">
+        <i class="fa fa-envelope"></i> info@ozogoldanddiamonds.com
+      </span>
     </div>
+
+    <!-- Right Side -->
+    <div class="top-right d-flex align-items-center gap-3">
+      <!-- <a routerLink="/offers" class="top-link">
+        <i class="fa fa-tag"></i> Offers
+      </a> -->
+      <!-- Social Icons -->
+      <a href="#" class="social-icon"><i class="fa fa-facebook"></i></a>
+      <a href="#" class="social-icon"><i class="fa fa-instagram"></i></a>
+      <a href="#" class="social-icon"><i class="fa fa-twitter"></i></a>
+      <!-- Logged In User -->
+      <div *ngIf="isLoggedIn" class="top-user">
+        <i class="fa fa-user-circle"></i>
+        <span
+          >Hi,
+          {{
+            userName || profileData?.user?.name || profileData?.name || "User"
+              | titlecase
+          }}</span
+        >
+
+        <div class="top-user-dropdown">
+          <a routerLink="/profile">
+            <i class="fa fa-user"></i>
+            My Profile
+          </a>
+
+          <a routerLink="/orders">
+            <i class="fa fa-shopping-bag"></i>
+            My Orders
+          </a>
+
+          <a routerLink="/whishlist">
+            <i class="fa fa-heart"></i>
+            Wishlist
+          </a>
+
+          <a (click)="logout()">
+            <i class="fa fa-sign-out"></i>
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <nav class="navbar navbar-expand-lg" id="mainNavbar">
+  <!-- Brand -->
+  <a class="navbar-brand fw-bold text-dark brand-glass" routerLink="/">
+    <div class="brand-logo">
+      <img
+        src="../../../assets/images/logo.jpg"
+        alt="OZO Gold and Diamond Jewellery Mart"
+      />
+    </div>
 
-    <!-- Brand -->
-    <a class="navbar-brand fw-bold text-dark brand-glass" routerLink="/">
+    <span class="nav-title">
+      <span class="brand-name">
+        OZO
+        <span class="gold-text">Gold</span>
+        <span class="diamond-text">and DiamondJewellery Mart</span>
+      </span>
 
-        <div class="brand-logo">
-            <img src="../../../assets/images/logo.jpg" alt="OZO Gold and Diamond Jewellery Mart">
-        </div>
+      <span class="brand-subtitle"> Every shine has a story. </span>
+    </span>
+  </a>
+  <a class="mobile-cart-wrapper position-relative" routerLink="/cart">
+    <i class="fa fa-shopping-cart"></i>
+    <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+  </a>
 
-        <span class="nav-title">
+  <!-- Mobile Toggle -->
+  <button
+    class="navbar-toggler custom-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarNav"
+    (click)="isMenuOpen = !isMenuOpen"
+  >
+    <span class="toggler-icon top" [class.active]="isMenuOpen"></span>
+    <span class="toggler-icon middle" [class.active]="isMenuOpen"></span>
+    <span class="toggler-icon bottom" [class.active]="isMenuOpen"></span>
+  </button>
 
-            <span class="brand-name">
-                OZO
-                <span class="gold-text">Gold</span>
-                <span class="diamond-text">and DiamondJewellery Mart</span>
-            </span>
+  <!-- Menu -->
+  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <ul class="navbar-nav align-items-center gap-5">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/" (click)="closeMenu()">HOME</a>
+      </li>
 
-            <span class="brand-subtitle">
-                Every shine has a story.
-            </span>
+      <li
+        class="nav-item dropdown mega-dropdown"
+        [class.show]="isCategoryOpen"
+        (mouseenter)="openCategoryMenuDesktop()"
+        (mouseleave)="closeCategoryMenuDesktop()"
+      >
+        <a
+          class="nav-link dropdown-toggle"
+          role="button"
+          tabindex="0"
+          (click)="toggleCategoryMenu($event)"
+        >
+          CATEGORIES <i class="fa fa-angle-down"></i>
+        </a>
 
-        </span>
+        <div
+          class="dropdown-menu mega-menu p-4"
+          [class.show]="isCategoryOpen"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="mega-wrapper">
+            <div class="mega-left">
+              <h6 class="mega-title">Shop By Category</h6>
 
-    </a>
-    <a class="mobile-cart-wrapper position-relative" routerLink="/cart">
-        <i class="fa fa-shopping-cart"></i>
-        <span class="cart-badge" *ngIf="cartCount > 0 ">{{ cartCount }}</span>
-    </a>
+              <ul class="mega-links">
+                <li *ngFor="let category of categories">
+                  <a
+                    [routerLink]="['/categories']"
+                    [queryParams]="{ categoryId: category._id }"
+                    (click)="closeMenu()"
+                  >
+                    {{ category.name }}
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-
-    <!-- Mobile Toggle -->
-    <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        (click)="isMenuOpen = !isMenuOpen">
-        <span class="toggler-icon top" [class.active]="isMenuOpen"></span>
-        <span class="toggler-icon middle" [class.active]="isMenuOpen"></span>
-        <span class="toggler-icon bottom" [class.active]="isMenuOpen"></span>
-    </button>
-
-    <!-- Menu -->
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav align-items-center gap-5">
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/" (click)="closeMenu()">HOME</a>
-            </li>
-
-            <li class="nav-item dropdown mega-dropdown" [class.show]="isCategoryOpen"
-                (mouseenter)="openCategoryMenuDesktop()" (mouseleave)="closeCategoryMenuDesktop()">
-
-                <a class="nav-link dropdown-toggle" role="button" tabindex="0" (click)="toggleCategoryMenu($event)">
-                    CATEGORIES <i class="fa fa-angle-down"></i>
-                </a>
-
-                <div class="dropdown-menu mega-menu p-4" [class.show]="isCategoryOpen"
-                    (click)="$event.stopPropagation()">
-                    <div class="mega-wrapper">
-                        <div class="mega-left">
-                            <h6 class="mega-title">Shop By Category</h6>
-
-                            <ul class="mega-links">
-                                <li *ngFor="let category of categories">
-                                    <a [routerLink]="['/categories']" [queryParams]="{ categoryId: category._id }"
-                                        (click)="closeMenu()">
-                                        {{ category.name }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="mega-right">
-                            <div class="row g-4">
-                                <div class="col-lg-3 col-6" *ngFor="let category of categories">
-                                    <a [routerLink]="['/categories']" [queryParams]="{ categoryId: category._id }"
-                                        class="mega-card" (click)="closeMenu()">
-                                        <img [src]="category.image" [alt]="category.name">
-                                        <div class="mega-card-content">
-                                            <h5>{{ category.name }}</h5>
-                                            <p>Explore Collection</p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+            <div class="mega-right">
+              <div class="row g-4">
+                <div class="col-lg-3 col-6" *ngFor="let category of categories">
+                  <a
+                    [routerLink]="['/categories']"
+                    [queryParams]="{ categoryId: category._id }"
+                    class="mega-card"
+                    (click)="closeMenu()"
+                  >
+                    <img [src]="category.image" [alt]="category.name" />
+                    <div class="mega-card-content">
+                      <h5>{{ category.name }}</h5>
+                      <p>Explore Collection</p>
                     </div>
+                  </a>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/schemes-page" (click)="closeMenu()">OZO SCHEMES</a>
-            </li>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/schemes-page" (click)="closeMenu()"
+          >OZO SCHEMES</a
+        >
+      </li>
 
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/about" (click)="closeMenu()">ABOUT</a>
-            </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/about" (click)="closeMenu()">ABOUT</a>
+      </li>
 
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/contact" (click)="closeMenu()">CONTACT</a>
-            </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/contact" (click)="closeMenu()"
+          >CONTACT</a
+        >
+      </li>
 
-            <!-- Cart -->
-            <li class="nav-item desk-cart icons">
-                <a class="position-relative" routerLink="/cart" (click)="closeMenu()">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill"
-                        *ngIf="cartCount > 0 ">
-                        {{ cartCount }}
-                    </span>
-                </a>
-            </li>
-            <!-- <li class="icons">
+      <!-- Cart -->
+      <li class="nav-item desk-cart icons">
+        <a class="position-relative" routerLink="/cart" (click)="closeMenu()">
+          <i class="fa fa-shopping-cart"></i>
+          <span
+            class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill"
+            *ngIf="cartCount > 0"
+          >
+            {{ cartCount }}
+          </span>
+        </a>
+      </li>
+      <!-- <li class="icons">
                 <a (click)="closeMenu()">
                     <i class="fa" [ngClass]="wishlistCount > 0? 'fa-heart text-danger': 'fa-heart-o'"
                         (click)="whishlist()">
                     </i>
                 </a>
             </li> -->
-            <li class="nav-item">
-                <div *ngIf="isLoggedIn" class="top-user mobile_user">
-                    <i class="fa fa-user-circle"></i>
-                    <span>Hi, {{ userName || profileData?.user?.name || profileData?.name || 'User' | titlecase}}</span>
+      <li class="nav-item">
+        <div *ngIf="isLoggedIn" class="top-user mobile_user">
+          <i class="fa fa-user-circle"></i>
+          <span
+            >Hi,
+            {{
+              userName || profileData?.user?.name || profileData?.name || "User"
+                | titlecase
+            }}</span
+          >
 
-                    <div class="top-user-dropdown">
+          <div class="top-user-dropdown">
+            <a routerLink="/profile" (click)="closeMenu()">
+              <i class="fa fa-user"></i>
+              My Profile
+            </a>
 
-                        <a routerLink="/profile" (click)="closeMenu()">
-                            <i class="fa fa-user"></i>
-                            My Profile
-                        </a>
+            <a routerLink="/orders" (click)="closeMenu()">
+              <i class="fa fa-shopping-bag"></i>
+              My Orders
+            </a>
 
-                        <a routerLink="/orders" (click)="closeMenu()">
-                            <i class="fa fa-shopping-bag"></i>
-                            My Orders
-                        </a>
+            <a routerLink="/whishlist" (click)="closeMenu()">
+              <i class="fa fa-heart"></i>
+              Wishlist
+            </a>
 
-                        <a routerLink="/whishlist" (click)="closeMenu()">
-                            <i class="fa fa-heart"></i>
-                            Wishlist
-                        </a>
-
-                        <a (click)="logout()" (click)="closeMenu()">
-                            <i class="fa fa-sign-out"></i>
-                            Logout
-                        </a>
-
-                    </div>
-                </div>
-            </li>
-            <!-- Login -->
-            <li *ngIf="!isLoggedIn">
-
-                <button class="auth-glass-btn" (click)="openAuthModal()">
-
-                    Login
-
-                </button>
-
-
-            </li>
-            <li>
-
-
-
-            </li>
-
-        </ul>
-    </div>
+            <a (click)="logout()" (click)="closeMenu()">
+              <i class="fa fa-sign-out"></i>
+              Logout
+            </a>
+          </div>
+        </div>
+      </li>
+      <!-- Login -->
+      <li *ngIf="!isLoggedIn">
+        <button class="auth-glass-btn" (click)="openAuthModal()">Login</button>
+      </li>
+      <li></li>
+    </ul>
+  </div>
 </nav>
 <app-user-login [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
 </app-user-login>

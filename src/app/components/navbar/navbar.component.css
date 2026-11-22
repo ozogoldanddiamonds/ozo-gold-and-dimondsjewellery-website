@@ -1672,6 +1672,9 @@
 
     }
 
+  .nav-item .mobile_user{
+        display: none;
+    }
 
 
     /* =========================================================
@@ -1721,6 +1724,7 @@
         padding: 2px 5px;
         border-radius: 50%;
     }
+  
 
     @media (max-width:560px) {
         .mobile-cart-wrapper {
@@ -1733,12 +1737,14 @@
             display: none;
         }
 
-        .mobile_user {
+       .nav-item .mobile_user{
             color: black;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             white-space: nowrap;
+            display: block;
+            left: 15%;
         }
     }
 
