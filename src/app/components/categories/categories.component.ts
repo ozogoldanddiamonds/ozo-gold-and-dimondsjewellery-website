@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -15,7 +22,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.css']
+  styleUrls: ['./categories.component.css'],
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
   categorySwiper!: Swiper;
@@ -74,11 +81,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     private loaderService: LoadingService,
     public router: Router,
     private toastr: ToastrService,
-    private cartService: CartService
-  ) { }
+    private cartService: CartService,
+  ) {}
 
   ngOnInit(): void {
-    this.routeSub = this.route.queryParams.subscribe(params => {
+    this.routeSub = this.route.queryParams.subscribe((params) => {
       this.selectedCategory = params['category'] || '';
       this.selectedSubCategory = params['subCategory'] || '';
       this.selectedSubSubCategory = params['subSubCategory'] || '';
@@ -93,12 +100,14 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
     this.getAllCategories();
 
-    this.wishlistRefreshSub = this.wishlistService.wishlistRefresh$.subscribe(refresh => {
-      if (refresh) {
-        this.loadWishlistStatus();
-        this.wishlistService.resetWishlistRefresh();
-      }
-    });
+    this.wishlistRefreshSub = this.wishlistService.wishlistRefresh$.subscribe(
+      (refresh) => {
+        if (refresh) {
+          this.loadWishlistStatus();
+          this.wishlistService.resetWishlistRefresh();
+        }
+      },
+    );
   }
 
   ngOnDestroy(): void {
@@ -118,18 +127,27 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   private sortPurities(purities: string[]): string[] {
-    return [...new Set(purities.map(value => String(value || '').trim().toUpperCase()).filter(Boolean))]
-      .sort((a, b) => {
-        const valueA = Number.parseFloat(a.replace(/[^0-9.]/g, ''));
-        const valueB = Number.parseFloat(b.replace(/[^0-9.]/g, ''));
+    return [
+      ...new Set(
+        purities
+          .map((value) =>
+            String(value || '')
+              .trim()
+              .toUpperCase(),
+          )
+          .filter(Boolean),
+      ),
+    ].sort((a, b) => {
+      const valueA = Number.parseFloat(a.replace(/[^0-9.]/g, ''));
+      const valueB = Number.parseFloat(b.replace(/[^0-9.]/g, ''));
 
-        if (Number.isNaN(valueA) && Number.isNaN(valueB)) {
-          return a.localeCompare(b);
-        }
-        if (Number.isNaN(valueA)) return 1;
-        if (Number.isNaN(valueB)) return -1;
-        return valueA - valueB;
-      });
+      if (Number.isNaN(valueA) && Number.isNaN(valueB)) {
+        return a.localeCompare(b);
+      }
+      if (Number.isNaN(valueA)) return 1;
+      if (Number.isNaN(valueB)) return -1;
+      return valueA - valueB;
+    });
   }
 
   initCategorySwiper(): void {
@@ -144,8 +162,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         320: { slidesPerView: 3.2 },
         576: { slidesPerView: 4 },
         768: { slidesPerView: 5 },
-        992: { slidesPerView: 6 }
-      }
+        992: { slidesPerView: 6 },
+      },
     });
   }
 
@@ -154,7 +172,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   getVariantPrice(variant: any): number {
-    const value = variant?.priceDetails?.finalPrice ??
+    const value =
+      variant?.priceDetails?.finalPrice ??
       variant?.calculatedPrice ??
       variant?.priceBreakup?.finalPrice ??
       0;
@@ -169,14 +188,14 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
     // First preference: Default variant with stock
     const defaultAvailable = variants.find(
-      (variant: any) => variant?.isDefault && Number(variant?.stock) > 0
+      (variant: any) => variant?.isDefault && Number(variant?.stock) > 0,
     );
 
     if (defaultAvailable) return defaultAvailable;
 
     // Second preference: Any available variant
     const availableVariant = variants.find(
-      (variant: any) => Number(variant?.stock) > 0
+      (variant: any) => Number(variant?.stock) > 0,
     );
 
     if (availableVariant) return availableVariant;
@@ -186,50 +205,50 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   mapProduct(item: any): any {
-    const variants = item?.variants || [];
+    const variants = Array.isArray(item?.variants) ? item.variants : [];
 
-    const sortedVariants = [...variants].sort((a: any, b: any) => {
-      const priceA = Number(
-        a?.priceDetails?.finalPrice ?? a?.calculatedPrice ?? 0
-      );
+    // Get only available variants
+    const availableVariants = variants.filter(
+      (variant: any) => Number(variant?.stock) > 0,
+    );
 
-      const priceB = Number(
-        b?.priceDetails?.finalPrice ?? b?.calculatedPrice ?? 0
-      );
+    // Sort available variants by price (Low to High)
+    const sortedVariants = [...availableVariants].sort(
+      (a: any, b: any) => this.getVariantPrice(a) - this.getVariantPrice(b),
+    );
 
-      return priceA - priceB;
-    });
-
-    const defaultVariant = this.getDefaultVariant(item);
-    const cheapestVariant = sortedVariants[0] || defaultVariant;
+    // Lowest priced available variant
+    const selectedVariant = sortedVariants[0] || this.getDefaultVariant(item);
 
     const totalStock = variants.reduce(
       (total: number, variant: any) =>
         total + Math.max(0, Number(variant?.stock || 0)),
-      0
+      0,
     );
 
     const inStock = totalStock > 0;
 
     return {
       ...item,
+
       image: item?.images?.[0] || 'assets/images/placeholder.png',
+
       categoryName: item?.category?.name || '',
       subCategoryName: item?.subCategory?.name || '',
-      selectedVariant: defaultVariant,
+
+      selectedVariant,
 
       totalStock,
       inStock,
 
-      displayPrice:
-        cheapestVariant?.priceDetails?.finalPrice ??
-        cheapestVariant?.calculatedPrice ??
-        0,
+      displayPrice: this.getVariantPrice(selectedVariant),
 
-      oldPrice: cheapestVariant?.priceDetails?.metalValue || 0,
-      discountPercentage: cheapestVariant?.discountPercentage || 0,
+      oldPrice: selectedVariant?.priceDetails?.metalValue || 0,
+
+      discountPercentage: selectedVariant?.discountPercentage || 0,
+
       isWishlisted: false,
-      wishlistItemId: null
+      wishlistItemId: null,
     };
   }
 
@@ -241,7 +260,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       },
       error: (err: any) => {
         console.error('Failed to load categories:', err);
-      }
+      },
     });
   }
 
@@ -262,17 +281,26 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     const query: any = {
       page: this.page,
       limit: this.limit,
-      sort: this.selectedSort || 'latest'
+      sort: this.selectedSort || 'latest',
     };
 
     if (this.selectedCategory) query.category = this.selectedCategory;
     if (this.selectedSubCategory) query.subCategory = this.selectedSubCategory;
-    if (this.selectedSubSubCategory) query.subSubCategory = this.selectedSubSubCategory;
+    if (this.selectedSubSubCategory)
+      query.subSubCategory = this.selectedSubSubCategory;
     if (this.selectedProductType) query.productType = this.selectedProductType;
-    if (this.minPrice !== '' && this.minPrice !== null && this.minPrice !== undefined) {
+    if (
+      this.minPrice !== '' &&
+      this.minPrice !== null &&
+      this.minPrice !== undefined
+    ) {
       query.minPrice = this.minPrice;
     }
-    if (this.maxPrice !== '' && this.maxPrice !== null && this.maxPrice !== undefined) {
+    if (
+      this.maxPrice !== '' &&
+      this.maxPrice !== null &&
+      this.maxPrice !== undefined
+    ) {
       query.maxPrice = this.maxPrice;
     }
 
@@ -284,19 +312,24 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         this.loaderService.hide();
 
         const rawProducts: any[] = Array.isArray(res?.data) ? res.data : [];
-        const incomingProducts = rawProducts.map(item => this.mapProduct(item));
+        const incomingProducts = rawProducts.map((item) =>
+          this.mapProduct(item),
+        );
 
         // Build category child options from the returned results. If the backend
         // returns paginated data, these options reflect the current result page.
         const subCategoryMap = new Map<string, any>();
         const subSubCategoryMap = new Map<string, any>();
 
-        rawProducts.forEach(item => {
+        rawProducts.forEach((item) => {
           if (item?.subCategory?._id) {
             subCategoryMap.set(String(item.subCategory._id), item.subCategory);
           }
           if (item?.subSubCategory?._id) {
-            subSubCategoryMap.set(String(item.subSubCategory._id), item.subSubCategory);
+            subSubCategoryMap.set(
+              String(item.subSubCategory._id),
+              item.subSubCategory,
+            );
           }
         });
 
@@ -327,9 +360,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
         this.loading = false;
         this.loaderService.hide();
-        this.errorMessage = err?.error?.message || 'Unable to load products. Please try again.';
+        this.errorMessage =
+          err?.error?.message || 'Unable to load products. Please try again.';
         console.error('Failed to load products:', err);
-      }
+      },
     });
   }
 
@@ -350,9 +384,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         productType: this.selectedProductType || null,
         minPrice: this.minPrice || null,
         maxPrice: this.maxPrice || null,
-        sort: this.selectedSort !== 'latest' ? this.selectedSort : null
+        sort: this.selectedSort !== 'latest' ? this.selectedSort : null,
       },
-      queryParamsHandling: ''
+      queryParamsHandling: '',
     });
   }
 
@@ -384,8 +418,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       'productType',
       'minPrice',
       'maxPrice',
-      'sort'
-    ].some(key => !!currentParams[key]);
+      'sort',
+    ].some((key) => !!currentParams[key]);
 
     this.selectedCategory = '';
     this.categoryId = '';
@@ -400,24 +434,26 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
     // When URL filters exist, queryParams subscription reloads all products.
     // If URL is already clear, trigger the request directly.
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        category: null,
-        subCategory: null,
-        subSubCategory: null,
-        productType: null,
-        minPrice: null,
-        maxPrice: null,
-        sort: null
-      },
-      queryParamsHandling: ''
-    }).then(() => {
-      if (!hadFilterParams) {
-        this.resetPagination();
-        this.getProducts();
-      }
-    });
+    this.router
+      .navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          category: null,
+          subCategory: null,
+          subSubCategory: null,
+          productType: null,
+          minPrice: null,
+          maxPrice: null,
+          sort: null,
+        },
+        queryParamsHandling: '',
+      })
+      .then(() => {
+        if (!hadFilterParams) {
+          this.resetPagination();
+          this.getProducts();
+        }
+      });
 
     this.closeOffcanvas('filterCanvas');
   }
@@ -461,10 +497,10 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     const userId = localStorage.getItem('userId');
 
     if (!userId || !this.products?.length) {
-      this.products = this.products.map(product => ({
+      this.products = this.products.map((product) => ({
         ...product,
         isWishlisted: false,
-        wishlistItemId: null
+        wishlistItemId: null,
       }));
       return;
     }
@@ -480,13 +516,15 @@ export class CategoriesComponent implements OnInit, OnDestroy {
           const variantId = item?.variantId?._id || item?.variantId;
 
           if (productId && variantId) {
-            this.wishlistMap[this.getWishlistKey(String(productId), String(variantId))] =
-              item?.wishlistItemId || item?._id;
+            this.wishlistMap[
+              this.getWishlistKey(String(productId), String(variantId))
+            ] = item?.wishlistItemId || item?._id;
           }
         });
 
-        this.products = this.products.map(product => {
-          const selectedVariant = product?.selectedVariant || this.getDefaultVariant(product);
+        this.products = this.products.map((product) => {
+          const selectedVariant =
+            product?.selectedVariant || this.getDefaultVariant(product);
           const variantId = this.getVariantId(selectedVariant);
           const key = this.getWishlistKey(product?._id, variantId);
 
@@ -494,7 +532,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
             ...product,
             selectedVariant,
             isWishlisted: !!this.wishlistMap[key],
-            wishlistItemId: this.wishlistMap[key] || null
+            wishlistItemId: this.wishlistMap[key] || null,
           };
         });
       },
@@ -503,13 +541,13 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         if (err?.status === 404) {
           this.wishlistId = '';
           this.wishlistMap = {};
-          this.products = this.products.map(product => ({
+          this.products = this.products.map((product) => ({
             ...product,
             isWishlisted: false,
-            wishlistItemId: null
+            wishlistItemId: null,
           }));
         }
-      }
+      },
     });
   }
 
@@ -522,10 +560,12 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const selectedVariant = item?.selectedVariant || this.getDefaultVariant(item);
-    const variantId = typeof selectedVariant === 'string'
-      ? selectedVariant
-      : this.getVariantId(selectedVariant);
+    const selectedVariant =
+      item?.selectedVariant || this.getDefaultVariant(item);
+    const variantId =
+      typeof selectedVariant === 'string'
+        ? selectedVariant
+        : this.getVariantId(selectedVariant);
 
     if (!item?._id || !variantId) {
       this.toastr.warning('Variant not found');
@@ -533,23 +573,27 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     }
 
     if (item.isWishlisted && this.wishlistId && item.wishlistItemId) {
-      this.wishlistService.removeWishlistItem(this.wishlistId, item.wishlistItemId).subscribe({
-        next: () => {
-          item.isWishlisted = false;
-          item.wishlistItemId = null;
-          this.wishlistService.refreshWishlist();
-          this.loadWishlistStatus();
-        },
-        error: (err: any) => {
-          console.error(err);
-          this.toastr.warning(err?.error?.message || 'Failed to remove wishlist');
-        }
-      });
+      this.wishlistService
+        .removeWishlistItem(this.wishlistId, item.wishlistItemId)
+        .subscribe({
+          next: () => {
+            item.isWishlisted = false;
+            item.wishlistItemId = null;
+            this.wishlistService.refreshWishlist();
+            this.loadWishlistStatus();
+          },
+          error: (err: any) => {
+            console.error(err);
+            this.toastr.warning(
+              err?.error?.message || 'Failed to remove wishlist',
+            );
+          },
+        });
     } else {
       const payload = {
         user: userId,
         product: item._id,
-        variantId
+        variantId,
       };
 
       this.wishlistService.addToWishlist(payload).subscribe({
@@ -565,9 +609,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
             item.isWishlisted = true;
             this.loadWishlistStatus();
           } else {
-            this.toastr.warning(err?.error?.message || 'Failed to add wishlist');
+            this.toastr.warning(
+              err?.error?.message || 'Failed to add wishlist',
+            );
           }
-        }
+        },
       });
     }
   }
@@ -580,7 +626,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         this.wishlistService.updateWishlistCount(res?.items?.length || 0);
       },
-      error: () => this.wishlistService.updateWishlistCount(0)
+      error: () => this.wishlistService.updateWishlistCount(0),
     });
   }
 
@@ -589,12 +635,21 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     const variants = Array.isArray(item?.variants) ? item.variants : [];
 
     this.availablePurities = this.sortPurities(
-      variants.map((variant: any) => variant?.metalPurity)
-        .filter((purity: any) => purity !== null && purity !== undefined && String(purity).trim() !== '')
+      variants
+        .map((variant: any) => variant?.metalPurity)
+        .filter(
+          (purity: any) =>
+            purity !== null &&
+            purity !== undefined &&
+            String(purity).trim() !== '',
+        ),
     );
 
-    const defaultVariant = item?.selectedVariant || this.getDefaultVariant(item);
-    this.selectedPurity = String(defaultVariant?.metalPurity || this.availablePurities[0] || '').toUpperCase();
+    const defaultVariant =
+      item?.selectedVariant || this.getDefaultVariant(item);
+    this.selectedPurity = String(
+      defaultVariant?.metalPurity || this.availablePurities[0] || '',
+    ).toUpperCase();
 
     this.filterVariantsByPurity();
     this.showVariantPopup = true;
@@ -610,25 +665,30 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       ? this.selectedProduct.variants
       : [];
 
-    this.filteredVariants = variants.filter((variant: any) =>
-      String(variant?.metalPurity || '').trim().toUpperCase() ===
-      String(this.selectedPurity || '').trim().toUpperCase()
+    this.filteredVariants = variants.filter(
+      (variant: any) =>
+        String(variant?.metalPurity || '')
+          .trim()
+          .toUpperCase() ===
+        String(this.selectedPurity || '')
+          .trim()
+          .toUpperCase(),
     );
 
     if (this.filteredVariants.length) {
-
       const availableVariant = this.filteredVariants.find(
-        (variant: any) => Number(variant?.stock) > 0
+        (variant: any) => Number(variant?.stock) > 0,
       );
 
       const currentVariant = this.filteredVariants.find(
         (variant: any) =>
           this.getVariantId(variant) === this.selectedVariantId &&
-          Number(variant?.stock) > 0
+          Number(variant?.stock) > 0,
       );
 
-      this.selectVariant(currentVariant || availableVariant || this.filteredVariants[0]);
-
+      this.selectVariant(
+        currentVariant || availableVariant || this.filteredVariants[0],
+      );
     } else {
       this.selectedVariant = null;
       this.selectedVariantId = '';
@@ -637,7 +697,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   selectPurity(purity: string): void {
-    this.selectedPurity = String(purity || '').trim().toUpperCase();
+    this.selectedPurity = String(purity || '')
+      .trim()
+      .toUpperCase();
     this.filterVariantsByPurity();
   }
 
@@ -680,7 +742,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       user: userId,
       product: this.selectedProduct._id,
       variantId: this.selectedVariantId,
-      quantity: 1
+      quantity: 1,
     };
 
     this.loading = true;
@@ -696,7 +758,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
         this.loading = false;
         console.error(err);
         this.toastr.warning(err?.error?.message || 'Failed to add cart');
-      }
+      },
     });
   }
 
@@ -727,10 +789,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     const element = document.getElementById(id);
     if (!element || typeof bootstrap === 'undefined') return;
 
-    const instance = bootstrap.Offcanvas.getInstance(element) ||
+    const instance =
+      bootstrap.Offcanvas.getInstance(element) ||
       new bootstrap.Offcanvas(element);
     instance.hide();
   }
-
-
 }

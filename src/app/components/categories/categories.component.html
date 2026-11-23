@@ -1,444 +1,534 @@
 <div class="container-fluid product-page">
-    <div class="row">
+  <div class="row">
+    <!-- ================= LEFT FILTER ================= -->
+    <div class="col-lg-2 filter-sidebar d-none d-lg-block">
+      <div class="d-grid gap-2 mt-3">
+        <button class="btn btn-outline-secondary" (click)="clearFilters()">
+          Clear Filters
+        </button>
+      </div>
+      <div class="filter-section">
+        <h6 class="filter-title">CATEGORIES</h6>
+        <label class="filter-option" *ngIf="categories?.length">
+          <input
+            type="radio"
+            name="desktopCategory"
+            [checked]="selectedCategory === ''"
+            (change)="filterByCategory('')"
+          />
+          All
+        </label>
+        <label class="filter-option" *ngFor="let category of categories">
+          <input
+            type="radio"
+            name="desktopCategory"
+            [checked]="selectedCategory === category._id"
+            (change)="filterByCategory(category._id)"
+          />
+          {{ category.name | titlecase }}
+        </label>
+      </div>
+      <div class="filter-section">
+        <h6 class="filter-title">SUB CATEGORIES</h6>
 
-        <!-- ================= LEFT FILTER ================= -->
-        <div class="col-lg-2 filter-sidebar d-none d-lg-block">
-            <div class="d-grid gap-2 mt-3">
-                <button class="btn btn-outline-secondary" (click)="clearFilters()">Clear Filters</button>
-            </div>
-            <div class="filter-section">
-                <h6 class="filter-title">CATEGORIES</h6>
-                <label class="filter-option" *ngIf="categories?.length">
-                    <input type="radio" name="desktopCategory" [checked]="selectedCategory === ''"
-                        (change)="filterByCategory('')">
-                    All
-                </label>
-                <label class="filter-option" *ngFor="let category of categories">
-                    <input type="radio" name="desktopCategory" [checked]="selectedCategory === category._id"
-                        (change)="filterByCategory(category._id)">
-                    {{ category.name |titlecase}}
-                </label>
+        <label class="filter-option">
+          <input
+            type="radio"
+            name="subCategory"
+            [checked]="selectedSubCategory === ''"
+            (change)="filterBySubCategory('')"
+          />
 
+          All
+        </label>
 
-            </div>
-            <div class="filter-section">
+        <label class="filter-option" *ngFor="let sub of subCategories">
+          <input
+            type="radio"
+            name="subCategory"
+            [checked]="selectedSubCategory === sub._id"
+            (change)="filterBySubCategory(sub._id)"
+          />
 
-                <h6 class="filter-title">
-                    SUB CATEGORIES
-                </h6>
+          {{ sub.name | titlecase }}
+        </label>
+      </div>
+      <div class="filter-section">
+        <h6 class="filter-title">COLLECTIONS</h6>
 
+        <label class="filter-option">
+          <input
+            type="radio"
+            name="subSubCategory"
+            [checked]="selectedSubSubCategory === ''"
+            (change)="filterBySubSubCategory('')"
+          />
 
-                <label class="filter-option">
+          All
+        </label>
 
-                    <input type="radio" name="subCategory" [checked]="selectedSubCategory === ''"
-                        (change)="filterBySubCategory('')">
+        <label class="filter-option" *ngFor="let subsub of subSubCategories">
+          <input
+            type="radio"
+            name="subSubCategory"
+            [checked]="selectedSubSubCategory === subsub._id"
+            (change)="filterBySubSubCategory(subsub._id)"
+          />
 
-                    All
+          {{ subsub.name | titlecase }}
+        </label>
+      </div>
+      <div class="filter-section">
+        <h6 class="filter-title">PRICE</h6>
 
-                </label>
-
-
-                <label class="filter-option" *ngFor="let sub of subCategories">
-
-                    <input type="radio" name="subCategory" [checked]="selectedSubCategory === sub._id"
-                        (change)="filterBySubCategory(sub._id)">
-
-                    {{ sub.name | titlecase }}
-
-                </label>
-
-            </div>
-            <div class="filter-section">
-
-                <h6 class="filter-title">
-                    COLLECTIONS
-                </h6>
-
-
-                <label class="filter-option">
-
-                    <input type="radio" name="subSubCategory" [checked]="selectedSubSubCategory === ''"
-                        (change)="filterBySubSubCategory('')">
-
-                    All
-
-                </label>
-
-
-                <label class="filter-option" *ngFor="let subsub of subSubCategories">
-
-                    <input type="radio" name="subSubCategory" [checked]="selectedSubSubCategory === subsub._id"
-                        (change)="filterBySubSubCategory(subsub._id)">
-
-                    {{ subsub.name | titlecase }}
-
-                </label>
-
-            </div>
-            <div class="filter-section">
-                <h6 class="filter-title">PRICE</h6>
-
-                <div class="mb-2">
-                    <input type="number" class="form-control mb-2" placeholder="Min Price" [(ngModel)]="minPrice">
-                    <input type="number" class="form-control" placeholder="Max Price" [(ngModel)]="maxPrice">
-                </div>
-
-                <div class="price-text">
-                    ₹ {{ minPrice || 0 }} - ₹ {{ maxPrice || 'Any' }}
-                </div>
-            </div>
-
-            <div class="filter-section">
-                <h6 class="filter-title">SORT BY</h6>
-
-                <select class="form-select" [(ngModel)]="selectedSort" (change)="onSortChange()">
-                    <option value="latest">Latest</option>
-                    <option value="lowToHigh">Price Low to High</option>
-                    <option value="highToLow">Price High to Low</option>
-                </select>
-            </div>
-
-            <div class="d-grid gap-2 mt-3">
-                <button class="btn btn-dark" (click)="applyFilters()">Apply Filters</button>
-            </div>
-
+        <div class="mb-2">
+          <input
+            type="number"
+            class="form-control mb-2"
+            placeholder="Min Price"
+            [(ngModel)]="minPrice"
+          />
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Max Price"
+            [(ngModel)]="maxPrice"
+          />
         </div>
 
-        <!-- ================= RIGHT SIDE ================= -->
-        <div class="col-lg-10">
-            <!-- CATEGORY SWIPER -->
-            <div class="category-swiper-wrapper" *ngIf="categories?.length">
-
-                <div class="swiper categorySwiper">
-
-                    <div class="swiper-wrapper">
-
-
-                        <div class="swiper-slide" *ngFor="let category of categories">
-
-                            <div class="category-card" [class.active]="selectedCategory === category._id"
-                                (click)="filterByCategory(category._id)">
-
-                                <img [src]="category.image" [alt]="category.name">
-
-                                <span>
-                                    {{ category.name | titlecase}}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-            <!-- TOP BAR -->
-            <div class="top-bar">
-                <div>
-                    <h5 class="page-title">
-                        Jewellery Collection
-                    </h5>
-
-                    <span class="product-count">
-                        {{ products.length }} Items
-                    </span>
-                </div>
-
-                <!-- Desktop -->
-                <div class="sort-box d-none d-lg-block">
-                    <select class="form-select" [(ngModel)]="selectedSort" (change)="onSortChange()">
-
-                        <option value="latest">Sort by : Latest</option>
-                        <option value="lowToHigh">Price Low to High</option>
-                        <option value="highToLow">Price High To Low</option>
-
-                    </select>
-                </div>
-
-                <!-- Mobile -->
-                <button class="mobile-clear-btn d-lg-none" (click)="clearFilters()">
-
-                    Clear
-
-                </button>
-            </div>
-
-            <!-- LOADER -->
-            <div class="text-center py-5" *ngIf="loading && page === 1">
-                <p>Loading products...</p>
-            </div>
-
-            <!-- EMPTY -->
-            <div class="text-center py-5" *ngIf="!loading && !products.length">
-                <p>{{ errorMessage || 'No products found' }}</p>
-            </div>
-
-            <!-- PRODUCTS -->
-            <div class="row g-4" *ngIf="products?.length">
-
-                <div class="col-lg-3 col-md-4 col-sm-6 col-6" *ngFor="let item of products">
-                    <div class="product-card" [class.out-of-stock-card]="!item.inStock">
-                        <div class="product-img">
-
-                            <img [src]="item.image" [alt]="item.name">
-
-                            <!-- Out of Stock Overlay -->
-                            <div class="out-of-stock-overlay" *ngIf="!item.inStock">
-                                <span>OUT OF STOCK</span>
-                            </div>
-
-                            <!-- Wishlist -->
-                            <div class="wishlist" *ngIf="item.inStock"
-                                (click)="toggleWishlist(item); $event.stopPropagation()">
-                                <i class="fa" [ngClass]="item.isWishlisted ? 'fa-heart' : 'fa-heart-o'"></i>
-                            </div>
-
-                            <!-- Hover Actions -->
-                            <div class="hover-icons" *ngIf="item.inStock">
-                                <i class="fa fa-shopping-cart" title="Add to Cart"
-                                    (click)="openVariantPopup(item); $event.stopPropagation()"></i>
-
-                                <i class="fa fa-eye" title="View Product"
-                                    (click)="viewProduct(item._id); $event.stopPropagation()"></i>
-                            </div>
-
-                            <!-- Product Image Click -->
-                            <div class="product-overlay" *ngIf="item.inStock" (click)="viewProduct(item._id)"></div>
-
-                        </div>
-
-                        <div class="product-info" (click)="item.inStock && viewProduct(item._id)">
-                            <h6>{{ item.name | titlecase }}</h6>
-
-                            <p class="category">
-                                {{ item.categoryName || 'Premium Jewellery' | titlecase }}
-                            </p>
-
-                            <div class="price-section">
-                                <span class="price">
-                                    {{ item.displayPrice | currency:'INR':'symbol':'1.0-0' }}
-                                </span>
-
-                                <span class="old-price" *ngIf="item.oldPrice">
-                                    {{ item.oldPrice | currency:'INR':'symbol':'1.0-0' }}
-                                </span>
-
-                                <span class="discount" *ngIf="item.discountPercentage > 0">
-                                    ({{ item.discountPercentage }}% OFF)
-                                </span>
-                            </div>
-
-                            <div class="stock-section">
-                                <span *ngIf="item.inStock" class="stock-available">
-                                    <i class="fa fa-check-circle"></i>
-                                    In Stock ({{ item.totalStock }})
-                                </span>
-
-                                <span *ngIf="!item.inStock" class="stock-unavailable">
-                                    <i class="fa fa-times-circle"></i>
-                                    Out of Stock
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <!-- LOAD MORE -->
-            <div class="text-center my-4" *ngIf="hasMoreData && products.length">
-                <button class="btn btn-dark" (click)="loadMoreProducts()" [disabled]="loading">
-                    {{ loading ? 'Loading...' : 'Load More' }}
-                </button>
-            </div>
-
+        <div class="price-text">
+          ₹ {{ minPrice || 0 }} - ₹ {{ maxPrice || "Any" }}
         </div>
+      </div>
+
+      <div class="filter-section">
+        <h6 class="filter-title">SORT BY</h6>
+
+        <select
+          class="form-select"
+          [(ngModel)]="selectedSort"
+          (change)="onSortChange()"
+        >
+          <option value="latest">Latest</option>
+          <option value="lowToHigh">Price Low to High</option>
+          <option value="highToLow">Price High to Low</option>
+        </select>
+      </div>
+
+      <div class="d-grid gap-2 mt-3">
+        <button class="btn btn-dark" (click)="applyFilters()">
+          Apply Filters
+        </button>
+      </div>
     </div>
+
+    <!-- ================= RIGHT SIDE ================= -->
+    <div class="col-lg-10">
+      <!-- CATEGORY SWIPER -->
+      <div class="category-swiper-wrapper" *ngIf="categories?.length">
+        <div class="swiper categorySwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" *ngFor="let category of categories">
+              <div
+                class="category-card"
+                [class.active]="selectedCategory === category._id"
+                (click)="filterByCategory(category._id)"
+              >
+                <img [src]="category.image" [alt]="category.name" />
+
+                <span>
+                  {{ category.name | titlecase }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- TOP BAR -->
+      <div class="top-bar">
+        <div>
+          <h5 class="page-title">Jewellery Collection</h5>
+
+          <span class="product-count"> {{ products.length }} Items </span>
+        </div>
+
+        <!-- Desktop -->
+        <div class="sort-box d-none d-lg-block">
+          <select
+            class="form-select"
+            [(ngModel)]="selectedSort"
+            (change)="onSortChange()"
+          >
+            <option value="latest">Sort by : Latest</option>
+            <option value="lowToHigh">Price Low to High</option>
+            <option value="highToLow">Price High To Low</option>
+          </select>
+        </div>
+
+        <!-- Mobile -->
+        <button class="mobile-clear-btn d-lg-none" (click)="clearFilters()">
+          Clear
+        </button>
+      </div>
+
+      <!-- LOADER -->
+      <div class="text-center py-5" *ngIf="loading && page === 1">
+        <p>Loading products...</p>
+      </div>
+
+      <!-- EMPTY -->
+      <div class="text-center py-5" *ngIf="!loading && !products.length">
+        <p>{{ errorMessage || "No products found" }}</p>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="row g-4" *ngIf="products?.length">
+        <div
+          class="col-lg-3 col-md-4 col-sm-6 col-6"
+          *ngFor="let item of products"
+        >
+          <div class="product-card" [class.out-of-stock-card]="!item.inStock">
+            <div class="product-img">
+              <img [src]="item.image" [alt]="item.name" />
+
+              <!-- Out of Stock Overlay -->
+              <div class="out-of-stock-overlay" *ngIf="!item.inStock">
+                <span>OUT OF STOCK</span>
+              </div>
+
+              <!-- Wishlist -->
+              <div
+                class="wishlist"
+                *ngIf="item.inStock"
+                (click)="toggleWishlist(item); $event.stopPropagation()"
+              >
+                <i
+                  class="fa"
+                  [ngClass]="item.isWishlisted ? 'fa-heart' : 'fa-heart-o'"
+                ></i>
+              </div>
+
+              <!-- Hover Actions -->
+              <div class="hover-icons" *ngIf="item.inStock">
+                <i
+                  class="fa fa-shopping-cart"
+                  title="Add to Cart"
+                  (click)="openVariantPopup(item); $event.stopPropagation()"
+                ></i>
+
+                <i
+                  class="fa fa-eye"
+                  title="View Product"
+                  (click)="viewProduct(item._id); $event.stopPropagation()"
+                ></i>
+              </div>
+
+              <!-- Product Image Click -->
+              <div
+                class="product-overlay"
+                *ngIf="item.inStock"
+                (click)="viewProduct(item._id)"
+              ></div>
+            </div>
+
+            <div
+              class="product-info"
+              (click)="item.inStock && viewProduct(item._id)"
+            >
+              <h6>{{ item.name | titlecase }}</h6>
+
+              <p class="category">
+                {{ item.categoryName || "Premium Jewellery" | titlecase }}
+              </p>
+
+              <div class="price-section">
+                <span class="price">
+                  {{ item.displayPrice | currency: "INR" : "symbol" : "1.2-2" }}
+                </span>
+
+                <span class="old-price" *ngIf="item.oldPrice">
+                  {{ item.oldPrice | currency: "INR" : "symbol" : "1.0-0" }}
+                </span>
+
+                <span class="discount" *ngIf="item.discountPercentage > 0">
+                  ({{ item.discountPercentage }}% OFF)
+                </span>
+              </div>
+
+              <div class="stock-section">
+                <span *ngIf="item.inStock" class="stock-available">
+                  <i class="fa fa-check-circle"></i>
+                  In Stock ({{ item.totalStock }})
+                </span>
+
+                <span *ngIf="!item.inStock" class="stock-unavailable">
+                  <i class="fa fa-times-circle"></i>
+                  Out of Stock
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOAD MORE -->
+      <div class="text-center my-4" *ngIf="hasMoreData && products.length">
+        <button
+          class="btn btn-dark"
+          (click)="loadMoreProducts()"
+          [disabled]="loading"
+        >
+          {{ loading ? "Loading..." : "Load More" }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- MOBILE BOTTOM BAR -->
 <div class="mobile-bottom-bar d-lg-none">
+  <div
+    class="bottom-tab"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#filterCanvas"
+  >
+    <i class="fa fa-filter"></i>
+    Filter
+  </div>
 
-    <div class="bottom-tab" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
-        <i class="fa fa-filter"></i>
-        Filter
-    </div>
-
-    <div class="bottom-tab" data-bs-toggle="offcanvas" data-bs-target="#sortCanvas">
-        <i class="fa fa-sort"></i>
-        Sort
-    </div>
-
+  <div
+    class="bottom-tab"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#sortCanvas"
+  >
+    <i class="fa fa-sort"></i>
+    Sort
+  </div>
 </div>
 
 <!-- FILTER OFFCANVAS -->
 <div class="offcanvas offcanvas-bottom" tabindex="-1" id="filterCanvas">
-    <div class="offcanvas-header">
-        <h5>Filters</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  <div class="offcanvas-header">
+    <h5>Filters</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <div class="mobile-filter-section">
+      <h6>Categories</h6>
+      <label *ngIf="categories?.length">
+        <input
+          type="radio"
+          name="mobileCategory"
+          [checked]="selectedCategory === ''"
+          (change)="filterByCategory('')"
+        />
+        All
+      </label>
+      <label *ngFor="let category of categories">
+        <input
+          type="radio"
+          name="mobileCategory"
+          [checked]="selectedCategory === category._id"
+          (change)="filterByCategory(category._id)"
+        />
+        {{ category.name | titlecase }}
+      </label>
     </div>
 
-    <div class="offcanvas-body">
+    <div class="mobile-filter-section">
+      <h6>Price Range</h6>
 
-        <div class="mobile-filter-section">
-            <h6>Categories</h6>
-            <label *ngIf="categories?.length">
-                <input type="radio" name="mobileCategory" [checked]="selectedCategory === ''"
-                    (change)="filterByCategory('')">
-                All
-            </label>
-            <label *ngFor="let category of categories">
-                <input type="radio" name="mobileCategory" [checked]="selectedCategory === category._id"
-                    (change)="filterByCategory(category._id)">
-                {{ category.name | titlecase}}
-            </label>
+      <input
+        type="number"
+        class="form-control mb-2"
+        placeholder="Min Price"
+        [(ngModel)]="minPrice"
+      />
 
-
-        </div>
-
-        <div class="mobile-filter-section">
-            <h6>Price Range</h6>
-
-            <input type="number" class="form-control mb-2" placeholder="Min Price" [(ngModel)]="minPrice">
-
-            <input type="number" class="form-control" placeholder="Max Price" [(ngModel)]="maxPrice">
-        </div>
-
-        <div class="mobile-filter-section">
-            <h6>Jewellery Type</h6>
-
-            <select class="form-select" [(ngModel)]="selectedProductType">
-                <option value="">All</option>
-                <option value="gold">Gold</option>
-                <option value="diamond">Diamond</option>
-                <option value="silver">Silver</option>
-            </select>
-        </div>
-
-        <button class="btn apply-btn" (click)="applyFilters()">
-            Apply Filters
-        </button>
-
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Max Price"
+        [(ngModel)]="maxPrice"
+      />
     </div>
+
+    <div class="mobile-filter-section">
+      <h6>Jewellery Type</h6>
+
+      <select class="form-select" [(ngModel)]="selectedProductType">
+        <option value="">All</option>
+        <option value="gold">Gold</option>
+        <option value="diamond">Diamond</option>
+        <option value="silver">Silver</option>
+      </select>
+    </div>
+
+    <button class="btn apply-btn" (click)="applyFilters()">
+      Apply Filters
+    </button>
+  </div>
 </div>
 
 <!-- SORT OFFCANVAS -->
 <div class="offcanvas offcanvas-bottom" tabindex="-1" id="sortCanvas">
-    <div class="offcanvas-header">
-        <h5>Sort By</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
+  <div class="offcanvas-header">
+    <h5>Sort By</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+    ></button>
+  </div>
 
-    <div class="offcanvas-body">
-        <div class="sort-option" (click)="selectSort('latest')">Latest</div>
-        <div class="sort-option" (click)="selectSort('lowToHigh')">Price Low To High</div>
-        <div class="sort-option" (click)="selectSort('highToLow')">Price High To Low</div>
+  <div class="offcanvas-body">
+    <div class="sort-option" (click)="selectSort('latest')">Latest</div>
+    <div class="sort-option" (click)="selectSort('lowToHigh')">
+      Price Low To High
     </div>
+    <div class="sort-option" (click)="selectSort('highToLow')">
+      Price High To Low
+    </div>
+  </div>
 </div>
 
 <!-- VARIANT POPUP -->
-<div class="variant-popup-backdrop" *ngIf="showVariantPopup" (click)="closeVariantPopup()"></div>
+<div
+  class="variant-popup-backdrop"
+  *ngIf="showVariantPopup"
+  (click)="closeVariantPopup()"
+></div>
 
 <!-- Backdrop -->
-<div class="variant-popup-backdrop" *ngIf="showVariantPopup" (click)="closeVariantPopup()"></div>
+<div
+  class="variant-popup-backdrop"
+  *ngIf="showVariantPopup"
+  (click)="closeVariantPopup()"
+></div>
 
 <!-- Popup -->
 <div class="variant-popup" *ngIf="showVariantPopup">
-    <div class="variant-popup-shell" *ngIf="selectedProduct">
+  <div class="variant-popup-shell" *ngIf="selectedProduct">
+    <!-- Header -->
+    <div class="variant-popup-header">
+      <div class="popup-title-wrap">
+        <span class="popup-kicker">Choose Variant</span>
+        <h5>{{ selectedProduct?.name | titlecase }}</h5>
+      </div>
 
-        <!-- Header -->
-        <div class="variant-popup-header">
-            <div class="popup-title-wrap">
-                <span class="popup-kicker">Choose Variant</span>
-                <h5>{{ selectedProduct?.name | titlecase}}</h5>
-            </div>
-
-            <button type="button" class="popup-close" aria-label="Close popup" (click)="closeVariantPopup()">
-                <span>&times;</span>
-            </button>
-        </div>
-
-        <!-- Body -->
-        <div class="variant-popup-body">
-            <div class="price-panel">
-                <div>
-                    <p class="price-label mb-1">Selected Price</p>
-                    <h4 class="final-price mb-0">
-                        ₹{{ selectedVariant?.priceDetails?.finalPrice | number:'1.0-0' }}
-                    </h4>
-                </div>
-
-                <div class="price-badge">
-                    Best Match
-                </div>
-            </div>
-
-            <!-- Purity -->
-            <div class="option-section" *ngIf="availablePurities?.length">
-                <label class="section-label">Purity</label>
-
-                <div class="purity-list">
-                    <button type="button" *ngFor="let purity of availablePurities" class="purity-btn"
-                        [class.active]="selectedPurity === purity" (click)="selectPurity(purity)">
-                        {{ purity }}
-                    </button>
-                </div>
-            </div>
-
-            <!-- Variants -->
-            <div class="option-section">
-                <label class="section-label">Available Sizes</label>
-
-                <div class="variant-list" *ngIf="selectedProduct?.variants?.length; else noVariants">
-                    <button type="button" class="variant-btn" *ngFor="let variant of filteredVariants"
-                        [class.active]="selectedVariantId === getVariantId(variant)"
-                        [class.out-of-stock]="variant.stock <= 0" [disabled]="variant.stock <= 0"
-                        (click)="selectVariant(variant)">
-
-                        <div class="variant-top">
-                            <span class="variant-size">{{ variant?.size || 'Standard Variant' }}</span>
-                            <span class="variant-check" *ngIf="selectedVariantId === getVariantId(variant)">✓</span>
-                        </div>
-
-                        <div class="variant-price">
-                            {{ variant?.priceDetails?.finalPrice || 0 | currency:'INR':'symbol':'1.0-0' }}
-                        </div>
-
-                        <div class="variant-meta" [class.text-success]="variant.stock > 0"
-                            [class.text-danger]="variant.stock <= 0">
-
-                            <span *ngIf="variant.stock > 0">
-                                <i class="fa fa-check-circle"></i>
-                                {{ variant.stock }} Available
-                            </span>
-
-                            <span *ngIf="variant.stock <= 0">
-                                <i class="fa fa-times-circle"></i>
-                                Out of Stock
-                            </span>
-
-                        </div>
-                    </button>
-                </div>
-
-                <ng-template #noVariants>
-                    <div class="no-variants-box">
-                        <p class="mb-0">No variants available for this product.</p>
-                    </div>
-                </ng-template>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="variant-popup-footer">
-            <button class="btn-add-cart" (click)="confirmAddToCart()">
-                Add To Cart
-            </button>
-        </div>
+      <button
+        type="button"
+        class="popup-close"
+        aria-label="Close popup"
+        (click)="closeVariantPopup()"
+      >
+        <span>&times;</span>
+      </button>
     </div>
+
+    <!-- Body -->
+    <div class="variant-popup-body">
+      <div class="price-panel">
+        <div>
+          <p class="price-label mb-1">Selected Price</p>
+          <h4 class="final-price mb-0">
+            ₹{{ selectedVariant?.priceDetails?.finalPrice | number: "1.0-0" }}
+          </h4>
+        </div>
+
+        <div class="price-badge">Best Match</div>
+      </div>
+
+      <!-- Purity -->
+      <div class="option-section" *ngIf="availablePurities?.length">
+        <label class="section-label">Purity</label>
+
+        <div class="purity-list">
+          <button
+            type="button"
+            *ngFor="let purity of availablePurities"
+            class="purity-btn"
+            [class.active]="selectedPurity === purity"
+            (click)="selectPurity(purity)"
+          >
+            {{ purity }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Variants -->
+      <div class="option-section">
+        <label class="section-label">Available Sizes</label>
+
+        <div
+          class="variant-list"
+          *ngIf="selectedProduct?.variants?.length; else noVariants"
+        >
+          <button
+            type="button"
+            class="variant-btn"
+            *ngFor="let variant of filteredVariants"
+            [class.active]="selectedVariantId === getVariantId(variant)"
+            [class.out-of-stock]="variant.stock <= 0"
+            [disabled]="variant.stock <= 0"
+            (click)="selectVariant(variant)"
+          >
+            <div class="variant-top">
+              <span class="variant-size">{{
+                variant?.size || "Standard Variant"
+              }}</span>
+              <span
+                class="variant-check"
+                *ngIf="selectedVariantId === getVariantId(variant)"
+                >✓</span
+              >
+            </div>
+
+            <div class="variant-price">
+              {{
+                variant?.priceDetails?.finalPrice || 0
+                  | currency: "INR" : "symbol" : "1.0-0"
+              }}
+            </div>
+
+            <div
+              class="variant-meta"
+              [class.text-success]="variant.stock > 0"
+              [class.text-danger]="variant.stock <= 0"
+            >
+              <span *ngIf="variant.stock > 0">
+                <i class="fa fa-check-circle"></i>
+                {{ variant.stock }} Available
+              </span>
+
+              <span *ngIf="variant.stock <= 0">
+                <i class="fa fa-times-circle"></i>
+                Out of Stock
+              </span>
+            </div>
+          </button>
+        </div>
+
+        <ng-template #noVariants>
+          <div class="no-variants-box">
+            <p class="mb-0">No variants available for this product.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="variant-popup-footer">
+      <button class="btn-add-cart" (click)="confirmAddToCart()">
+        Add To Cart
+      </button>
+    </div>
+  </div>
 </div>
 <app-user-login [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
 </app-user-login>
