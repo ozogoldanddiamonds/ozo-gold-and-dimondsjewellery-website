@@ -2654,4 +2654,148 @@
     opacity: 0.5;
     cursor: not-allowed;
     text-decoration: line-through;
+}/* ================= STONE DETAILS ================= */
+
+.stone-details-section {
+  margin: 16px 0;
+  padding: 14px;
+  background: #fffdf9;
+  border: 1px solid #eee4d2;
+  border-radius: 10px;
+}
+
+.stone-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee6d9;
+  color: #987323;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.stone-section-heading i {
+  font-size: 17px;
+  color: #b18a3d;
+}
+
+/* Individual Stone Card */
+
+.stone-detail-card {
+  padding: 14px;
+  margin-bottom: 12px;
+  background: #ffffff;
+  border: 1px solid #eee7db;
+  border-radius: 9px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stone-detail-card:last-child {
+  margin-bottom: 0;
+}
+
+.stone-detail-card:hover {
+  border-color: #d8c18e;
+  box-shadow: 0 3px 12px rgba(125, 94, 32, 0.07);
+}
+
+/* Stone Header */
+
+.stone-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0ebe2;
+}
+
+.stone-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stone-title h6 {
+  margin: 0;
+  color: #292929;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.stone-title span {
+  color: #888;
+  font-size: 11px;
+}
+
+.stone-detail-header > strong {
+  color: #987323;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Stone Information Grid */
+
+.stone-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+  padding-top: 14px;
+}
+
+.stone-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.stone-detail-item span {
+  color: #888;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.stone-detail-item strong {
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 576px) {
+  .stone-details-section {
+    padding: 11px;
+    margin: 13px 0;
+  }
+
+  .stone-section-heading {
+    font-size: 14px;
+  }
+
+  .stone-detail-card {
+    padding: 12px;
+  }
+
+  .stone-detail-grid {
+    gap: 12px;
+  }
+
+  .stone-detail-item span {
+    font-size: 10px;
+  }
+
+  .stone-detail-item strong {
+    font-size: 12px;
+  }
+
+  .stone-detail-header > strong {
+    font-size: 12px;
+  }
 }

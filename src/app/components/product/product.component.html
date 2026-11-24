@@ -120,25 +120,73 @@
           </div>
 
           <!-- Individual Stones -->
-          <ng-container *ngFor="let stone of breakup.stones">
-            <div class="price-breakup-row" *ngIf="stone.stoneValue > 0">
-              <span>
-                {{ stone.stoneType | titlecase }}
-
-                <small class="stone-info">
-                  ({{ stone.stoneCategory | titlecase }},
-                  {{ stone.quality | uppercase }}, {{ stone.unit | uppercase }})
-                </small>
-              </span>
-
-              <span class="price-value">
-                {{
-                  stone.stoneValue
-                    | currency: "INR" : "symbol" : "1.0-2" : "en-IN"
-                }}
-              </span>
+          <!-- Individual Stone Details -->
+          <div
+            class="stone-details-section"
+            *ngIf="breakup.stones && breakup.stones.length > 0"
+          >
+            <div class="stone-section-heading">
+              <i class="bi bi-gem"></i>
+              <span>Stone Details</span>
             </div>
-          </ng-container>
+
+            <div class="stone-detail-card" *ngFor="let stone of breakup.stones">
+              <!-- Stone Header -->
+              <div class="stone-detail-header">
+                <div class="stone-title">
+                  <h6>{{ stone.stoneType | titlecase }}</h6>
+                  <span>{{ stone.stoneCategory | titlecase }}</span>
+                </div>
+
+                <strong>
+                  {{
+                    stone.stoneValue
+                      | currency: "INR" : "symbol" : "1.0-2" : "en-IN"
+                  }}
+                </strong>
+              </div>
+
+              <!-- Stone Information -->
+              <div class="stone-detail-grid">
+                <div class="stone-detail-item">
+                  <span>Stone Type</span>
+                  <strong>{{ stone.stoneType | titlecase }}</strong>
+                </div>
+
+                <div class="stone-detail-item">
+                  <span>Category</span>
+                  <strong>{{ stone.stoneCategory | titlecase }}</strong>
+                </div>
+
+                <div class="stone-detail-item">
+                  <span>Quality</span>
+                  <strong>{{ stone.quality | uppercase }}</strong>
+                </div>
+
+                <div class="stone-detail-item">
+                  <span>Total Weight</span>
+                  <strong>
+                    {{ stone.totalWeight }} {{ stone.unit | uppercase }}
+                  </strong>
+                </div>
+
+                <div class="stone-detail-item">
+                  <span>Quantity</span>
+                  <strong>{{ stone.quantity }} Pieces</strong>
+                </div>
+
+                <div class="stone-detail-item">
+                  <span>Stone Value</span>
+                  <strong>
+                    {{
+                      stone.stoneValue
+                        | currency: "INR" : "symbol" : "1.0-2" : "en-IN"
+                    }}
+                  </strong>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Fallback: Aggregate Stone Value -->
           <div
