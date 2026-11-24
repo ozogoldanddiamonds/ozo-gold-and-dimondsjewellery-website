@@ -25,6 +25,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { CartCheckoutSuccessComponent } from './cart-checkout-success/cart-checkout-success.component';
 import { CartCheckoutPaymentFaileComponent } from './cart-checkout-payment-faile/cart-checkout-payment-faile.component';
 import { DeliveryTrackingComponent } from './delivery-tracking/delivery-tracking.component';
+import { SchemeDetailsComponent } from './scheme-details/scheme-details.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -43,20 +44,21 @@ const routes: Routes = [
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'terms-and-conditions', component: TermsAndConditionsComponent },
   { path: 'schemes-page', component: UserSchemesPageComponent },
+  { path: 'schemes-details', component: SchemeDetailsComponent },
   { path: 'scheme-payment-success', component: SchemePaymentSuccessComponent },
   { path: 'scheme-payment-failed', component: SchemePaymentFailedComponent },
   { path: 'scheme-payment/:id', component: SchemePaymentDetailsComponent },
   { path: 'address', component: UserAddressComponent },
   { path: 'orders', component: OrdersComponent },
-  { path: "custom-design", component: CustomDesignComponent },
-  { path: "help-faq", component: HelpFaqComponent },
+  { path: 'custom-design', component: CustomDesignComponent },
+  { path: 'help-faq', component: HelpFaqComponent },
   { path: 'payment-success', component: CartCheckoutSuccessComponent },
   { path: 'payment-failure', component: CartCheckoutPaymentFaileComponent },
-  { path: 'track-order', component: DeliveryTrackingComponent }
+  { path: 'track-order', component: DeliveryTrackingComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

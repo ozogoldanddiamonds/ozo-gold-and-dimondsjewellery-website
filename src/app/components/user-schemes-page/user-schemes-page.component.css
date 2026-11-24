@@ -453,3 +453,51 @@
     margin-right: 8px;
 
 }
+.ozo-scheme-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 13px 26px;
+  background: linear-gradient(135deg, #d9b568, #a77b32);
+  color: #fff !important;
+  border: 1px solid #c49a45;
+  border-radius: 4px;
+  text-decoration: none !important;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  transition: all .35s ease;
+  box-shadow: 0 5px 15px rgba(167, 123, 50, .18);
+  margin-bottom: 30px;
+}
+
+.ozo-scheme-btn .btn-icon {
+  font-size: 18px;
+  color: #fff4d6;
+}
+
+.ozo-scheme-btn .btn-arrow {
+  font-size: 20px;
+  transition: transform .3s ease;
+}
+
+.ozo-scheme-btn:hover {
+  background: linear-gradient(135deg, #292016, #46351e);
+  border-color: #c49a45;
+  color: #f3d58e !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .18);
+}
+
+.ozo-scheme-btn:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+@media (max-width: 576px) {
+  .ozo-scheme-btn {
+    padding: 12px 20px;
+    font-size: 13px;
+    gap: 9px;
+  }
+}

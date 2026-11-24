@@ -1,202 +1,158 @@
 <section class="scheme-section">
-
-    <div class="container">
-
-        <!-- Section Header -->
-        <div class="section-header text-center">
-
-            <h2>Jewellery Saving Schemes</h2>
-
-            <p>
-                Save every month and own your dream jewellery with OZO.
-            </p>
-
-        </div>
-
-        <!-- Search -->
-        <div class="row justify-content-center mb-5">
-
-            <div class="col-lg-5 col-md-7">
-
-                <div class="search-box">
-
-                    <i class="fa fa-search"></i>
-
-                    <input type="text" class="form-control" placeholder="Search Scheme..." [(ngModel)]="search"
-                        (input)="searchScheme()">
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Schemes -->
-        <div class="row g-4">
-
-            <div class="col-lg-4 col-md-6" *ngFor="let item of filteredSchemes">
-
-                <div class="scheme-card">
-
-                    <!-- Popular Badge -->
-                    <div class="popular-badge" *ngIf="item.isPopular">
-                        MOST POPULAR
-                    </div>
-
-                    <!-- Scheme Icon -->
-                    <div class="scheme-icon">
-
-                        <img src="../../../assets/images/diamond_png.png" alt="Diamond icon">
-
-                    </div>
-
-                    <!-- Scheme Name -->
-                    <h3>
-                        {{ item.name | titlecase }}
-                    </h3>
-
-                    <!-- Monthly Installment Highlight -->
-                    <div class="monthly-highlight">
-
-                        <span>Monthly Installment</span>
-
-                        <h1>
-                            ₹ {{ item.monthlyAmount | number:'1.0-0' }}
-                        </h1>
-
-                        <p>Pay every month</p>
-
-                    </div>
-
-                    <!-- Description -->
-                    <p class="scheme-desc">
-                        {{ item.description | titlecase }}
-                    </p>
-
-                    <!-- Scheme Information -->
-                    <div class="scheme-info">
-
-                        <div class="info-row">
-
-                            <span>Monthly Payment</span>
-
-                            <strong>
-                                ₹ {{ item.monthlyAmount | number:'1.0-0' }}
-                            </strong>
-
-                        </div>
-
-                        <div class="info-row">
-
-                            <span>Duration</span>
-
-                            <strong>
-                                {{ item.durationMonths }} Months
-                            </strong>
-
-                        </div>
-
-                        <div class="info-row">
-
-                            <span>You Pay</span>
-
-                            <strong>
-                                {{ item.userPayMonths }} Months
-                            </strong>
-
-                        </div>
-
-                        <div class="info-row">
-
-                            <span>Company Pays</span>
-
-                            <strong class="free-month">
-                                Last {{ item.companyPayMonths }} Month FREE
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Scheme Benefits -->
-                    <div class="scheme-benefits">
-
-                        <div>
-
-                            <i class="fa fa-check-circle"></i>
-
-                            Zero Processing Fee
-
-                        </div>
-
-                        <div>
-
-                            <i class="fa fa-check-circle"></i>
-
-                            Company Pays Last Installment
-
-                        </div>
-
-                        <div>
-
-                            <i class="fa fa-check-circle"></i>
-
-                            Easy Monthly Savings
-
-                        </div>
-
-                    </div>
-
-                    <!-- Scheme Buttons -->
-                    <div class="scheme-buttons">
-
-                        <div class="row">
-
-                            <div class="col-12">
-
-                                <!-- NOT JOINED -->
-                                <button *ngIf="!joinedSchemes.includes(item._id)" class="btn join-btn"
-                                    (click)="joinScheme(item)">
-
-                                    Join Now
-
-                                </button>
-
-                                <!-- JOINED -->
-                                <button *ngIf="joinedSchemes.includes(item._id)" class="btn pay-btn"
-                                    (click)="payInstallment(item)">
-
-                                    <i class="fa fa-credit-card"></i>
-
-                                    Pay Installment
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Empty State -->
-        <div class="text-center py-5" *ngIf="!loading && filteredSchemes.length === 0">
-
-            <img src="assets/images/no-data.png" width="180" alt="No schemes found">
-
-            <h4 class="mt-3">
-                No Schemes Found
-            </h4>
-
-        </div>
-
+  <div class="container">
+    <!-- Section Header -->
+    <div class="section-header text-center">
+      <h2>Jewellery Saving Schemes</h2>
+
+      <p>Save every month and own your dream jewellery with OZO.</p>
+      <a routerLink="/schemes-details" class="ozo-scheme-btn">
+        <span class="btn-icon">✦</span>
+        <span>Explore Gold Scheme</span>
+        <span class="btn-arrow">→</span>
+      </a>
     </div>
 
+    <!-- Search -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-5 col-md-7">
+        <div class="search-box">
+          <i class="fa fa-search"></i>
+
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Scheme..."
+            [(ngModel)]="search"
+            (input)="searchScheme()"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Schemes -->
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6" *ngFor="let item of filteredSchemes">
+        <div class="scheme-card">
+          <!-- Popular Badge -->
+          <div class="popular-badge" *ngIf="item.isPopular">MOST POPULAR</div>
+
+          <!-- Scheme Icon -->
+          <div class="scheme-icon">
+            <img
+              src="../../../assets/images/diamond_png.png"
+              alt="Diamond icon"
+            />
+          </div>
+
+          <!-- Scheme Name -->
+          <h3>
+            {{ item.name | titlecase }}
+          </h3>
+
+          <!-- Monthly Installment Highlight -->
+          <div class="monthly-highlight">
+            <span>Monthly Installment</span>
+
+            <h1>₹ {{ item.monthlyAmount | number: "1.0-0" }}</h1>
+
+            <p>Pay every month</p>
+          </div>
+
+          <!-- Description -->
+          <p class="scheme-desc">
+            {{ item.description | titlecase }}
+          </p>
+
+          <!-- Scheme Information -->
+          <div class="scheme-info">
+            <div class="info-row">
+              <span>Monthly Payment</span>
+
+              <strong> ₹ {{ item.monthlyAmount | number: "1.0-0" }} </strong>
+            </div>
+
+            <div class="info-row">
+              <span>Duration</span>
+
+              <strong> {{ item.durationMonths }} Months </strong>
+            </div>
+
+            <div class="info-row">
+              <span>You Pay</span>
+
+              <strong> {{ item.userPayMonths }} Months </strong>
+            </div>
+
+            <div class="info-row">
+              <span>Company Pays</span>
+
+              <strong class="free-month">
+                Last {{ item.companyPayMonths }} Month FREE
+              </strong>
+            </div>
+          </div>
+
+          <!-- Scheme Benefits -->
+          <div class="scheme-benefits">
+            <div>
+              <i class="fa fa-check-circle"></i>
+
+              Zero Processing Fee
+            </div>
+
+            <div>
+              <i class="fa fa-check-circle"></i>
+
+              Company Pays Last Installment
+            </div>
+
+            <div>
+              <i class="fa fa-check-circle"></i>
+
+              Easy Monthly Savings
+            </div>
+          </div>
+
+          <!-- Scheme Buttons -->
+          <div class="scheme-buttons">
+            <div class="row">
+              <div class="col-12">
+                <!-- NOT JOINED -->
+                <button
+                  *ngIf="!joinedSchemes.includes(item._id)"
+                  class="btn join-btn"
+                  (click)="joinScheme(item)"
+                >
+                  Join Now
+                </button>
+
+                <!-- JOINED -->
+                <button
+                  *ngIf="joinedSchemes.includes(item._id)"
+                  class="btn pay-btn"
+                  (click)="payInstallment(item)"
+                >
+                  <i class="fa fa-credit-card"></i>
+
+                  Pay Installment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      class="text-center py-5"
+      *ngIf="!loading && filteredSchemes.length === 0"
+    >
+      <img src="assets/images/no-data.png" width="180" alt="No schemes found" />
+
+      <h4 class="mt-3">No Schemes Found</h4>
+    </div>
+  </div>
 </section>
 
 <!-- Login Modal -->
