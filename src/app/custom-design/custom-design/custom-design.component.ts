@@ -98,7 +98,8 @@ export class CustomDesignComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getMyCustomDesignRequests();
+    this.myRequests = [];
+    this.listLoading = false;
   }
 
   // =========================================
