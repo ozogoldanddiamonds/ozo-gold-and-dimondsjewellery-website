@@ -20,15 +20,17 @@
       <a href="#" class="social-icon"><i class="fa fa-instagram"></i></a>
       <a href="#" class="social-icon"><i class="fa fa-twitter"></i></a>
       <!-- Logged In User -->
+      <!-- Logged In User -->
       <div *ngIf="isLoggedIn" class="top-user">
         <i class="fa fa-user-circle"></i>
-        <span
-          >Hi,
+
+        <span>
+          Hi,
           {{
             userName || profileData?.user?.name || profileData?.name || "User"
               | titlecase
-          }}</span
-        >
+          }}
+        </span>
 
         <div class="top-user-dropdown">
           <a routerLink="/profile">

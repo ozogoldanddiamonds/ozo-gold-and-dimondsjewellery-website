@@ -9,7 +9,7 @@ import { WishlistService } from 'src/app/service/wishlist.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
   constructor(
@@ -18,8 +18,8 @@ export class NavbarComponent implements OnInit {
     private authService: AuthService,
     private wishlistService: WishlistService,
     private cartService: CartService,
-    private productService: ProductService
-  ) { }
+    private productService: ProductService,
+  ) {}
   profileData: any;
   categories: any[] = [];
   products: any[] = [];
@@ -48,11 +48,11 @@ export class NavbarComponent implements OnInit {
 
     this.loadCartCount();
 
-    this.cartService.cartCount$.subscribe(count => {
+    this.cartService.cartCount$.subscribe((count) => {
       this.cartCount = count;
     });
 
-    this.authService.loginStatus$.subscribe(status => {
+    this.authService.loginStatus$.subscribe((status) => {
       this.isLoggedIn = status;
 
       if (status) {
@@ -70,12 +70,10 @@ export class NavbarComponent implements OnInit {
     this.checkLoginStatus();
     this.loadWishlistCount();
 
-    this.wishlistService.wishlistCount$.subscribe(count => {
+    this.wishlistService.wishlistCount$.subscribe((count) => {
       this.wishlistCount = count;
     });
-
   }
-
 
   loadUserFromStorage(): void {
     const user = localStorage.getItem('user');
@@ -88,18 +86,15 @@ export class NavbarComponent implements OnInit {
         const userData = JSON.parse(user);
 
         this.userName =
-          userData?.name ||
-          userData?.fullName ||
-          userData?.username ||
-          '';
+          userData?.name || userData?.fullName || userData?.username || '';
 
         // Make the navbar name available immediately
         this.profileData = {
           ...this.profileData,
           user: {
             ...this.profileData?.user,
-            ...userData
-          }
+            ...userData,
+          },
         };
       } catch (error) {
         console.error('Unable to read user data:', error);
@@ -125,19 +120,15 @@ export class NavbarComponent implements OnInit {
         const user = res?.data?.user || res?.data;
 
         this.userName =
-          user?.name ||
-          user?.fullName ||
-          user?.username ||
-          this.userName;
+          user?.name || user?.fullName || user?.username || this.userName;
 
         console.log('Profile loaded:', this.profileData);
       },
       error: (err: any) => {
         console.error('Profile summary error:', err);
-      }
+      },
     });
   }
-
 
   toggleCategoryMenu(event?: Event) {
     if (event) {
@@ -164,17 +155,11 @@ export class NavbarComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
 
-    const target =
-      event.target as HTMLElement;
+    const dropdown = target.closest('.mega-dropdown');
 
-    const dropdown =
-      target.closest('.mega-dropdown');
-
-    if (
-      this.isMobileView() &&
-      !dropdown
-    ) {
+    if (this.isMobileView() && !dropdown) {
       this.isCategoryOpen = false;
     }
   }
@@ -220,9 +205,17 @@ export class NavbarComponent implements OnInit {
     }, 200);
   }
 
-  checkLoginStatus() {
+  checkLoginStatus(): void {
     const userId = localStorage.getItem('userId');
-    this.isLoggedIn = !!userId;
+    const token = localStorage.getItem('token');
+
+    this.isLoggedIn = !!(userId && token);
+
+    if (!this.isLoggedIn) {
+      this.userId = null;
+      this.userName = '';
+      this.profileData = null;
+    }
   }
 
   loadWishlistCount() {
@@ -236,7 +229,7 @@ export class NavbarComponent implements OnInit {
     this.wishlistService.getWishlist(userId).subscribe({
       next: (res: any) => {
         this.wishlistService.updateWishlistCount(res?.items?.length || 0);
-      }
+      },
     });
   }
 
@@ -255,7 +248,7 @@ export class NavbarComponent implements OnInit {
       },
       error: () => {
         this.cartCount = 0;
-      }
+      },
     });
   }
 
@@ -308,12 +301,10 @@ export class NavbarComponent implements OnInit {
         const products = res?.data || [];
         this.categories = [
           ...new Map(
-            products.map((item: any) => [item.category?._id, item.category])
-          ).values()
+            products.map((item: any) => [item.category?._id, item.category]),
+          ).values(),
         ];
-      }
+      },
     });
   }
-
-
 }
