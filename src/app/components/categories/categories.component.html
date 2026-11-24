@@ -246,9 +246,9 @@
                   {{ item.displayPrice | currency: "INR" : "symbol" : "1.2-2" }}
                 </span>
 
-                <span class="old-price" *ngIf="item.oldPrice">
+                <!-- <span class="old-price" *ngIf="item.oldPrice">
                   {{ item.oldPrice | currency: "INR" : "symbol" : "1.0-0" }}
-                </span>
+                </span> -->
 
                 <span class="discount" *ngIf="item.discountPercentage > 0">
                   ({{ item.discountPercentage }}% OFF)
