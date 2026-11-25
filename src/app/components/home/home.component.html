@@ -421,7 +421,11 @@
       >
         <div class="product-card">
           <div class="product-img">
-            <img [src]="item.images?.[0] || item.image" [alt]="item.name" />
+            <img
+              [src]="item.images?.[0] || item.image"
+              [alt]="item.name"
+              (click)="product(item._id)"
+            />
 
             <!-- <div class="product-top-badge">
                             New
@@ -430,7 +434,7 @@
             <div class="hover-icons">
               <!-- <i class="fa fa-shopping-cart"></i> -->
 
-              <i class="fa fa-eye" (click)="product(item._id)"> </i>
+              <!-- <i class="fa fa-eye" > </i> -->
 
               <i
                 class="fa"

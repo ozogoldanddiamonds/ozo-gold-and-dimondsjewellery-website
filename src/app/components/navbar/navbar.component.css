@@ -1502,6 +1502,7 @@
         border: none;
         background: transparent;
         padding: 6px;
+        right: 10px;
     }
 
     /* Hamburger lines */
@@ -1729,7 +1730,7 @@
     @media (max-width:560px) {
         .mobile-cart-wrapper {
             display: block;
-
+                    margin-right: 30px;
         }
 
 
@@ -1787,7 +1788,7 @@
         .mobile-cart-wrapper {
             /* display: flex; */
             align-items: center;
-            margin-right: 20px;
+                    margin-right: 30px;
         }
 
         /* Toggle */
