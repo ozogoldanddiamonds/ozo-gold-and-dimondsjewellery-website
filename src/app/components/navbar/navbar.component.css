@@ -2730,3 +2730,14 @@
             padding: 6px;
         }
     }
+
+   .trademark {
+  font-size: 10px;
+  font-weight: 700;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 2px;
+  position: relative;
+  color: black;
+  top: -2px;
+}

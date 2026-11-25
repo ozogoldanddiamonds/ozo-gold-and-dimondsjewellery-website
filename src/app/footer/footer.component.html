@@ -1,64 +1,64 @@
 <footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="brand-logo">
+          <img
+            src="../../../assets/images/logo.jpg"
+            alt="OZO Gold and Diamond Jewellery Mart"
+          />
+        </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="brand-logo">
-                    <img src="../../../assets/images/logo.jpg" alt="OZO Gold and Diamond Jewellery Mart">
-                </div>
+        <span class="nav-title">
+          <span class="brand-name">
+            OZO
+            <span class="gold-text">Gold</span>
+            <span class="diamond-text">
+              and DiamondJewellery Mart<sup class="trademark">TS</sup>
+            </span>
+          </span>
 
-                <span class="nav-title">
+          <span class="brand-subtitle"> Every shine has a story. </span>
+        </span>
+      </div>
+      <!-- About -->
+      <div class="col-md-3">
+        <h5 class="footer-title">ABOUT US</h5>
+        <ul>
+          <li><a routerLink="/about">About</a></li>
+          <li><a routerLink="/contact">Contact US</a></li>
+          <!-- <li><a href="">Store Locations</a></li> -->
+          <!-- <li><a href="">Wholesalers</a></li> -->
+          <!-- <li><a href="">Map Site</a></li> -->
+          <li><a routerLink="/schemes-page">OZO Schemes</a></li>
+        </ul>
+      </div>
 
-                    <span class="brand-name">
-                        OZO
-                        <span class="gold-text">Gold</span>
-                        <span class="diamond-text">and DiamondJewellery Mart</span>
-                    </span>
+      <!-- Information -->
+      <div class="col-md-3">
+        <h5 class="footer-title">INFORMATION</h5>
+        <ul>
+          <li><a routerLink="/help-faq">Help & FAQs</a></li>
+          <!-- <li><a href="">Advance Search</a></li> -->
+          <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
+          <li>
+            <a routerLink="/terms-and-conditions">Terms and Conditions</a>
+          </li>
+        </ul>
+      </div>
 
-                    <span class="brand-subtitle">
-                        Every shine has a story.
-                    </span>
+      <!-- Account -->
+      <div class="col-md-2">
+        <h5 class="footer-title">ACCOUNT</h5>
+        <ul>
+          <li><a routerLink="/orders">Order History</a></li>
+          <li><a routerLink="/cart">Cart Page</a></li>
+          <li (click)="openAuthModal()"><a>Sign In</a></li>
+        </ul>
+      </div>
 
-                </span>
-
-            </div>
-            <!-- About -->
-            <div class="col-md-3">
-                <h5 class="footer-title">ABOUT US</h5>
-                <ul>
-                    <li><a routerLink="/about">About</a></li>
-                    <li><a routerLink="/contact">Contact US</a></li>
-                    <!-- <li><a href="">Store Locations</a></li> -->
-                    <!-- <li><a href="">Wholesalers</a></li> -->
-                    <!-- <li><a href="">Map Site</a></li> -->
-                    <li><a routerLink="/schemes-page">OZO Schemes</a></li>
-                </ul>
-            </div>
-
-            <!-- Information -->
-            <div class="col-md-3">
-                <h5 class="footer-title">INFORMATION</h5>
-                <ul>
-                    <li><a routerLink="/help-faq">Help & FAQs</a></li>
-                    <!-- <li><a href="">Advance Search</a></li> -->
-                    <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
-                    <li><a routerLink="/terms-and-conditions">Terms and Conditions</a></li>
-                </ul>
-            </div>
-
-            <!-- Account -->
-            <div class="col-md-2">
-                <h5 class="footer-title">ACCOUNT</h5>
-                <ul>
-
-                    <li><a routerLink="/orders">Order History</a></li>
-                    <li><a routerLink="/cart">Cart Page</a></li>
-                    <li (click)="openAuthModal()"><a>Sign In</a></li>
-                </ul>
-            </div>
-
-            <!-- Newsletter -->
-            <!-- <div class="col-md-3">
+      <!-- Newsletter -->
+      <!-- <div class="col-md-3">
                 <h5 class="footer-title">NEWSLETTER</h5>
 
                 <p>Subscribe for latest offers & updates</p>
@@ -69,29 +69,22 @@
                 </div>
 
             </div> -->
-
-        </div>
     </div>
+  </div>
 
-    <!-- Bottom -->
-    <div class="footer-bottom">
+  <!-- Bottom -->
+  <div class="footer-bottom">
+    <div class="container d-flex justify-content-between align-items-center">
+      <p>© 2026 OZO Gold and DiamondJewellery Mart . All Rights Reserved.</p>
 
-        <div class="container d-flex justify-content-between align-items-center">
-
-            <p>© 2026 OZO Gold and DiamondJewellery Mart
-                . All Rights Reserved.</p>
-
-            <div class="payments">
-                <i class="fa fa-cc-visa"></i>
-                <i class="fa fa-cc-mastercard"></i>
-                <i class="fa fa-cc-paypal"></i>
-                <i class="fa fa-credit-card"></i>
-            </div>
-
-        </div>
-
+      <div class="payments">
+        <i class="fa fa-cc-visa"></i>
+        <i class="fa fa-cc-mastercard"></i>
+        <i class="fa fa-cc-paypal"></i>
+        <i class="fa fa-credit-card"></i>
+      </div>
     </div>
-
+  </div>
 </footer>
 <app-user-login [isAuthOpen]="isAuthOpen" (close)="closeAuthModal($event)">
 </app-user-login>
