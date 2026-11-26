@@ -27,7 +27,8 @@ interface Country {
 export class UserLoginComponent implements OnChanges, OnDestroy {
   @Input() isAuthOpen = false;
   @Output() close = new EventEmitter<boolean>();
-
+  isNameRequired = false;
+  isCheckingMobile = false;
   mobileForm: FormGroup;
   otpForm: FormGroup;
 
@@ -82,6 +83,7 @@ export class UserLoginComponent implements OnChanges, OnDestroy {
     private toastr: ToastrService,
   ) {
     this.mobileForm = this.fb.group({
+      name: [''],
       phone: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
     });
 
@@ -170,7 +172,83 @@ export class UserLoginComponent implements OnChanges, OnDestroy {
   get otpControl() {
     return this.otpForm.get('otp');
   }
+  continueWithPhone(): void {
+    if (this.isLoading || this.isCheckingMobile) {
+      return;
+    }
 
+    if (this.phoneControl?.invalid) {
+      this.phoneControl.markAsTouched();
+      return;
+    }
+
+    // Name already required: validate and send OTP
+    if (this.isNameRequired) {
+      const nameControl = this.mobileForm.get('name');
+
+      if (nameControl?.invalid || !nameControl?.value?.trim()) {
+        nameControl?.markAsTouched();
+        return;
+      }
+
+      this.sendOtp();
+      return;
+    }
+    this.isNameRequired = false;
+    this.mobileForm.get('name')?.clearValidators();
+    this.mobileForm.get('name')?.reset('');
+    this.mobileForm.get('name')?.updateValueAndValidity();
+    // First check mobile number in backend
+    this.isCheckingMobile = true;
+
+    const phone = `${this.selectedCountry.code}${this.phoneControl?.value}`;
+
+    this.authService.checkCustomerMobile(phone).subscribe({
+      next: (response: any) => {
+        this.isCheckingMobile = false;
+
+        if (!response.success) {
+          this.errorMessage = response.message;
+          return;
+        }
+
+        if (response.nameRequired) {
+          this.isNameRequired = true;
+
+          const nameControl = this.mobileForm.get('name');
+
+          nameControl?.setValidators([
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(100),
+            Validators.pattern(/\S/),
+          ]);
+
+          nameControl?.updateValueAndValidity();
+
+          return;
+        }
+
+        // Existing customer with name
+        this.isNameRequired = false;
+
+        this.sendOtp();
+      },
+
+      error: (error) => {
+        this.isCheckingMobile = false;
+
+        console.error('Check Customer Mobile API Error:', error);
+        console.error('Status:', error.status);
+        console.error('Response:', error.error);
+
+        this.errorMessage =
+          error.error?.message ||
+          error.message ||
+          'Unable to check mobile number';
+      },
+    });
+  }
   // SEND OTP
   sendOtp(): void {
     if (this.mobileForm.invalid || this.isLoading) {
@@ -180,12 +258,12 @@ export class UserLoginComponent implements OnChanges, OnDestroy {
 
     this.errorMessage = '';
     this.successMessage = '';
-
+    const name = this.isNameRequired ? this.mobileForm.value.name.trim() : '';
     this.mobileNumber = `${this.selectedCountry.code}${this.mobileForm.value.phone}`;
 
     this.isLoading = true;
 
-    this.authService.sendOtp(this.mobileNumber).subscribe({
+    this.authService.sendOtp(this.mobileNumber, name).subscribe({
       next: (response: AuthResponse) => {
         this.isLoading = false;
 
@@ -275,7 +353,8 @@ export class UserLoginComponent implements OnChanges, OnDestroy {
     if (this.resendSeconds > 0 || this.isLoading) {
       return;
     }
-
+    this.isNameRequired = false;
+    this.isCheckingMobile = false;
     this.errorMessage = '';
     this.successMessage = '';
 

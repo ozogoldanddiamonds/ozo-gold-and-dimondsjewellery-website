@@ -57,8 +57,30 @@
       <form
         *ngIf="currentStep === 'mobile'"
         [formGroup]="mobileForm"
-        (ngSubmit)="sendOtp()"
+        (ngSubmit)="continueWithPhone()"
       >
+        <!-- CUSTOMER NAME -->
+        <div class="customer-name-group" *ngIf="isNameRequired">
+          <label class="form-label">Please Add Your Name</label>
+
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            placeholder="Enter your full name"
+            maxlength="100"
+            autocomplete="name"
+          />
+
+          <small
+            class="field-error"
+            *ngIf="
+              mobileForm.get('name')?.touched && mobileForm.get('name')?.invalid
+            "
+          >
+            Please enter a valid customer name.
+          </small>
+        </div>
         <label class="form-label">Mobile Number</label>
 
         <div class="mobile-input-group">

@@ -20,7 +20,7 @@ export interface AuthResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   // Inside AuthService class
@@ -35,7 +35,10 @@ export class AuthService {
   private loginStatusSubject = new BehaviorSubject<boolean>(false);
   loginStatus$ = this.loginStatusSubject.asObservable();
 
-  constructor(private http: HttpClient, handler: HttpBackend) {
+  constructor(
+    private http: HttpClient,
+    handler: HttpBackend,
+  ) {
     this.rawHttp = new HttpClient(handler);
   }
 
@@ -48,10 +51,7 @@ export class AuthService {
     return this.http.post(`${environment.apiUrl}/userregister`, payload);
   }
 
-  login(payload: {
-    phone: string;
-    password: string;
-  }): Observable<any> {
+  login(payload: { phone: string; password: string }): Observable<any> {
     return this.http.post(`${environment.apiUrl}/userlogin`, payload);
   }
 
@@ -98,78 +98,63 @@ export class AuthService {
     this.loginStatusSubject.next(status);
   }
 
-
   // =========================
   // Google / Gmail Login
   // =========================
   googleLogin(data: any): Observable<any> {
-
-    return this.http.post<any>(
-      `${environment.apiUrl}/google-login`,
-      data
-    );
-
+    return this.http.post<any>(`${environment.apiUrl}/google-login`, data);
   }
   updateProfile(userId: string, data: any): Observable<any> {
-    return this.http.put(
-      `${environment.apiUrl}/updateProfile/${userId}`,
-      data
-    );
+    return this.http.put(`${environment.apiUrl}/updateProfile/${userId}`, data);
   }
 
   getUserById(userId: string) {
-    return this.http.get<any>(
-      `${environment.apiUrl}/getUserById/${userId}`
-    );
+    return this.http.get<any>(`${environment.apiUrl}/getUserById/${userId}`);
   }
 
   // SEND OTP
-  sendOtp(phone: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(
-      `${environment.apiUrl}/send-otp`,
-      { phone }
-    );
+  sendOtp(phone: string, name: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/send-otp`, {
+      phone,
+      name,
+    });
   }
 
   // VERIFY OTP AND LOGIN
   verifyOtp(phone: string, otp: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(
-      `${environment.apiUrl}/verify-otp`,
-      { phone, otp }
-    );
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/verify-otp`, {
+      phone,
+      otp,
+    });
   }
-
+  // CHECK CUSTOMER MOBILE
+  // CHECK CUSTOMER MOBILE
+  checkCustomerMobile(phone: string) {
+    return this.http.post<any>(`${environment.apiUrl}/check-customer-mobile`, {
+      phone,
+    });
+  }
   // RESEND OTP
   resendOtp(phone: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(
-      `${environment.apiUrl}/resend-otp`,
-      { phone }
-    );
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/resend-otp`, {
+      phone,
+    });
   }
 
   // REFRESH ACCESS TOKEN
   refreshToken(refreshToken: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(
-      `${environment.apiUrl}/refresh-token`,
-      { refreshToken }
-    );
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/refresh-token`, {
+      refreshToken,
+    });
   }
 
   // LOGOUT
   logout(): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(
-      `${environment.apiUrl}/logout`,
-      {}
-    );
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/logout`, {});
   }
 
   // SAVE LOGIN SESSION
-  setSession(
-    accessToken: string,
-    refreshToken: string,
-    user: any
-  ): void {
-
+  setSession(accessToken: string, refreshToken: string, user: any): void {
     localStorage.setItem('token', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
 
@@ -199,41 +184,36 @@ export class AuthService {
 
   // REFRESH SESSION
   refreshSession(): Observable<string> {
-
     const refreshToken = this.getRefreshToken();
 
     if (!refreshToken) {
-      return throwError(() =>
-        new Error('Refresh token not found')
-      );
+      return throwError(() => new Error('Refresh token not found'));
     }
 
-    return this.http.post<AuthResponse>(
-      `${environment.apiUrl}/refresh-token`,
-      { refreshToken }
-    ).pipe(map(response => {
+    return this.http
+      .post<AuthResponse>(`${environment.apiUrl}/refresh-token`, {
+        refreshToken,
+      })
+      .pipe(
+        map((response) => {
+          if (
+            !response.success ||
+            !response.accessToken ||
+            !response.refreshToken
+          ) {
+            throw new Error('Invalid refresh response');
+          }
 
-      if (
-        !response.success ||
-        !response.accessToken ||
-        !response.refreshToken
-      ) {
-        throw new Error('Invalid refresh response');
-      }
+          localStorage.setItem('token', response.accessToken);
+          localStorage.setItem('refreshToken', response.refreshToken);
 
-      localStorage.setItem('token', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
-
-      return response.accessToken;
-
-    })
-
-    );
+          return response.accessToken;
+        }),
+      );
   }
 
   // CLEAR SESSION
   clearAuth(): void {
-
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userId');
